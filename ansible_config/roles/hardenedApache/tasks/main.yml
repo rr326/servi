@@ -1,0 +1,71 @@
+---
+#
+# Harden apache
+#
+# http://www.thefanclub.co.za/how-to/how-install-apache2-modsecurity-and-modevasive-ubuntu-1204-lts-server
+-   apt: pkg=libxml2 state=latest
+-   apt: pkg=libxml2-dev state=latest
+-   apt: pkg=libxml2-utils state=latest
+-   apt: pkg=libaprutil1 state=latest
+-   apt: pkg=libaprutil1-dev state=latest
+-   command: ln -sf /usr/lib/x86_64-linux-gnu/libxml2.so.2 /usr/lib/libxml2.so.2
+-   apt: pkg=libapache-mod-security state=latest
+-   command: cp /etc/modsecurity/modsecurity.conf-recommended /etc/modsecurity/modsecurity.conf
+-   lineinfile: dest=/etc/modsecurity/modsecurity.conf regexp='^SecRuleEngine.*' state=present create=yes line='SecRuleEngine On'
+-   lineinfile: dest=/etc/modsecurity/modsecurity.conf regexp='^SecRequestBodyLimit.*' state=present create=yes line='SecRequestBodyLimit 16384000'
+-   lineinfile: dest=/etc/modsecurity/modsecurity.conf regexp='^SecRequestBodyInMemoryLimit.*' state=present create=yes line='SecRequestBodyInMemoryLimit 16384000'
+
+#
+# These sections were recommended by the document I read, but seem overkill for me.  They must
+# slow things down and I'm sure that the security rules can cause problems for me for legit things.
+# No real need for them so turn them off for now.
+#
+
+# Download and install the latest OWASP Core Rule Set.
+#-   copy: src=owasp.sh dest=/tmp force=yes
+#-   command: /bin/bash /tmp/owasp.sh
+#-   lineinfile: >
+#        dest=/etc/modsecurity/modsecurity.conf  state=present create=yes
+#        line='Include "/etc/modsecurity/activated_rules/*.conf"'
+#-   command: a2enmod headers
+#-   command: a2enmod mod-security
+#-   service: name=apache2 state=restarted
+
+# Install ModEvasive.
+#-   apt: pkg=libapache2-mod-evasive state=latest
+#-   file: path=/var/log/mod_evasive/ state=directory owner=www-data group=www-data
+#-   copy: |
+#        dest=/etc/apache2/mods-available/mod-evasive.conf
+#        content="
+#        <ifmodule mod_evasive20.c>
+#           DOSHashTableSize 3097
+#           DOSPageCount  2
+#           DOSSiteCount  50
+#           DOSPageInterval 1
+#           DOSSiteInterval  1
+#           DOSBlockingPeriod  10
+#           DOSLogDir   /var/log/mod_evasive
+#           DOSEmailNotify  EMAIL@DOMAIN.com
+#           DOSWhitelist   127.0.0.1
+#        </ifmodule>"
+#-   file: state=link path=/etc/alternatives/mail src=/bin/mail/
+#-   command: a2enmod mod-evasive
+#-   service: name=apache2 state=restarted
+
+
+# Use a modified, securified apache2.conf
+-   copy: dest=/etc/apache2/apache2.conf src=apache2.conf backup=yes force=yes
+-   copy: dest=/etc/apache2/envvars src=apache2_envvars backup=yes force=yes
+
+-   debug: |
+        msg="
+        TODO
+        Must add mail setup and mail user
+        Must fix SMTP for DenyHosts"
+
+-   debug: |
+        msg="
+        TODO
+        Fix apache2.conf  not sure it is sufficient or fully hardened
+        Not sure if it works!"
+     

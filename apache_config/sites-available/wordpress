@@ -1,0 +1,31 @@
+# This is the example wordpress vhost file given by the playbook I copied
+# I don't actually use it though - instead the main .conf file needs to copy important
+
+<VirtualHost *:80>
+  ServerAdmin ops@aynassociates.com
+  DocumentRoot /var/www/wordpress
+
+  <Directory /var/www/wordpress>
+    Options FollowSymLinks MultiViews
+    AllowOverride All
+    Order allow,deny
+    allow from all
+
+  </Directory>
+
+  <IfModule mod_security2.c>
+    # This has to be global, cannot exist within a directory or location clause . . .
+    SecAction phase:1,nolog,pass,initcol:ip=%{REMOTE_ADDR},initcol:user=%{REMOTE_ADDR}
+    <Location /wp-login.php>
+      # Setup brute force detection.
+
+      # React if block flag has been set.
+      SecRule user:bf_block "@gt 0" "deny,status:401,log,msg:'ip address blocked for 5 minutes, more than 15 login attempts in 3 minutes.'"
+
+      # Setup Tracking.  On a successful login, a 302 redirect is performed, a 200 indicates login failed.
+      SecRule RESPONSE_STATUS "^302" "phase:5,t:none,nolog,pass,setvar:ip.bf_counter=0"
+      SecRule RESPONSE_STATUS "^200" "phase:5,chain,t:none,nolog,pass,setvar:ip.bf_counter=+1,deprecatevar:ip.bf_counter=1/180"
+      SecRule ip:bf_counter "@gt 15" "t:none,setvar:user.bf_block=1,expirevar:user.bf_block=300,setvar:ip.bf_counter=0"
+    </location>
+  </IfModule>
+</VirtualHost>

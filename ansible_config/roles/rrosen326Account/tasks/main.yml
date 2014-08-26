@@ -1,0 +1,19 @@
+---
+-   user: name=rrosen326 comment='Ross Rosen' createhome=yes shell=/usr/bin/zsh  group=webdev groups=adm,admin,sudo,webdev,www-data
+-   authorized_key: key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
+                    user=rrosen326
+-   authorized_key: key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
+                    user=webdev
+
+-   copy: src=.zshrc dest=/home/rrosen326
+    remote_user: rrosen326                        
+
+#
+# Create local sublime command. Note you need to set up your home machine as well.
+#
+# http://bit.ly/1aGHLId
+# http://stackoverflow.com/a/18107549/1400991
+# http://stackoverflow.com/questions/18938950/rsub-with-sublime-and-ssh-connection-refusual
+
+-   get_url: dest=/usr/local/bin/subl url=https://raw.github.com/aurora/rmate/master/rmate
+-   file: state=file path=/usr/local/bin/subl mode=755

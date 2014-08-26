@@ -1,0 +1,29 @@
+---
+-   hosts: all
+    vars:
+        webdev_uid: 1100
+        webdev_gid: 900
+    sudo: yes
+    roles:
+        - baseUbuntu
+        - rrosen326Account
+#        - hardenedUbuntu
+#        - hardenedApache
+#        - projectSpecific
+
+# TODO LogRotate
+# TODO Mod_security - get working
+
+
+# Debug stuff
+#    tasks:
+#       # If debugging apache problems, start with a clean apache.conf (without this, an old bad one fails)
+#        -   copy: dest=/etc/apache2/apache2.conf src=apache2.conf backup=yes force=yes
+
+
+
+# TODO - take changes in ansible setup at move to base ansible - webdev gid, fix to mongo (is_vagrant is defined)
+
+
+# Testing - to run a single task from the command line (to try it out), do something like this:
+# ansible  default -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory  -u rrosen326 --private-key=~/.ssh/rrosen326_rsa --sudo -m file -a "path=/etc/apache2/sites-available/test.conf group=webdev owner=webdev mode=770 state=touch"

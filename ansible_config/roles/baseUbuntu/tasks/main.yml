@@ -1,0 +1,64 @@
+---
+
+-   apt: update_cache=yes cache_valid_time=86400
+
+-   apt: pkg=python state=latest
+-   apt: pkg=python-pip state=latest
+-   apt: pkg=python-dev state=latest
+-   apt: pkg=python-virtualenv state=latest
+
+-   apt: pkg=apache2 state=latest 
+-   apt: pkg=libapache2-mod-wsgi state=latest
+-   apt: pkg=zsh state=latest
+-   apt: pkg=libapache2-mod-macro
+
+-   group: name=admin state=present system=yes
+
+-   user: name=admin comment='admin' createhome=yes shell=/usr/bin/zsh group=admin groups=adm,admin,sudo
+-   authorized_key:  key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
+                     user=admin
+
+# Make sure sudo & admin groups do not require passwords for sudo access
+-   copy: dest=/etc/sudoers.d/sudo_nopasswd src=sudo_nopasswd backup=yes force=yes
+-   file:  dest=/etc/sudoers.d/sudo_nopasswd mode=0440 owner=root group=root state=file
+-   service: name=sudo state=restarted
+
+-   group: name=www-data state=present system=yes
+-   group: name=webdev state=present system=yes gid={{ webdev_gid }}
+
+
+-   user: name=www-data state=present groups=www-data,webdev system=yes createhome=no
+    # Make sure /var/logs/apache2 is listable by everyone.
+-   file: dest=/var/log/apache2 mode=775
+-   file: dest={{ apache_log_dir }} owner=www-data group=www-data mode=775 state=directory
+-   name: Set ownership of apache logs to www-data
+    file: path=/var/log/apache2 owner=www-data group=www-data recurse=yes mode=770
+
+    # Note - this works only for TRUSTED webdev group - they have full rights to apache
+-   user: name=webdev state=present group=webdev shell=/usr/bin/zsh createhome=yes uid={{ webdev_uid }}
+
+-   file: path=/etc/apache2 owner=webdev group=webdev recurse=yes mode=774
+-   command: a2enmod expires  wsgi rewrite macro
+-   command: a2dissite default default-ssl
+    ignore_errors : True
+-   file: path=/etc/apache2/sites-available/default state=absent
+-   file: path=/etc/apache2/sites-available/default-ssl state=absent
+
+
+
+-   name: http service state
+    service: name=apache2 state=started enabled=yes
+
+
+-   name: Turn off DNS in ssh since it causes a delay logging in on a trusty development box
+    lineinfile: dest=/etc/ssh/sshd_config state=present create=yes line='UseDNS no'
+
+-   service: name=ssh state=restarted
+
+# TODO - turn on pagespeed later - right now it has lots of errors
+#-   get_url: dest=/tmp url=https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb
+#-   command: dpkg -i /tmp/mod-pagespeed-stable_current_amd64.deb
+#-   command: apt-get -f install
+# -   command: pagespeed
+
+# TODO - set sudoers to no password! - http://askubuntu.com/questions/192050/how-to-run-sudo-command-with-no-password

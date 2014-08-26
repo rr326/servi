@@ -1,0 +1,9 @@
+# This will be included by the main sudoers file.  (It should be in /etc/sudoers.d)
+
+# This says that admin and sudo groups do not require passwords
+
+# Members of the admin group may gain root privileges
+%admin ALL=(ALL) NOPASSWD:ALL
+
+# Allow members of group sudo to execute any command
+%sudo	ALL=(ALL:ALL) NOPASSWD:ALL

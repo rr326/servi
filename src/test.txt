@@ -1,0 +1,10 @@
+./
+../
+.git/
+.idea/
+.vagrant/
+README.md
+Vagrantfile
+ansible_config/
+apache_config/
+src/
