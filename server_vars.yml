@@ -1,0 +1,13 @@
+# These variables are used by the Vagrantfile AND ansible
+---
+
+# Configuration parameters for Vagrant and Ansible
+# IMPORTANT: you must define these here AND in ansible_config/playbook.yml
+# because you may run the ansible playbook without Vagrant.
+WEBDEV_UID : 1100
+WEBDEV_GID : 900
+LOCAL_DIR : "src"
+REMOTE_DIR : "/var/www/thissite"
+APACHE_LOG_DIR: "/var/log/apache2/thissite"
+STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
+HOST_NAME: "thishost"

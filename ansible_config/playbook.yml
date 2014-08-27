@@ -1,9 +1,9 @@
 ---
 -   hosts: all
-    vars:
-        webdev_uid: 1100
-        webdev_gid: 900
+    vars_files:
+      - ../server_vars.yml
     sudo: yes
+    tasks:
     roles:
         - baseUbuntu
         - rrosen326Account
