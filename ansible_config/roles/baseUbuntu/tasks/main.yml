@@ -79,7 +79,7 @@
 -   service: name=ssh state=restarted
 
 
-
+# Todo - set up mail (look at fail2ban)
 
 # TODO - turn on pagespeed later - right now it has lots of errors
 #-   get_url: dest=/tmp url=https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb

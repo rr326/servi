@@ -4,7 +4,10 @@
 #
 # http://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-1-basics
 
+#
 # UFW - Firewall
+#
+-   debug: msg="Set up UFW Firewall, opening ssh, http, https, 127.0.0.1"
 -   apt:  pkg=ufw state=latest
 -   command: ufw allow ssh
 -   command: ufw allow 2222/tcp
@@ -13,9 +16,12 @@
 -   command: ufw allow from 127.0.0.1   # For vagrant, which might be on different ssh port
 -   command: ufw --force  enable
 
+#
 # ssh
 # YAML note - including # in quotes strings is tricky. I'm using >. See http://www.yaml.org/spec/1.2/spec.html, and test with: http://yaml-online-parser.appspot.com/
--   lineinfile: >
+#
+-   name: SSH - Do not permit root login
+    lineinfile: >
         dest=/etc/ssh/sshd_config 
         state=absent  
         regexp='^[^#]*PermitRootLogin yes.*$ '
@@ -24,14 +30,19 @@
         state=present 
         create=yes 
         line='PermitRootLogin no # Added by ansible'
-# Should use a handler, but this is easier
 -   command: service ssh restart
 
+#
 # Protect su by limiting only to admin group
--   command: dpkg-statoverride --force --update --add root admin 4750 /bin/su
+#
+-   name: SU - limit only to admin group
+    command: dpkg-statoverride --force --update --add root admin 4750 /bin/su
 
+#
 #  Harden network with sysctl settings.
--   lineinfile: >
+#
+-   name: Harden network with sysctl settings
+    lineinfile: >
         dest=/etc/sysctl.conf 
         state=present create=yes 
         regexp='^[^#]*{{ item.key }}.*$'
@@ -57,15 +68,16 @@
         -    { key: 'net.ipv4.conf.default.accept_redirects', val: '0 '} 
         -    { key: 'net.ipv6.conf.default.accept_redirects', val: '0'} 
         -    { key: 'net.ipv4.icmp_echo_ignore_all', val: '1    '} 
+-   command: sysctl -p
 
-
-
--   command: sysctl -p 
 
 # Disable Open DNS Recursion and Remove Version Info  - BIND DNS Server.    
 # >> Skipping - don't have that file. Guessing its not critical
 
+#
 # Prevent IP Spoofing.
+#
+-   debug: msg="Prevent IP Spoofing"
 -   lineinfile: >
         dest=/etc/host.conf 
         state=absent 
@@ -79,37 +91,14 @@
         state=present create=yes 
         line='nospoof on'
 
-
-# Scan logs and ban suspicious hosts - DenyHosts and Fail2Ban.
--   apt:  pkg=denyhosts state=latest 
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='ADMIN_EMAIL = root@localhost'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SMTP_HOST = localhost'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SMTP_PORT = 25'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SMTP_FROM = DenyHosts nobody@localhost'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SYSLOG_REPORT = YES'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SMTP_USERNAME=rrosen326'
--   lineinfile: dest=/etc/denyhosts.conf state=present create=yes line='SMTP_PASSWORD=TODO' # TODO - NEED TO SET UP MAIL
-
-
-
--   apt:  pkg=fail2ban state=latest 
--   copy: src=fail2ban_jail.conf dest=/etc/fail2ban/jail.conf backup=yes force=yes 
-
-# TODO - Uncomment (these are slow)
-## Intrusion Detection - PSAD.
-#-   apt: pkg=psad state=latest
 #
-## Install some security tools
-## Check for rootkits - RKHunter and CHKRootKit.
-#-   apt: pkg=rkhunter state=latest
-#-   apt: pkg=chkrootkit state=latest
-## Scan open ports - Nmap.
-#-   apt: pkg=nmap state=latest
-## Analyse system LOG files - LogWatch.
-#-   apt: pkg=logwatch state=latest
-## Audit your system security - Tiger.
-#-   apt: pkg=tiger state=latest
+# Scan logs and ban suspicious hosts with Fail2Ban.
 #
-## SELinux - Apparmor.
-#-   apt: pkg=apparmor state=latest
-#-   apt: pkg=apparmor-profiles state=latest
+-   name: Install fail2ban
+    apt:  pkg=fail2ban state=latest
+-   copy: src=jail.conf dest=/etc/fail2ban/jail.conf backup=yes force=yes
+
+
+#
+# TODO - Reasses if my linux-hardening is necessary & sufficient
+#

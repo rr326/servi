@@ -7,7 +7,7 @@
     roles:
         - baseUbuntu
         - rrosen326Account
-#        - hardenedUbuntu
+        - hardenedUbuntu
 #        - hardenedApache
 #        - projectSpecific
 
