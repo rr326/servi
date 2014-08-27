@@ -1,5 +1,9 @@
 ---
 
+#
+# Install packages
+#
+
 -   apt: update_cache=yes cache_valid_time=86400
 
 -   name: apt - install multiple packages
@@ -9,49 +13,67 @@
       - python-pip
       - python-dev
       - python-virtualenv
+      - python3
       - apache2
       - libapache2-mod-wsgi
       - libapache2-mod-macro
       - zsh
 
+#
+# Set up admin user & group
+#
 -   group: name=admin state=present system=yes
-
 -   user: name=admin comment='admin' createhome=yes shell=/usr/bin/zsh group=admin groups=adm,admin,sudo
 -   authorized_key:  key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
                      user=admin
-
+#
 # Make sure sudo & admin groups do not require passwords for sudo access
+#
 -   copy: dest=/etc/sudoers.d/sudo_nopasswd src=sudo_nopasswd backup=yes force=yes
 -   file:  dest=/etc/sudoers.d/sudo_nopasswd mode=0440 owner=root group=root state=file
 -   service: name=sudo state=restarted
 
+#
+# Set up www-data & webdev groups & users
+#
 -   group: name=www-data state=present system=yes
 -   group: name=webdev state=present system=yes gid={{ WEBDEV_GID }}
+-   user:  name=www-data
+      state=present groups=www-data,webdev system=yes createhome=no
+-   user:  name=webdev
+      state=present group=webdev shell=/usr/bin/zsh createhome=yes uid={{ WEBDEV_UID }}
 
+#
+# Make sure apache logs & directory have proper owners / permissions
+#
+-   file: dest=/var/log/apache2
+      owner=www-data group=www-data recurse=yes mode=775
+-   file: dest={{ APACHE_LOG_DIR }}
+      owner=www-data group=www-data mode=775 state=directory
+-   file: dest=/etc/apache2 state=directory
+      owner=webdev group=webdev recurse=yes mode=775
 
--   user: name=www-data state=present groups=www-data,webdev system=yes createhome=no
-    # Make sure /var/logs/apache2 is listable by everyone.
--   file: dest=/var/log/apache2 mode=775
--   file: dest={{ APACHE_LOG_DIR }} owner=www-data group=www-data mode=775 state=directory
--   name: Set ownership of apache logs to www-data
-    file: path=/var/log/apache2 owner=www-data group=www-data recurse=yes mode=770
-
-    # Note - this works only for TRUSTED webdev group - they have full rights to apache
--   user: name=webdev state=present group=webdev shell=/usr/bin/zsh createhome=yes uid={{ WEBDEV_UID }}
-
--   file: path=/etc/apache2 owner=webdev group=webdev recurse=yes mode=774
+#
+# Set apache modules & sites
+#
 -   command: a2enmod expires  wsgi rewrite macro
 -   command: a2dissite default-ssl.conf 000-default.conf
     ignore_errors : True
--   file: path=/etc/apache2/sites-available/000-default state=absent
--   file: path=/etc/apache2/sites-available/default-ssl state=absent
+-   file: path=/etc/apache2/sites-available/000-default.conf  state=absent
+-   file: path=/etc/apache2/sites-available/default-ssl.conf  state=absent
+-   file: path=/etc/apache2/sites-available/default           state=absent
 
 
-
--   name: http service state
+#
+# Restart apache
+#
+-   name: Restart Apache
     service: name=apache2 state=started enabled=yes
 
 
+#
+# Turn off SSH DNS lookup
+#
 -   name: Turn off DNS in ssh since it causes a delay logging in on a trusty development box
     lineinfile: dest=/etc/ssh/sshd_config state=present create=yes line='UseDNS no'
 -   service: name=ssh state=restarted

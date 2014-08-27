@@ -1,7 +1,14 @@
 ---
--   user: name=rrosen326 comment='Ross Rosen' createhome=yes shell=/usr/bin/zsh  group=webdev groups=adm,admin,sudo,webdev,www-data
+
+-   debug: msg="Create rrosen326 account with proper ssh keys, home directory, zsh, and .zshrc"
+
+-   user: name=rrosen326  comment="Ross Rosen"
+      createhome=yes shell=/usr/bin/zsh
+      group=webdev groups=adm,admin,sudo,webdev,www-data
+
 -   authorized_key: key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
                     user=rrosen326
+
 -   authorized_key: key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
                     user=webdev
 
