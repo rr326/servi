@@ -70,13 +70,22 @@
 -   name: Restart Apache
     service: name=apache2 state=started enabled=yes
 
-
 #
 # Turn off SSH DNS lookup
 #
 -   name: Turn off DNS in ssh since it causes a delay logging in on a trusty development box
     lineinfile: dest=/etc/ssh/sshd_config state=present create=yes line='UseDNS no'
 -   service: name=ssh state=restarted
+
+#
+# Create local sublime command. Note you need to set up your home machine as well.
+#
+# http://bit.ly/1aGHLId
+# http://stackoverflow.com/a/18107549/1400991
+# http://stackoverflow.com/questions/18938950/rsub-with-sublime-and-ssh-connection-refusual
+
+-   get_url: dest=/usr/local/bin/subl url=https://raw.github.com/aurora/rmate/master/rmate
+-   file: state=file path=/usr/local/bin/subl mode=755
 
 
 # Todo - set up mail (look at fail2ban)
