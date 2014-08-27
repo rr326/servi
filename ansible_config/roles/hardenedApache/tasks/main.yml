@@ -1,4 +1,24 @@
 ---
+
+#
+# Harden Apache
+#
+# Philosophy:
+#  * Do a reasonable amount given that my sites are not at major risk.
+#  * Be sure to prevent BAD stuff (eg: server-side script vulnerabilities) but
+#     don't worry about non-terrible stuff unless proven I need to (eg: DoS attacks)
+#  * Note: this is for a LOCAL, single-user system. I'm not trying to protect
+#     against malevolent users on my Linux system
+
+# Sources:
+#  http://httpd.apache.org/docs/current/misc/security_tips.html
+
+#
+# DoS attacks
+#
+# --> Do nothing now. Not worried about it
+
+
 #
 # Harden apache
 #
