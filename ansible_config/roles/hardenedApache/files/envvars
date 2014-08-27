@@ -5,9 +5,9 @@ unset HOME
 
 # for supporting multiple apache2 instances
 if [ "${APACHE_CONFDIR##/etc/apache2-}" != "${APACHE_CONFDIR}" ] ; then
-    SUFFIX="-${APACHE_CONFDIR##/etc/apache2-}"
+	SUFFIX="-${APACHE_CONFDIR##/etc/apache2-}"
 else
-    SUFFIX=
+	SUFFIX=
 fi
 
 # Since there is no sane way to get the parsed apache2 config in scripts, some
@@ -15,7 +15,8 @@ fi
 # /etc/init.d/apache2, /etc/logrotate.d/apache2, etc.
 export APACHE_RUN_USER=www-data
 export APACHE_RUN_GROUP=www-data
-export APACHE_PID_FILE=/var/run/apache2$SUFFIX.pid
+# temporary state file location. This might be changed to /run in Wheezy+1
+export APACHE_PID_FILE=/var/run/apache2/apache2$SUFFIX.pid
 export APACHE_RUN_DIR=/var/run/apache2$SUFFIX
 export APACHE_LOCK_DIR=/var/lock/apache2$SUFFIX
 # Only /var/log/apache2 is handled by /etc/logrotate.d/apache2.
@@ -35,3 +36,12 @@ export LANG
 ## If you need a higher file descriptor limit, uncomment and adjust the
 ## following line (default is 8192):
 #APACHE_ULIMIT_MAX_FILES='ulimit -n 65536'
+
+## If you would like to pass arguments to the web server, add them below
+## to the APACHE_ARGUMENTS environment.
+#export APACHE_ARGUMENTS=''
+
+## Enable the debug mode for maintainer scripts.
+## This will produce a verbose output on package installations of web server modules and web application
+## installations which interact with Apache
+#export APACHE2_MAINTSCRIPT_DEBUG=1
