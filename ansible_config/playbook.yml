@@ -8,7 +8,7 @@
         - baseUbuntu
         - rrosen326Account
         - hardenedUbuntu
-#        - hardenedApache
+        - hardenedApache
 #        - projectSpecific
 
 # TODO LogRotate
