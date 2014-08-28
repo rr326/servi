@@ -6,10 +6,10 @@
     tasks:
     roles:
         - baseUbuntu
-#        - rrosen326Account
-#        - hardenedUbuntu
-#        - hardenedApache
-#        - projectSpecific
+        - rrosen326Account
+        - hardenedUbuntu
+        - hardenedApache
+        - projectSpecific
 
 
 

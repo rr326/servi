@@ -1,63 +1,64 @@
 ---
 
 
--   file: path=/var/log/apache2/{{SITE_SUFFIX}} state=directory group=www-data owner=www-data mode=770
--   file: path=/home/webdev/python_venv state=directory group=webdev owner=webdev mode=770
--   file: path=/home/webdev/python_venv/berkeley state=directory group=webdev owner=webdev mode=770
+#
+# Setup Python virtualenvs
+#
+-   copy: src=requirements_py2.txt dest=/tmp/requirements_py2.txt force=yes
+-   name: Update py2 venv with needed modules
+    pip:
+      executable: pip2
+      virtualenv: "{{ PY_VENV_DIR }}/py2"
+      requirements: /tmp/requirements_py2.txt
 
-# These will be mounted in Vagrant, but must exist for non-vagrant
--   file: path=/etc/apache2/sites-available/berkeley.conf group=webdev owner=webdev mode=770 state=touch
--   file: path=/var/www/berkeley state=directory group=webdev owner=webdev mode=770 state=directory
-
-# These are mounted by vagrant, but you need to reassign ownership manually.
-# Need to figure out how to do this. I need to change the ownership of the directories, but when you do
-# recurse, it doews all files too. Redo vagrant up and see what needs to be changed.
-# -   file: path=/etc/apache2/sites-available group=webdev owner=webdev mode=770 recurse=yes
-# -   file: path=/var/www/berkeley state=directory group=webdev owner=webdev mode=770 recurse=yes
-
-
--   name: create virtualenv
-    shell: chdir=/home/webdev/python_venv/ creates=berkeley virtualenv berkeley
-    remote_user: webdev
-    sudo: no
-
--   name: install Flask
-    pip: name=Flask state=present virtualenv=/home/webdev/python_venv/berkeley
-    remote_user: webdev
-    sudo: no
-
--   name: install pymongo
-    pip: name=pymongo state=present virtualenv=/home/webdev/python_venv/berkeley
-    remote_user: webdev
-    sudo: no
-
--   name: install Flask-PyMongo
-    pip: name=Flask-PyMongo  state=present virtualenv=/home/webdev/python_venv/berkeley
-    remote_user: webdev
-    sudo: no
-
--   name: install ipython
-    pip: name=ipython state=present virtualenv=/home/webdev/python_venv/berkeley
-    remote_user: webdev
-    sudo: no
-
--   name: install pillow
-    pip: name=pillow state=present virtualenv=/home/webdev/python_venv/berkeley
-    remote_user: webdev
-    sudo: no
-
-# php, for adaptive_images.php
--   apt: pkg=php5 state=latest
--   apt: pkg=libapache2-mod-php5 state=latest
--   apt: pkg=php5-cli state=latest
--   apt: pkg=php5-gd state=latest
+-   copy: src=requirements_py3.txt dest=/tmp/requirements_py3.txt force=yes
+-   name: Update py3 venv with needed modules
+    pip:
+      executable: pip3
+      virtualenv: "{{ PY_VENV_DIR }}/py3"
+      requirements: /tmp/requirements_py3.txt
 
 
--   command: a2ensite berkeley.conf  removes=/etc/apache2/sites-available/berkeley.conf
+
+
+#
+# Setup the apache configuration file
+# In Vagrant, this will be mounted and available.
+# In non-vagrant, the push scripts (eg: grunt pushto:prod) must upload the file, and possible restart apache.
+
+
+
+#
+# Vagrant-only
+#
+#-   debug: msg="Doing Vagrant-only tasks"
+
+
+#
+# Non-Vagrant-only
+#
+-   debug: msg="Doing Non-Vagrant tasks"
+-   file: dest=/var/www/{{ SITE_SUFFIX }} state=directory group=webdev owner=webdev mode=770 state=directory
+    when: not IS_VAGRANT
+-   name: Copy apache configuration to sites-available
+    copy: src="../../../../apache_config/sites-available/{{ SITE_SUFFIX }}.conf"
+        group=webdev owner=webdev mode=770 force=no
+    when: not IS_VAGRANT
+
+#
+# Do for Vagrant & non-Vagrant
+#
+
+-   name: Create apache log file directory
+    file: path=/var/log/apache2/{{SITE_SUFFIX}} state=directory group=www-data owner=www-data mode=770
+
+-   command: a2ensite {{ SITE_SUFFIX }}.conf
 -   service: name=apache2 state=restarted
 
-# Note - you need to restart apache after the first 'vagrant up', because the shared drives (with the proper vhost file) aren't set up until after
-# ansible finishes provisioning. 
 
-# TODO - need to make /var/www/berkeley, and give proper rights (don't need to in vagrant, but do for non-vagrant)
+
+
+
+#  TODO - is this still true:  Note - you need to restart apache after the first 'vagrant up', because the shared drives (with the proper vhost file) aren't set up until after ansible finishes provisioning.
+
 

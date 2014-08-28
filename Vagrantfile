@@ -33,7 +33,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # Run ansible with playbook.yml (next to Vagrantfile)
     config.vm.provision "ansible" do |ansible|
         ansible.extra_vars = {
-            is_vagrant: vars["IS_VAGRANT"],
+            IS_VAGRANT: true,
             SYS_TYPE: "virtual_machine"
         }
         ansible.playbook = "ansible_config/playbook.yml"
