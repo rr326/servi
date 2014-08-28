@@ -52,4 +52,4 @@ alias ll='ls -l'
 alias graceful='sudo apachectl graceful'
 
 # Activate virtual env
-. ../webdev/python_venv/berkeley/bin/activate
+. /var/penv/py3

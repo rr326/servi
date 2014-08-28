@@ -64,6 +64,7 @@
 -   file: path=/etc/apache2/sites-available/000-default.conf  state=absent
 -   file: path=/etc/apache2/sites-available/default-ssl.conf  state=absent
 -   file: path=/etc/apache2/sites-available/default           state=absent
+-   file: dest=/var/www/html state=absent  # Remove default apache site
 
 
 #
@@ -115,15 +116,30 @@
 #
 # Setup Python virtualenvs
 #
+
+-   name: Create python2 virtual environment
+    command: virtualenv --python=python2.7 {{ PY_VENV_DIR }}/py2
+      creates="{{ PY_VENV_DIR }}/py2"
+
+-   file: dest="{{ PY_VENV_DIR }}/py2" state=directory recurse=yes
+      owner=webdev group=webdev mode=775
+
 -   copy: src=requirements_py2.txt dest=/tmp/requirements_py2.txt force=yes
--   name: Create python2 venv
+-   name: Python2 - install base modules
     pip:
       executable: pip2
       virtualenv: "{{ PY_VENV_DIR }}/py2"
       requirements: /tmp/requirements_py2.txt
 
+-   name: Create python3 virtual environment
+    command: virtualenv --python=python3.4 {{ PY_VENV_DIR }}/py3
+      creates="{{ PY_VENV_DIR }}/py3"
+
+-   file: dest="{{ PY_VENV_DIR }}/py3" state=directory recurse=yes
+      owner=webdev group=webdev mode=775
+
 -   copy: src=requirements_py3.txt dest=/tmp/requirements_py3.txt force=yes
--   name: Create python3 venv
+-   name: Python2 - install base modules
     pip:
       executable: pip3
       virtualenv: "{{ PY_VENV_DIR }}/py3"

@@ -12,6 +12,6 @@
 -   authorized_key: key="{{ lookup('file', MAIN_RSA_KEY_FILE) }}"
                     user=webdev
 
--   copy: src=.zshrc dest=/home/rrosen326
+-   copy: src=.zshrc dest=/home/rrosen326 owner:rrosen326
     remote_user: rrosen326                        
 
