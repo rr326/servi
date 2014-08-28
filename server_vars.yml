@@ -6,8 +6,14 @@
 # because you may run the ansible playbook without Vagrant.
 WEBDEV_UID : 1100
 WEBDEV_GID : 900
-LOCAL_DIR : "src"
-REMOTE_DIR : "/var/www/thissite"
-APACHE_LOG_DIR: "/var/log/apache2/thissite"
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 HOST_NAME: "thishost"
+LOCAL_DIR : "src"
+
+SITE_SUFFIX: "thissite"
+REMOTE_DIR : "/var/www/thissite"
+APACHE_LOG_DIR: "/var/log/apache2/thissite"
+
+MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
+
+PY_VENV_DIR : "/var/penv"

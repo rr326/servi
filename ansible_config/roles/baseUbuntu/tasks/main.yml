@@ -1,5 +1,6 @@
 ---
 
+
 #
 # Install packages
 #
@@ -14,6 +15,7 @@
       - python-dev
       - python-virtualenv
       - python3
+      - python3-pip
       - apache2
       - libapache2-mod-wsgi
       - libapache2-mod-macro
@@ -24,7 +26,7 @@
 #
 -   group: name=admin state=present system=yes
 -   user: name=admin comment='admin' createhome=yes shell=/usr/bin/zsh group=admin groups=adm,admin,sudo
--   authorized_key:  key="{{ lookup('file', '/Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub') }}"
+-   authorized_key:  key="{{ lookup('file', MAIN_RSA_KEY_FILE) }}"
                      user=admin
 #
 # Make sure sudo & admin groups do not require passwords for sudo access
@@ -88,12 +90,42 @@
 -   file: state=file path=/usr/local/bin/subl mode=755
 
 
-# Todo - set up mail (look at fail2ban)
+#
+# Set up environment variables (/etc/environment in Ubuntu)
+#
 
-# TODO - turn on pagespeed later - right now it has lots of errors
-#-   get_url: dest=/tmp url=https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb
-#-   command: dpkg -i /tmp/mod-pagespeed-stable_current_amd64.deb
-#-   command: apt-get -f install
-# -   command: pagespeed
 
-# TODO - set sudoers to no password! - http://askubuntu.com/questions/192050/how-to-run-sudo-command-with-no-password
+-   name:  "Make {{ PY_VENV_DIR }}"
+    file: dest={{ PY_VENV_DIR }} state=directory
+      owner=webdev group=webdev mode=775
+
+-   name: "/etc/environment: Set PY_VENV_DIR = {{ PY_VENV_DIR }}"
+    lineinfile: >
+        dest=/etc/environment
+        state=present
+        line='export PY_VENV_DIR="{{ PY_VENV_DIR }}"'
+
+-   name: "/etc/environment: Set SYS_TYPE = {{ SYS_TYPE }}"
+    lineinfile: >
+        dest=/etc/environment
+        state=present
+        line='export SYS_TYPE="{{ SYS_TYPE | default("cloud") }}"'
+
+
+#
+# Setup Python virtualenvs
+#
+-   copy: src=requirements_py2.txt dest=/tmp/requirements_py2.txt force=yes
+-   name: Create python2 venv
+    pip:
+      executable: pip2
+      virtualenv: "{{ PY_VENV_DIR }}/py2"
+      requirements: /tmp/requirements_py2.txt
+
+-   copy: src=requirements_py3.txt dest=/tmp/requirements_py3.txt force=yes
+-   name: Create python3 venv
+    pip:
+      executable: pip3
+      virtualenv: "{{ PY_VENV_DIR }}/py3"
+      requirements: /tmp/requirements_py3.txt
+

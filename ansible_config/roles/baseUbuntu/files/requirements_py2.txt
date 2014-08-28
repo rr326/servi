@@ -1,0 +1,2 @@
+# Keeping requirments small in base, so building a virtual environment is fast
+ujson

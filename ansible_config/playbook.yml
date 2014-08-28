@@ -6,23 +6,26 @@
     tasks:
     roles:
         - baseUbuntu
-        - rrosen326Account
-        - hardenedUbuntu
-        - hardenedApache
+#        - rrosen326Account
+#        - hardenedUbuntu
+#        - hardenedApache
 #        - projectSpecific
 
+
+
 # TODO LogRotate
-# TODO Mod_security - get working
+# TODO Mailer
+# TODO Virtualenvs
+# TODO mod-Pagespeed
+# TODO Monitoring
+# TODO errors (fail2ban) to mail
+
 
 
 # Debug stuff
 #    tasks:
 #       # If debugging apache problems, start with a clean apache.conf (without this, an old bad one fails)
 #        -   copy: dest=/etc/apache2/apache2.conf src=apache2.conf backup=yes force=yes
-
-
-
-# TODO - take changes in ansible setup at move to base ansible - webdev gid, fix to mongo (is_vagrant is defined)
 
 
 # Testing - to run a single task from the command line (to try it out), do something like this:

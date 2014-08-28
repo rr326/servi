@@ -1,7 +1,7 @@
 ---
 
 
--   file: path=/var/log/apache2/berkeley state=directory group=www-data owner=www-data mode=770
+-   file: path=/var/log/apache2/{{SITE_SUFFIX}} state=directory group=www-data owner=www-data mode=770
 -   file: path=/home/webdev/python_venv state=directory group=webdev owner=webdev mode=770
 -   file: path=/home/webdev/python_venv/berkeley state=directory group=webdev owner=webdev mode=770
 
