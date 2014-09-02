@@ -11,13 +11,13 @@ def get_template_version():
     return data["template_version"]
 
 
-def create_manifest():
+def create_manifest(dir):
     # Return a dict of all template files and their SHA1 hash
     #  (and the template version - eg: 1.0.0)
-    manifest={ "files" : {}}
+    manifest = { "files" : {}}
     manifest["template_version"] = get_template_version()
 
-    for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
+    for (dirpath, dirnames, filenames) in os.walk(dir):
         for file in filenames:
             fullpath=os.path.join(dirpath, file)
             with open(fullpath, 'rb') as fp:
@@ -27,7 +27,7 @@ def create_manifest():
 
 
 def run():
-    manifest = create_manifest()
+    manifest = create_manifest(TEMPLATE_DIR)
 
 if __name__ == "__main__":
     run()
