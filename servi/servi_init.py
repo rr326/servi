@@ -50,19 +50,28 @@ def compare_template_versions(manifest):
     return existing_version, manifest["template_version"]
 
 
-def run():
-    print('cwd: ', os.getcwd())
+def do_init(manifest, force, changed_files, existing_version, new_version):
+    if not force and changed_files:
+        for file in changed_files:
+            print("Error: file changed in master: {0}".format(file))
+        raise Exception('Files Changed - Aborting (use "--force" to ignore)')
+
+    if not force and existing_version > new_version:
+        raise Exception('existing template version > new version: '
+              ' existing: {0} > new: {1}\nAborting (use "--force" to ignore) '.
+              format(existing_version, new_version))
+
+
+def run(args):
+    print('servi_init: args.force: {0}'.format(args.force))
+
     manifest = create_manifest()
     changed_files = compare_digests(manifest)
     existing_version, new_version = compare_template_versions(manifest)
-    if changed_files:
-        for file in changed_files:
-            print("Warning: file changed in master: {0}".format(file))
 
-    if existing_version > new_version:
-        print('Warning: existing template version > new version: '
-              ' existing: {0} > new: {1}'.format(existing_version,
-                                                 new_version))
+    do_init(manifest, force=args.force, changed_files=changed_files,
+        existing_version=existing_version, new_version=new_version)
+
 
 if __name__ == "__main__":
-    run()
+    pass
