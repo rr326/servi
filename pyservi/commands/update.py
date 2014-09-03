@@ -13,5 +13,4 @@ class UpdateCommand(Command):
         print('update.run() called with args: {0}'.format(args))
 
 
-print('**update.py**')
 command=UpdateCommand()

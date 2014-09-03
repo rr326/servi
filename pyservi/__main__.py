@@ -21,7 +21,6 @@ def load_plugins(main_parser):
     """
     import commands  # required for import_module()
     plugins = find_plugins()
-    print('Plugins found: {0}'.format(plugins))
     command_dict = {}
     for plugin in plugins:
         mod = import_module('commands.'+plugin, package='commands')
@@ -30,7 +29,6 @@ def load_plugins(main_parser):
 
 
 def main():
-    print('servi.__main__.py main()')
     main_parser = argparse.ArgumentParser(description='Servi Main Commands')
     sub_parsers = main_parser.add_subparsers(
         title='Commands', metavar='', dest='command')
@@ -40,6 +38,7 @@ def main():
     args = main_parser.parse_args()
     if args.command:
         try:
+            print('Servi - Running: {0}'.format(args.command))
             args.command_func(args)
         except ForceError as e:
             print(e)

@@ -112,9 +112,9 @@ def copy_files(manifest):
             os.makedirs(destdir, exist_ok=True)
         shutil.copyfile(new_file, master)
         if existing:
-            qprint('Replaced file:    {0}'.format(master))
+            qprint('Updated: {0}'.format(master))
         else:
-            qprint('Created new file: {0}'.format(master))
+            qprint('Created: {0}'.format(master))
        
 
 
@@ -129,7 +129,6 @@ class InitCommand(Command):
     def run(self, args):
         global quiet
         quiet = args.quiet
-        print('init.run() called with args: {0}'.format(args))
 
         manifest = create_manifest()
         changed_files = compare_digests(manifest)
@@ -139,10 +138,13 @@ class InitCommand(Command):
             force=args.force, changed_files=changed_files,
             existing_version=existing_version, new_version=new_version)
 
+        qprint('Initializing repository with Servi template version: {0}'.
+            format(new_version))
+        qprint('Master (destination directory): {0}'.format(MASTER_DIR))
+
         copy_files(manifest)
 
 
-print('**init.py**')
 command=InitCommand()
 
 ## TODO - How to deal with files that were deleted in MASTER_DIR (eg: THIS_SITE.conf)
