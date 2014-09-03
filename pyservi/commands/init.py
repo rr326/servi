@@ -55,8 +55,11 @@ def compare_digests(manifest):
 
 
 def compare_template_versions(manifest):
-    existing_version = get_template_version(
-        templatepath_to_destpath(VERSION_FILE))
+    try:
+        existing_version = get_template_version(
+            templatepath_to_destpath(VERSION_FILE))
+    except FileNotFoundError:
+        existing_version = ''
     return existing_version, manifest["template_version"]
 
 
