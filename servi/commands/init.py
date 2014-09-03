@@ -1,16 +1,26 @@
 from config import *
+from Command import Command
+from servi_exceptions import ForceError
+
+import shutil
 import json
 import os
 import hashlib
-from Command import Command
-from servi_exceptions import ForceError
 from pprint import pprint, pformat
+from datetime import datetime
 
 
 def get_template_version(file):
     with open(file) as f:
         data = json.load(f)
     return data["template_version"]
+
+
+def hash_of_file(fname):
+    with open(fname, 'rb') as fp:
+        content = fp.read()
+        hashv = hashlib.sha1(content).hexdigest()
+    return hashv
 
 
 def create_manifest():
@@ -24,9 +34,7 @@ def create_manifest():
     for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
         for file in filenames:
             fullpath = os.path.join(dirpath, file)
-            with open(fullpath, 'rb') as fp:
-                content = fp.read()
-                manifest["files"][fullpath] = hashlib.sha1(content).hexdigest()
+            manifest["files"][fullpath] = hash_of_file(fullpath)
     return manifest
 
 
@@ -41,10 +49,8 @@ def compare_digests(manifest):
     for file, sha1 in manifest["files"].items():
         path = templatepath_to_destpath(file)
         if os.path.isfile(path) and os.access(path, os.R_OK):
-            with open(path, 'rb') as fp:
-                content = fp.read()
-                if hashlib.sha1(content).hexdigest() != sha1:
-                    warn.append(path)
+            if hash_of_file(path) != sha1:
+                warn.append(path)
     return warn
 
 
@@ -65,11 +71,29 @@ def check_errors(force, changed_files, existing_version, new_version):
                          new_version))
 
 
+def rename_existing_file(fname):
+    shutil.move(fname, 'backup_{0}_{1}'.format(
+            os.path.basename(fname), datetime.utcnow().isoformat()))
+
+
 def copy_files(manifest):
-    print('manifest: \n{0}'.format(pformat(manifest)))
-    for file in manifest["files"]:
-        existing = templatepath_to_destpath(file)
-        print('Going to copy {0} to {1}'.format(file, existing))
+    for new_file, new_hash in manifest["files"].items():
+        existing = templatepath_to_destpath(new_file)
+        try:
+            existing_hash = hash_of_file(existing)
+        except IOError:
+            existing_hash = None
+
+        if existing_hash == new_hash:
+            continue
+
+        print('Copy: {0} --> {1}'.format(new_file, existing))
+        if os.path.isfile(existing):
+            rename_existing_file(existing)
+        destdir = os.path.abspath(os.path.dirname(existing))
+        if os.path.dirname(destdir):
+            os.makedirs(destdir, exist_ok=True)
+        shutil.copyfile(new_file, existing)
 
 
 class InitCommand(Command):
@@ -95,3 +119,5 @@ class InitCommand(Command):
 
 print('**init.py**')
 command=InitCommand()
+
+## TODO - How to deal with files that were deleted in MASTER_DIR (eg: THIS_SITE.conf)
