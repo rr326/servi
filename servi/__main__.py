@@ -1,8 +1,15 @@
+import os
+from glob import glob
+import argparse
+from importlib import import_module
+
+
+
 # import argparse
 # import os
 # from glob import glob
 #
-# def import_commands():
+# def load_plugins():
 #     all_list=[]
 #     for f in glob(os.path.dirname(__file__)+'/commands/*.py'):
 #         if os.path.isfile(f) and not os.path.basename(f).startswith('_'):
@@ -30,10 +37,46 @@
 #
 # def main():
 #     #parse_args()
-#     commands = import_commands()
+#     commands = load_plugins()
 #     print('commands: {0}'.format(commands))
+
+
+def find_plugins():
+    plugins = []
+    for f in glob(os.path.dirname(__file__) + '/commands/*.py'):
+        if os.path.isfile(f) and not os.path.basename(f).startswith('_'):
+            plugins.append(os.path.basename(f)[:-3])
+
+    return plugins
+
+
+def load_plugins(main_parser):
+    """
+    Loads plugins from ./commands directory.
+    Each plugin must implement Command.Command class.
+    """
+    import commands
+    plugins = find_plugins()
+    print('Plugins found: {0}'.format(plugins))
+    commands={}
+    for plugin in plugins:
+        mod = import_module('commands.'+plugin, package='commands')
+        p = commands[plugin] = mod.command
+        p.register_command_line(main_parser)
+
+
+
+
+
 def main():
     print('servi.__main__.py main()')
+    main_parser = argparse.ArgumentParser(description='Servi Main Commands')
+    sub_parsers = main_parser.add_subparsers(title='Commands', metavar='')
+
+    load_plugins(sub_parsers)
+
+    args = main_parser.parse_args()
+    args.command_func(args)
 
 if __name__ == "__main__":
     main()
