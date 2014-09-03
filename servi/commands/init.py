@@ -3,6 +3,7 @@ import json
 import os
 import hashlib
 from Command import Command
+from servi_exceptions import ForceError
 from pprint import pformat, pprint
 
 
@@ -54,16 +55,15 @@ def compare_template_versions(manifest):
 
 def do_init(manifest, force, changed_files, existing_version, new_version):
     if not force and changed_files:
-        for file in changed_files:
-            print("Error: file changed in master: {0}".format(file))
-        raise Exception('Files Changed - Aborting (use "--force" to ignore)')
+        raise ForceError('The following files from the template were changed'
+                         ' unexpectedly: {0}'.format(changed_files))
 
     if not force and existing_version > new_version:
-        raise Exception('existing template version > new version: '
-              ' existing: {0} > new: {1}\nAborting (use "--force" to ignore) '.
-              format(existing_version, new_version))
+        raise ForceError('Existing template version ({0}) '
+                         '> new version ({1})'.format(existing_version,
+                         new_version))
 
-    
+
 class InitCommand(Command):
     def register_command_line(self, sub_parsers):
 
@@ -80,7 +80,6 @@ class InitCommand(Command):
 
         do_init(manifest, force=args.force, changed_files=changed_files,
                 existing_version=existing_version, new_version=new_version)
-
 
 
 print('**init.py**')

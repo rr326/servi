@@ -2,6 +2,7 @@ import os
 from glob import glob
 import argparse
 from importlib import import_module
+from servi_exceptions import ForceError
 
 
 
@@ -76,7 +77,10 @@ def main():
     load_plugins(sub_parsers)
 
     args = main_parser.parse_args()
-    args.command_func(args)
+    try:
+        args.command_func(args)
+    except ForceError as e:
+        print(e)
 
 if __name__ == "__main__":
     main()
