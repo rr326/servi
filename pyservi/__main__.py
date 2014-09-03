@@ -4,6 +4,8 @@ import argparse
 from importlib import import_module
 from servi_exceptions import ForceError
 
+from utils import *
+
 
 def find_plugins():
     plugins = []
@@ -30,13 +32,14 @@ def load_plugins(main_parser):
 
 
 def main():
-    main_parser = argparse.ArgumentParser(description='Servi Main Commands')
-    sub_parsers = main_parser.add_subparsers(
+    global servi_parser
+    servi_parser = argparse.ArgumentParser(description='Servi Main Commands')
+    sub_parsers = servi_parser.add_subparsers(
         title='Commands', metavar='', dest='command')
 
     load_plugins(sub_parsers)
 
-    args = main_parser.parse_args()
+    args = servi_parser.parse_args()
     if args.command:
         try:
             print('Servi - Running: {0}'.format(args.command))
@@ -45,7 +48,7 @@ def main():
             print(e)
     else:
         print('\n***** Error ******\nNo command on command line.\n')
-        main_parser.print_help()
+        servi_parser.print_help()
 
 if __name__ == "__main__":
     main()

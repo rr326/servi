@@ -1,4 +1,7 @@
+from config import *
 from Command import Command
+from commands._commands_utils import *
+from servi_exceptions import ForceError
 
 
 class UpdateCommand(Command):
