@@ -4,6 +4,7 @@ import os
 import hashlib
 from Command import Command
 from servi_exceptions import ForceError
+from pprint import pprint, pformat
 
 
 def get_template_version(file):
@@ -30,7 +31,7 @@ def create_manifest():
 
 
 def templatepath_to_destpath(template_path):
-    return os.path.join(DEST_DIR,  template_path[len(TEMPLATE_DIR)+1:])
+    return os.path.join(MASTER_DIR,  template_path[len(TEMPLATE_DIR)+1:])
 
 
 def compare_digests(manifest):
@@ -53,8 +54,7 @@ def compare_template_versions(manifest):
     return existing_version, manifest["template_version"]
 
 
-# noinspection PyUnusedLocal
-def do_init(manifest, force, changed_files, existing_version, new_version):
+def check_errors(force, changed_files, existing_version, new_version):
     if not force and changed_files:
         raise ForceError('The following files from the template were changed'
                          ' unexpectedly: {0}'.format(changed_files))
@@ -63,6 +63,13 @@ def do_init(manifest, force, changed_files, existing_version, new_version):
         raise ForceError('Existing template version ({0}) '
                          '> new version ({1})'.format(existing_version,
                          new_version))
+
+
+def copy_files(manifest):
+    print('manifest: \n{0}'.format(pformat(manifest)))
+    for file in manifest["files"]:
+        existing = templatepath_to_destpath(file)
+        print('Going to copy {0} to {1}'.format(file, existing))
 
 
 class InitCommand(Command):
@@ -79,8 +86,11 @@ class InitCommand(Command):
         changed_files = compare_digests(manifest)
         existing_version, new_version = compare_template_versions(manifest)
 
-        do_init(manifest, force=args.force, changed_files=changed_files,
-                existing_version=existing_version, new_version=new_version)
+        check_errors(
+            force=args.force, changed_files=changed_files,
+            existing_version=existing_version, new_version=new_version)
+
+        copy_files(manifest)
 
 
 print('**init.py**')
