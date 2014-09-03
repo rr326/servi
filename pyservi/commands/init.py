@@ -10,6 +10,14 @@ from pprint import pprint, pformat
 from datetime import datetime
 
 
+def qprint(*args, **kwargs):
+    # quiet print - relies on GLOBAL quiet
+    if quiet:
+        print('qprint')
+        return
+    print(*args, **kwargs)
+
+
 def get_template_version(file):
     with open(file) as f:
         data = json.load(f)
@@ -74,29 +82,40 @@ def check_errors(force, changed_files, existing_version, new_version):
                          new_version))
 
 
-def rename_existing_file(fname):
-    shutil.move(fname, 'backup_{0}_{1}'.format(
-            os.path.basename(fname), datetime.utcnow().isoformat()))
+def rename_master_file(fname):
+    path = os.path.dirname(fname)
+    newfname = 'backup_{0}_{1}'.format(os.path.basename(fname),
+        datetime.utcnow().isoformat())
+
+    shutil.move(fname, os.path.join(path, newfname))
 
 
 def copy_files(manifest):
     for new_file, new_hash in manifest["files"].items():
-        existing = templatepath_to_destpath(new_file)
+        master = templatepath_to_destpath(new_file)
         try:
-            existing_hash = hash_of_file(existing)
+            master_hash = hash_of_file(master)
         except IOError:
-            existing_hash = None
+            master_hash = None
 
-        if existing_hash == new_hash:
+        if master_hash == new_hash:
             continue
 
-        print('Copy: {0} --> {1}'.format(new_file, existing))
-        if os.path.isfile(existing):
-            rename_existing_file(existing)
-        destdir = os.path.abspath(os.path.dirname(existing))
+        if os.path.isfile(master):
+            rename_master_file(master)
+            existing = True
+        else:
+            existing = False
+
+        destdir = os.path.abspath(os.path.dirname(master))
         if os.path.dirname(destdir):
             os.makedirs(destdir, exist_ok=True)
-        shutil.copyfile(new_file, existing)
+        shutil.copyfile(new_file, master)
+        if existing:
+            qprint('Replaced file:    {0}'.format(master))
+        else:
+            qprint('Created new file: {0}'.format(master))
+       
 
 
 class InitCommand(Command):
@@ -104,9 +123,12 @@ class InitCommand(Command):
 
         parser_init = sub_parsers.add_parser('init', help='Init project')
         parser_init.add_argument('-f', '--force', action='store_true')
+        parser_init.add_argument('-q', '--quiet', action='store_true')
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
+        global quiet
+        quiet = args.quiet
         print('init.run() called with args: {0}'.format(args))
 
         manifest = create_manifest()

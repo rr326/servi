@@ -32,15 +32,20 @@ def load_plugins(main_parser):
 def main():
     print('servi.__main__.py main()')
     main_parser = argparse.ArgumentParser(description='Servi Main Commands')
-    sub_parsers = main_parser.add_subparsers(title='Commands', metavar='')
+    sub_parsers = main_parser.add_subparsers(
+        title='Commands', metavar='', dest='command')
 
     load_plugins(sub_parsers)
 
     args = main_parser.parse_args()
-    try:
-        args.command_func(args)
-    except ForceError as e:
-        print(e)
+    if args.command:
+        try:
+            args.command_func(args)
+        except ForceError as e:
+            print(e)
+    else:
+        print('\n***** Error ******\nNo command on command line.\n')
+        main_parser.print_help()
 
 if __name__ == "__main__":
     main()
