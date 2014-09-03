@@ -5,6 +5,6 @@ class Command(object):
     def register_command_line(self, parser, command_name, help):
         pass
 
-    def run(self):
+    def run(self, args):
         pass
 

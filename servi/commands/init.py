@@ -2,7 +2,7 @@ from config import *
 import json
 import os
 import hashlib
-#import ..Command
+from Command import Command
 from pprint import pformat, pprint
 
 
@@ -63,19 +63,25 @@ def do_init(manifest, force, changed_files, existing_version, new_version):
               ' existing: {0} > new: {1}\nAborting (use "--force" to ignore) '.
               format(existing_version, new_version))
 
+    
+class InitCommand(Command):
+    def register_command_line(self, sub_parsers):
 
-def run(args):
-    print('servi_init: args.force: {0}'.format(args.force))
+        parser_init = sub_parsers.add_parser('init', help='Init project')
+        parser_init.add_argument('-f', '--force', action='store_true')
+        parser_init.set_defaults(command_func=self.run)
 
-    manifest = create_manifest()
-    changed_files = compare_digests(manifest)
-    existing_version, new_version = compare_template_versions(manifest)
+    def run(self, args):
+        print('init.run() called with args: {0}'.format(args))
 
-    do_init(manifest, force=args.force, changed_files=changed_files,
-        existing_version=existing_version, new_version=new_version)
+        manifest = create_manifest()
+        changed_files = compare_digests(manifest)
+        existing_version, new_version = compare_template_versions(manifest)
+
+        do_init(manifest, force=args.force, changed_files=changed_files,
+                existing_version=existing_version, new_version=new_version)
 
 
-if __name__ == "__main__":
-    pass
 
-print('**_init.py**')
+print('**init.py**')
+command=InitCommand()
