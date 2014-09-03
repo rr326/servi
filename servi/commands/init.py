@@ -2,7 +2,9 @@ from config import *
 import json
 import os
 import hashlib
+#import ..Command
 from pprint import pformat, pprint
+
 
 
 def get_template_version(file):
@@ -75,3 +77,5 @@ def run(args):
 
 if __name__ == "__main__":
     pass
+
+print('**init.py**')
