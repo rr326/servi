@@ -4,8 +4,6 @@ import os
 import hashlib
 from Command import Command
 from servi_exceptions import ForceError
-from pprint import pformat, pprint
-
 
 
 def get_template_version(file):
@@ -17,12 +15,14 @@ def get_template_version(file):
 def create_manifest():
     # Return a dict of all template files and their SHA1 hash
     #  (and the template version - eg: 1.0.0)
-    manifest = { "files" : {}}
-    manifest["template_version"] = get_template_version(VERSION_FILE)
+    manifest = {
+        "files": {},
+        "template_version": get_template_version(VERSION_FILE)
+    }
 
     for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
         for file in filenames:
-            fullpath=os.path.join(dirpath, file)
+            fullpath = os.path.join(dirpath, file)
             with open(fullpath, 'rb') as fp:
                 content = fp.read()
                 manifest["files"][fullpath] = hashlib.sha1(content).hexdigest()
@@ -53,6 +53,7 @@ def compare_template_versions(manifest):
     return existing_version, manifest["template_version"]
 
 
+# noinspection PyUnusedLocal
 def do_init(manifest, force, changed_files, existing_version, new_version):
     if not force and changed_files:
         raise ForceError('The following files from the template were changed'
