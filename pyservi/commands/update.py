@@ -13,4 +13,7 @@ class UpdateCommand(Command):
         print('update.run() called with args: {0}'.format(args))
 
 
-command=UpdateCommand()
+command = UpdateCommand()
+
+## TODO - How to deal with files that were deleted in MASTER_DIR
+## (eg: THIS_SITE.conf)

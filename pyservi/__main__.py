@@ -14,6 +14,7 @@ def find_plugins():
     return plugins
 
 
+# noinspection PyUnresolvedReferences
 def load_plugins(main_parser):
     """
     Loads plugins from ./commands directory.

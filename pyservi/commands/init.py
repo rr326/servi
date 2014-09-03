@@ -84,8 +84,8 @@ def check_errors(force, changed_files, existing_version, new_version):
 
 def rename_master_file(fname):
     path = os.path.dirname(fname)
-    newfname = 'backup_{0}_{1}'.format(os.path.basename(fname),
-        datetime.utcnow().isoformat())
+    newfname = 'backup_{0}_{1}'.format(
+        os.path.basename(fname), datetime.utcnow().isoformat())
 
     shutil.move(fname, os.path.join(path, newfname))
 
@@ -117,7 +117,6 @@ def copy_files(manifest):
             qprint('Created: {0}'.format(master))
        
 
-
 class InitCommand(Command):
     def register_command_line(self, sub_parsers):
 
@@ -139,12 +138,11 @@ class InitCommand(Command):
             existing_version=existing_version, new_version=new_version)
 
         qprint('Initializing repository with Servi template version: {0}'.
-            format(new_version))
+               format(new_version))
         qprint('Master (destination directory): {0}'.format(MASTER_DIR))
 
         copy_files(manifest)
 
 
-command=InitCommand()
+command = InitCommand()
 
-## TODO - How to deal with files that were deleted in MASTER_DIR (eg: THIS_SITE.conf)
