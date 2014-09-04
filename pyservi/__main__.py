@@ -2,9 +2,7 @@ import os
 from glob import glob
 import argparse
 from importlib import import_module
-from servi_exceptions import ForceError
-
-from utils import *
+from servi_exceptions import *
 
 
 def find_plugins():
@@ -44,7 +42,7 @@ def main():
         try:
             print('Servi - Running: {0}'.format(args.command))
             args.command_func(args)
-        except ForceError as e:
+        except (ForceError, ServiError) as e:
             print(e)
     else:
         print('\n***** Error ******\nNo command on command line.\n')

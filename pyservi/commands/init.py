@@ -1,27 +1,9 @@
 from config import *
-from Command import Command
-from servi_exceptions import ForceError
-import globals as g
+from command import Command
 from utils import *
-from ._commands_utils import  *
+from commands.utils.utils import *
+from commands.utils.manifest import *
 
-
-
-
-
-
-def check_errors(force, changed_files, existing_version, new_version):
-    if not force and changed_files:
-        raise ForceError('The following files from the template were changed'
-                         ' unexpectedly: {0}'.format(changed_files))
-
-    if not force and existing_version > new_version:
-        raise ForceError('Existing template version ({0}) '
-                         '> new version ({1})'.format(existing_version,
-                         new_version))
-
-
-       
 
 class InitCommand(Command):
     def register_command_line(self, sub_parsers):
@@ -34,19 +16,23 @@ class InitCommand(Command):
     def run(self, args):
         g.quiet = args.quiet
 
-        manifest = create_manifest()
-        changed_files = compare_digests(manifest)
-        existing_version, new_version = compare_template_versions(manifest)
+        m_existing_fresh = Manifest(MASTER)
+        m_existing_fresh.create()
+        m_template_fresh = Manifest(TEMPLATE)
+        m_template_fresh.create()
 
-        check_errors(
+        _, changed_files, _ = m_existing_fresh.changed_files(m_template_fresh)
+
+        error_if_changed(
             force=args.force, changed_files=changed_files,
-            existing_version=existing_version, new_version=new_version)
+            existing_version=m_template_fresh.template_version,
+            new_version=m_existing_fresh)
 
         qprint('Initializing repository with Servi template version: {0}'.
-               format(new_version))
+               format(m_template_fresh))
         qprint('Master (destination directory): {0}'.format(MASTER_DIR))
 
-        copy_files(manifest)
+        copy_files(m_template_fresh.manifest)
 
 
 command = InitCommand()
