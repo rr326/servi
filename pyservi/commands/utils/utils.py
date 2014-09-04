@@ -2,6 +2,8 @@ import shutil
 import json
 import os
 import hashlib
+import re
+from copy import deepcopy
 from pprint import pformat
 from datetime import datetime
 
@@ -18,7 +20,7 @@ def rename_master_file(fname):
     shutil.move(fname, os.path.join(path, newfname))
 
 
-def copy_files(manifest):
+def copy_files(manifest, exclude_files):
     for new_file, new_hash in manifest["files"].items():
         if new_file == pathfor(VERSION_FILE, TEMPLATE):
             continue  # No need to copy version file (its in servi_data.json)
@@ -30,6 +32,10 @@ def copy_files(manifest):
             master_hash = None
 
         if master_hash == new_hash:
+            continue
+
+        if exclude_files and os.path.isfile(master) and \
+                normalize_path(new_file, TEMPLATE):
             continue
 
         if os.path.isfile(master):
@@ -49,17 +55,6 @@ def copy_files(manifest):
             qprint('Created: {0}'.format(master))
 
 
-def error_if_changed(force, changed_files, existing_version,
-                     new_version):
-    if not force and changed_files:
-        raise ForceError(
-            'The following files from the template were changed'
-            ' unexpectedly: {0}'.format(changed_files))
-
-    if not force and existing_version > new_version:
-        raise ForceError('Existing template version ({0}) '
-                         '> new version ({1})'
-                         .format(existing_version, new_version))
 
 
 def hash_of_file(fname):
@@ -69,6 +64,20 @@ def hash_of_file(fname):
     return hashv
 
 
+def remove_ignored_files(files):
+    with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
+        data = json.load(f)
+    ignore_list =  data["ignore"]
+    ignore_re_string = '('+'|'.join(ignore_list)+')'
+    ignore_re = re.compile(ignore_re_string)
+
+    new_files=files.copy()
+    for file in files:
+        if ignore_re.search(file):
+            new_files.remove(file)
+
+    print("DEBUG: Ignored_files: {0}".format(files-new_files))
+    return new_files
 #
 # Path functions
 #
@@ -87,4 +96,11 @@ def pathfor(fname, source):
 
     return path
 
-
+def normalize_path(path, source):
+    assert source in [TEMPLATE, MASTER]
+    prefix = TEMPLATE_DIR if source is TEMPLATE else MASTER_DIR
+    prefix += '/'
+    if not os.path.commonprefix([prefix, path]) == prefix:
+        raise Exception('Expected prefix ({0}) not found in path ({1})'
+                        .format(prefix, path))
+    return path.split(sep=prefix, maxsplit=1)[1]

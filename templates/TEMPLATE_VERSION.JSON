@@ -1,3 +1,8 @@
 {
-    "template_version" : "1.0.0"
+    "template_version" : "1.0.0",
+    "ignore" : [
+        "^TEMPLATE_VERSION.json",
+        "^ansible_config/roles/projectSpecific/.*",
+        "^apache_config/sites-available/THISSITE.conf"
+    ]
 }

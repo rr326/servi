@@ -1,5 +1,6 @@
 # noinspection PyProtectedMember
 from commands.utils.utils import *
+from copy import deepcopy
 
 
 class Manifest(object):
@@ -26,6 +27,7 @@ class Manifest(object):
                     fullpath = templatepath_to_destpath(fullpath)
                     if not (os.path.isfile(fullpath) and
                             os.access(fullpath, os.R_OK)):
+                        self.manifest["files"][fullpath] = 'NONE'
                         continue  # If MASTER doesn't have a template file,
                                   # that's ok
                 self.manifest["files"][fullpath] = hash_of_file(fullpath)
@@ -47,19 +49,35 @@ class Manifest(object):
                 self.template_version == otherval('template_version')
                 )
 
-    def changed_files(self, orig):
+    def changed_files(self, orig, normalize_path):
         """
         compares self to orig.manifest
+        if normalize_path, it allows you to compare MASTER to TEMPLATE
+         manifests
         :returns  (in self not in orig, different in both, in orig not self)
         """
-        orig_manifest = getattr(orig, 'manifest')
-        diff = DictDiffer(self.manifest['files'], orig_manifest['files'])
+        if normalize_path:
+            d0 = normalize_manifest_paths(orig.manifest, orig.source)
+            d1 = normalize_manifest_paths(self.manifest, self.source)
+        else:
+            d0 = orig.manifest
+            d1 = self.manifest
+
+        diff = DictDiffer(d1["files"], d0["files"])
         return diff.added(), diff.changed(), diff.removed()
 
 
 #
 # Utilities
 #
+def normalize_manifest_paths(manifest, source):
+    newm = deepcopy(manifest)
+    for file, val in manifest["files"].items():
+        newf = normalize_path(file, source)
+        newm["files"][newf] = val
+        del newm["files"][file]
+    return newm
+
 
 def get_template_version(file):
     with open(file) as f:

@@ -1,6 +1,9 @@
 from command import Command
 # noinspection PyProtectedMember
 from commands.utils.utils import *
+from commands.utils.manifest import *
+
+
 
 
 class UpdateCommand(Command):
@@ -16,23 +19,27 @@ class UpdateCommand(Command):
     def run(self, args):
         g.quiet = args.quiet
 
-        # manifest = create_manifest()
-        # changed_files = compare_digests(manifest)
-        # existing_version, new_version = compare_template_versions(manifest)
-        #
-        # error_if_changed(
-        #     force=args.force, changed_files=changed_files,
-        #     existing_version=existing_version, new_version=new_version)
-        #
-        # find_deleted_files()
-        #
-        # qprint('Updating repository with Servi template version: {0}'.
-        #        format(new_version))
-        # qprint('Master (destination directory): {0}'.format(MASTER_DIR))
-        #
-        # copy_files(manifest)
+        m_existing_fresh = Manifest(MASTER)
+        m_existing_fresh.create()
+        m_template_fresh = Manifest(TEMPLATE)
+        m_template_fresh.create()
+
+        _, changed_files, deleted_files = m_existing_fresh.changed_files(
+            m_template_fresh, True)
+
+        changed_files = remove_ignored_files(changed_files)
+
+        if changed_files:
+            print('\nWarning\n'
+                  'The following files from the template were changed'
+                  ' unexpectedly and will not be updated: {0}\n'
+                  .format(changed_files))
+
+        qprint('Updating repository with Servi template version: {0}'
+               .format(m_template_fresh.template_version))
+        qprint('Master (destination directory): {0}'.format(MASTER_DIR))
+
+        copy_files(m_template_fresh.manifest, exclude_files=changed_files)
 
 command = UpdateCommand()
 
-## TODO - How to deal with files that were deleted in MASTER_DIR
-## (eg: THIS_SITE.conf)
