@@ -20,6 +20,9 @@ def rename_master_file(fname):
 
 def copy_files(manifest):
     for new_file, new_hash in manifest["files"].items():
+        if new_file == pathfor(VERSION_FILE, TEMPLATE):
+            continue  # No need to copy version file (its in servi_data.json)
+
         master = templatepath_to_destpath(new_file)
         try:
             master_hash = hash_of_file(master)
@@ -57,28 +60,6 @@ def error_if_changed(force, changed_files, existing_version,
         raise ForceError('Existing template version ({0}) '
                          '> new version ({1})'
                          .format(existing_version, new_version))
-
-
-def find_deleted_files():
-    """
-    Figure out what files the user has intentionally deleted from the
-    template structure. (eg: apache_config/sites-available/THISSITE.conf)
-    deleted =
-        * old-deleted: anything in the master manifest's "deleted" list
-        * newly-deleted: anything the master manifest says should be there and
-           isn't
-    """
-    servi_data_file = templatepath_to_destpath(VERSION_FILE)
-    try:
-        with open(servi_data_file, 'r') as fp:
-            existing_manifest = json.load(fp)
-    except FileNotFoundError:
-        raise ServiError('The servi data file ({0}) was not found.\n'
-                         'servi needs this to update properly.'
-                         .format(servi_data_file))
-
-    print('existing manifest: \n{0}'.format(pformat(existing_manifest)))
-    exit()
 
 
 def hash_of_file(fname):

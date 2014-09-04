@@ -57,31 +57,14 @@ class Manifest(object):
         return diff.added(), diff.changed(), diff.removed()
 
 
+#
+# Utilities
+#
+
 def get_template_version(file):
     with open(file) as f:
         data = json.load(f)
     return data["template_version"]
-
-
-def compare_template_versions(manifest):
-    try:
-        existing_version = get_template_version(
-            templatepath_to_destpath(VERSION_FILE))
-    except FileNotFoundError:
-        existing_version = ''
-    return existing_version, manifest["template_version"]
-
-
-def compare_digests(manifest):
-    # Returns a list of files that are in the template directory but have
-    # been changed in the master directory
-    warn = []
-    for file, sha1 in manifest["files"].items():
-        path = templatepath_to_destpath(file)
-        if os.path.isfile(path) and os.access(path, os.R_OK):
-            if hash_of_file(path) != sha1:
-                warn.append(path)
-    return warn
 
 
 # http://stackoverflow.com/a/1165552/1400991
