@@ -42,7 +42,7 @@ class Manifest(object):
 
     def save(self):
         with open(self.fname, 'w') as fp:
-            json.dump(self.manifest, fp)
+            json.dump(self.manifest, fp, indent=4)
 
     def __eq__(self, other):
         otherval = lambda x: getattr(other, x, None)

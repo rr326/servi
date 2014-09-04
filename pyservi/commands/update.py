@@ -11,7 +11,6 @@ class UpdateCommand(Command):
 
         parser_update = sub_parsers.add_parser(
             'update', help='Update project with latest template')
-        parser_update.add_argument('-f', '--force', action='store_true')
         parser_update.add_argument('-q', '--quiet', action='store_true')
 
         parser_update.set_defaults(command_func=self.run)
@@ -51,4 +50,3 @@ class UpdateCommand(Command):
         copy_files(m_template_fresh, exclude_files=changed_but_ignored_files)
 
 command = UpdateCommand()
-
