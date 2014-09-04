@@ -24,22 +24,31 @@ class UpdateCommand(Command):
         m_template_fresh = Manifest(TEMPLATE)
         m_template_fresh.create()
 
-        _, changed_files, deleted_files = m_existing_fresh.changed_files(
-            m_template_fresh, True)
+        changed_files= m_existing_fresh.changed_files(
+            m_template_fresh)
 
-        changed_files = remove_ignored_files(changed_files)
+        changed_but_ignored_files = ignored_files(changed_files)
+
+        if len(changed_files - changed_but_ignored_files) > 0:
+            raise ServiError(
+                'The following files were changed in your master and updated '
+                'in the template:\n  {0}\n'
+                '\nIf you want to reinitialize your templates '
+                '(with automatic backup) run "servi init -f"'
+                .format(changed_files - changed_but_ignored_files))
+
 
         if changed_files:
             print('\nWarning\n'
                   'The following files from the template were changed'
                   ' unexpectedly and will not be updated: {0}\n'
-                  .format(changed_files))
+                  .format(changed_but_ignored_files))
 
         qprint('Updating repository with Servi template version: {0}'
                .format(m_template_fresh.template_version))
         qprint('Master (destination directory): {0}'.format(MASTER_DIR))
 
-        copy_files(m_template_fresh.manifest, exclude_files=changed_files)
+        copy_files(m_template_fresh, exclude_files=changed_but_ignored_files)
 
 command = UpdateCommand()
 

@@ -12,4 +12,5 @@ MASTER_DIR = os.path.normpath(os.path.join(ROOT_DIR, '..'))
 MANIFEST_FILE = "servi_data.json"
 VERSION_FILE = "TEMPLATE_VERSION.json"
 
+MISSING_HASH = 'FILE NOT FOUND'
 # TODO - Move to relative paths? (rooted at boilerplate dir?)

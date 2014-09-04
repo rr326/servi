@@ -22,17 +22,19 @@ class Manifest(object):
 
         for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
             for file in filenames:
-                fullpath = os.path.join(dirpath, file)
+                template_file = os.path.join(dirpath, file)
                 if self.source is MASTER:
-                    fullpath = templatepath_to_destpath(fullpath)
-                    if not (os.path.isfile(fullpath) and
-                            os.access(fullpath, os.R_OK)):
-                        self.manifest["files"][fullpath] = 'NONE'
-                        continue  # If MASTER doesn't have a template file,
-                                  # that's ok
-                self.manifest["files"][fullpath] = hash_of_file(fullpath)
+                    hashv = hash_of_file(
+                        templatepath_to_destpath(template_file))
+                else:
+                    hashv = hash_of_file(template_file)
+
+                self.manifest["files"]\
+                    [normalize_path(template_file, TEMPLATE)] = hashv
 
         self.template_version = self.manifest["template_version"]
+        self.manifest["source"] = self.source
+        self.manifest["source_dir"] = TEMPLATE_DIR if TEMPLATE else MASTER_DIR
 
     def load(self):
         with open(self.fname, 'r') as fp:
@@ -49,28 +51,23 @@ class Manifest(object):
                 self.template_version == otherval('template_version')
                 )
 
-    def changed_files(self, orig, normalize_path):
+    def changed_files(self, orig):
         """
         compares self to orig.manifest
         if normalize_path, it allows you to compare MASTER to TEMPLATE
          manifests
-        :returns  (in self not in orig, different in both, in orig not self)
+        :returns  files changed (includes deleted)
         """
-        if normalize_path:
-            d0 = normalize_manifest_paths(orig.manifest, orig.source)
-            d1 = normalize_manifest_paths(self.manifest, self.source)
-        else:
-            d0 = orig.manifest
-            d1 = self.manifest
 
-        diff = DictDiffer(d1["files"], d0["files"])
-        return diff.added(), diff.changed(), diff.removed()
+        diff = DictDiffer(self.manifest["files"], orig.manifest["files"])
+        return diff.changed()
 
 
 #
 # Utilities
 #
 def normalize_manifest_paths(manifest, source):
+    return manifest
     newm = deepcopy(manifest)
     for file, val in manifest["files"].items():
         newf = normalize_path(file, source)

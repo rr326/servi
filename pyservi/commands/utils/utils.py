@@ -20,64 +20,65 @@ def rename_master_file(fname):
     shutil.move(fname, os.path.join(path, newfname))
 
 
-def copy_files(manifest, exclude_files):
-    for new_file, new_hash in manifest["files"].items():
-        if new_file == pathfor(VERSION_FILE, TEMPLATE):
+def copy_files(man, exclude_files):
+    assert man.source == TEMPLATE
+    
+    for normalized_fname, template_hash in man.manifest["files"].items():
+        if normalized_fname == pathfor(VERSION_FILE, TEMPLATE):
             continue  # No need to copy version file (its in servi_data.json)
 
-        master = templatepath_to_destpath(new_file)
-        try:
-            master_hash = hash_of_file(master)
-        except IOError:
-            master_hash = None
+        template_fname = pathfor(normalized_fname, TEMPLATE)
+        master_fname = pathfor(normalized_fname, MASTER)
 
-        if master_hash == new_hash:
+        master_hash = hash_of_file(master_fname)
+
+        # Exclude unchanged files
+        if master_hash == template_hash:
             continue
 
-        if exclude_files and os.path.isfile(master) and \
-                normalize_path(new_file, TEMPLATE):
+        # Exclude ignored files
+        if normalized_fname in exclude_files:
             continue
 
-        if os.path.isfile(master):
-            rename_master_file(master)
+        # Always backup (never overrite) master
+        if file_exists(master_fname):
+            rename_master_file(master_fname)
             existing = True
         else:
             existing = False
 
-        destdir = os.path.normpath(os.path.dirname(master))
+        # Copy template to master
+        destdir = os.path.normpath(os.path.dirname(master_fname))
         if os.path.dirname(destdir):
             # noinspection PyArgumentList
             os.makedirs(destdir, exist_ok=True)
-        shutil.copyfile(new_file, master)
+        shutil.copyfile(template_fname, master_fname)
         if existing:
-            qprint('Updated: {0}'.format(master))
+            qprint('Updated: {0}'.format(master_fname))
         else:
-            qprint('Created: {0}'.format(master))
-
-
+            qprint('Created: {0}'.format(master_fname))
 
 
 def hash_of_file(fname):
-    with open(fname, 'rb') as fp:
-        content = fp.read()
-        hashv = hashlib.sha1(content).hexdigest()
+    try:
+        with open(fname, 'rb') as fp:
+            content = fp.read()
+            hashv = hashlib.sha1(content).hexdigest()
+    except FileNotFoundError:
+        hashv = MISSING_HASH
     return hashv
 
 
-def remove_ignored_files(files):
+def ignored_files(files):
     with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
         data = json.load(f)
     ignore_list =  data["ignore"]
     ignore_re_string = '('+'|'.join(ignore_list)+')'
     ignore_re = re.compile(ignore_re_string)
 
-    new_files=files.copy()
-    for file in files:
-        if ignore_re.search(file):
-            new_files.remove(file)
+    ignored = {file for file in files if ignore_re.search(file)}
 
-    print("DEBUG: Ignored_files: {0}".format(files-new_files))
-    return new_files
+    return ignored
 #
 # Path functions
 #
@@ -104,3 +105,6 @@ def normalize_path(path, source):
         raise Exception('Expected prefix ({0}) not found in path ({1})'
                         .format(prefix, path))
     return path.split(sep=prefix, maxsplit=1)[1]
+
+def file_exists(path):
+    return os.path.isfile(path) and os.access(path, os.R_OK)
