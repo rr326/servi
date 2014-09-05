@@ -1,9 +1,6 @@
 # These variables are used by the Vagrantfile AND ansible
 ---
 
-# Configuration parameters for Vagrant and Ansible
-# IMPORTANT: you must define these here AND in ansible_config/playbook.yml
-# because you may run the ansible playbook without Vagrant.
 WEBDEV_UID : 1100
 WEBDEV_GID : 900
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
@@ -17,3 +14,5 @@ APACHE_LOG_DIR: "/var/log/apache2/thissite"
 MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
 
 PY_VENV_DIR : "/var/penv"
+
+MAIN_USERNAME : rrosen326

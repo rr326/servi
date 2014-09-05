@@ -6,7 +6,7 @@
     tasks:
     roles:
         - baseUbuntu
-        - rrosen326Account
+        - mainAccount
         - hardenedUbuntu
         - hardenedApache
         - projectSpecific

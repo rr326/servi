@@ -1,0 +1,17 @@
+---
+
+-   debug: msg="Create Main User account {{ MAIN_USERNAME }} with proper ssh keys, home directory, zsh, and .zshrc"
+
+-   user: name="Create Main User ({{ MAIN_USERNAME }}) "
+      createhome=yes shell=/usr/bin/zsh
+      group=webdev groups=adm,admin,sudo,webdev,www-data
+
+-   authorized_key: key="{{ lookup('file', MAIN_RSA_KEY_FILE) }}"
+                    user="{{ MAIN_USERNAME }}"
+
+-   authorized_key: key="{{ lookup('file', MAIN_RSA_KEY_FILE) }}"
+                    user="{{ MAIN_USERNAME }}"
+
+-   copy: src=.zshrc dest="/home/{{ MAIN_USERNAME }}" owner:"{{ MAIN_USERNAME }}"
+    remote_user: "{{ MAIN_USERNAME }}"
+

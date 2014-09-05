@@ -41,11 +41,6 @@ zstyle ':completion:*' verbose true
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
-
-#
-# Ross stuff
-#
-
 # Aliases
 alias ls='ls -ahF --color'
 alias ll='ls -l'
