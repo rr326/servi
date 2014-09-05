@@ -24,3 +24,6 @@ sv1 = SemanticVersion('1')
 print(sv1)
 sv1 = SemanticVersion('1.2')
 print(sv1)
+
+assert SemanticVersion('1.1') > SemanticVersion('1')
+assert SemanticVersion('1.1') > SemanticVersion('1.0.1')

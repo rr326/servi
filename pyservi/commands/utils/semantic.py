@@ -25,7 +25,7 @@ class SemanticVersion(object):
         except ValueError:
             raise ValueError('Bad semantic version string: |{0}|'
                              .format(sv_string))
-        print('sv_string_to_ver: {0} --> {1}'.format(sv_string, sv_val))
+        # print('sv_string_to_ver: {0} --> {1}'.format(sv_string, sv_val))
         return sv_val, sv_ar
 
     @staticmethod

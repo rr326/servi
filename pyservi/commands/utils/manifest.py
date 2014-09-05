@@ -1,6 +1,7 @@
 # noinspection PyProtectedMember
 from commands.utils.utils import *
 from copy import deepcopy
+from commands.utils.semantic import *
 
 
 class Manifest(object):
@@ -48,7 +49,8 @@ class Manifest(object):
         otherval = lambda x: getattr(other, x, None)
         return (self.manifest == otherval('manifest')
                 and
-                self.template_version == otherval('template_version')
+                (SemanticVersion(self.template_version)  ==
+                 SemanticVersion(otherval('template_version')))
                 )
 
     def changed_files(self, orig):
