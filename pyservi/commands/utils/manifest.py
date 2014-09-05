@@ -1,6 +1,4 @@
-# noinspection PyProtectedMember
 from commands.utils.utils import *
-from copy import deepcopy
 from commands.utils.semantic import *
 
 
@@ -30,8 +28,8 @@ class Manifest(object):
                 else:
                     hashv = hash_of_file(template_file)
 
-                self.manifest["files"]\
-                    [normalize_path(template_file, TEMPLATE)] = hashv
+                fname = normalize_path(template_file, TEMPLATE)
+                self.manifest["files"][fname] = hashv
 
         self.template_version = self.manifest["template_version"]
         self.manifest["source"] = self.source
@@ -49,7 +47,7 @@ class Manifest(object):
         otherval = lambda x: getattr(other, x, None)
         return (self.manifest == otherval('manifest')
                 and
-                (SemanticVersion(self.template_version)  ==
+                (SemanticVersion(self.template_version) ==
                  SemanticVersion(otherval('template_version')))
                 )
 
@@ -68,14 +66,6 @@ class Manifest(object):
 #
 # Utilities
 #
-def normalize_manifest_paths(manifest, source):
-    return manifest
-    newm = deepcopy(manifest)
-    for file, val in manifest["files"].items():
-        newf = normalize_path(file, source)
-        newm["files"][newf] = val
-        del newm["files"][file]
-    return newm
 
 
 def get_template_version(file):
@@ -93,6 +83,7 @@ class DictDiffer(object):
     (3) keys same in both but changed values
     (4) keys same in both and unchanged values
     """
+
     def __init__(self, current_dict, past_dict):
         self.current_dict, self.past_dict = current_dict, past_dict
         self.set_current, self.set_past = \

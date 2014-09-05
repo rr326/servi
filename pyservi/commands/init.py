@@ -1,8 +1,6 @@
-from config import *
 from command import Command
-from utils import *
-from commands.utils.utils import *
 from commands.utils.manifest import *
+from servi_exceptions import *
 
 
 def error_if_changed(force, changed_files, existing_version, new_version):
@@ -33,9 +31,10 @@ class InitCommand(Command):
         m_template_fresh = Manifest(TEMPLATE)
         m_template_fresh.create()
 
-        changed_files= m_existing_fresh.changed_files(m_template_fresh)
+        changed_files = m_existing_fresh.changed_files(m_template_fresh)
 
-        error_if_changed(force=args.force, changed_files=changed_files,
+        error_if_changed(
+            force=args.force, changed_files=changed_files,
             existing_version=m_template_fresh.template_version,
             new_version=m_existing_fresh)
 

@@ -1,9 +1,6 @@
 from command import Command
-# noinspection PyProtectedMember
-from commands.utils.utils import *
 from commands.utils.manifest import *
-
-
+from servi_exceptions import *
 
 
 class UpdateCommand(Command):
@@ -23,7 +20,7 @@ class UpdateCommand(Command):
         m_template_fresh = Manifest(TEMPLATE)
         m_template_fresh.create()
 
-        changed_files= m_existing_fresh.changed_files(
+        changed_files = m_existing_fresh.changed_files(
             m_template_fresh)
 
         changed_but_ignored_files = ignored_files(changed_files)
@@ -35,7 +32,6 @@ class UpdateCommand(Command):
                 '\nIf you want to reinitialize your templates '
                 '(with automatic backup) run "servi init -f"'
                 .format(changed_files - changed_but_ignored_files))
-
 
         if changed_files:
             print('\nWarning\n'

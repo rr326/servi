@@ -3,16 +3,14 @@ import json
 import os
 import hashlib
 import re
-from copy import deepcopy
-from pprint import pformat
 from datetime import datetime
 
 from config import *
-from servi_exceptions import *
 from utils import *
 
 
 def rename_master_file(fname):
+    # Renames the file  fname --> backup_fname__2014-09-04T17:32:44
     path = os.path.dirname(fname)
     newfname = 'backup_{0}_{1}'.format(
         os.path.basename(fname), datetime.utcnow().isoformat())
@@ -21,6 +19,13 @@ def rename_master_file(fname):
 
 
 def copy_files(man, exclude_files):
+    """
+    man = manifest class for TEMPLATE (must be current)
+    exclude_files = optional list of files to ignore
+
+    Copies files from TEMPLATE_DIR to MASTER_DIR
+    *Never* overrwrites - will always make a backup if file exists.
+    """
     assert man.source == TEMPLATE
     
     for normalized_fname, template_hash in man.manifest["files"].items():
@@ -40,7 +45,7 @@ def copy_files(man, exclude_files):
         if normalized_fname in exclude_files:
             continue
 
-        # Always backup (never overrite) master
+        # Always backup (never overwrite) master
         if file_exists(master_fname):
             rename_master_file(master_fname)
             existing = True
@@ -70,18 +75,24 @@ def hash_of_file(fname):
 
 
 def ignored_files(files):
+    """
+    Looks in VERSION_FILE for a list of ignored files (regex)
+    Returns the subset of input files that are matched.
+    """
     with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
         data = json.load(f)
-    ignore_list =  data["ignore"]
+    ignore_list = data["ignore"]
     ignore_re_string = '('+'|'.join(ignore_list)+')'
     ignore_re = re.compile(ignore_re_string)
 
     ignored = {file for file in files if ignore_re.search(file)}
 
     return ignored
+
 #
 # Path functions
 #
+
 
 def templatepath_to_destpath(template_path):
     return os.path.join(MASTER_DIR,  template_path[len(TEMPLATE_DIR)+1:])
@@ -97,6 +108,7 @@ def pathfor(fname, source):
 
     return path
 
+
 def normalize_path(path, source):
     assert source in [TEMPLATE, MASTER]
     prefix = TEMPLATE_DIR if source is TEMPLATE else MASTER_DIR
@@ -105,6 +117,7 @@ def normalize_path(path, source):
         raise Exception('Expected prefix ({0}) not found in path ({1})'
                         .format(prefix, path))
     return path.split(sep=prefix, maxsplit=1)[1]
+
 
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)

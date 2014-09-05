@@ -37,12 +37,16 @@ class SemanticVersion(object):
 
     def __lt__(self, other):
         return self.sv < other.sv
+
     def __le__(self, other):
         return self.sv <= other.sv
+
     def __eq__(self, other):
         return self.sv == other.sv
+
     def __ge__(self, other):
         return self.sv >= other.sv
+
     def __gt__(self, other):
         return self.sv > other.sv
 

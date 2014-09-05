@@ -1,7 +1,7 @@
 from command import Command
-from commands.utils.utils import *
 from commands.utils.manifest import *
 from pprint import pprint
+
 
 class ZZCommand(Command):
     def register_command_line(self, sub_parsers):
