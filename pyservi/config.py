@@ -3,6 +3,9 @@ import os.path
 TEMPLATE = 'template'
 MASTER = 'master'
 
+print('__file__: {0}'.format(__file__))
+print('abspath: {0}'.format(os.path.abspath(os.path.dirname(__file__))))
+
 PYSERVI_DIR = os.path.normpath(os.path.dirname(__file__))
 ROOT_DIR = os.path.normpath(os.path.join(PYSERVI_DIR, '..'))
 

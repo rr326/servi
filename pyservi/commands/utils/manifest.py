@@ -15,8 +15,7 @@ class Manifest(object):
         # use the files in TEMPLATE_DIR as the source list
         self.manifest = {
             "files": {},
-            "template_version": get_template_version(
-                pathfor(VERSION_FILE, self.source)),
+            "template_version": get_template_version(),
         }
 
         for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
@@ -68,8 +67,8 @@ class Manifest(object):
 #
 
 
-def get_template_version(file):
-    with open(file) as f:
+def get_template_version():
+    with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
         data = json.load(f)
     return data["template_version"]
 

@@ -1,7 +1,7 @@
 ---
 -   hosts: all
     vars_files:
-      - ../server_vars.yml
+      - ../servi_config.yml
     sudo: yes
     tasks:
     roles:

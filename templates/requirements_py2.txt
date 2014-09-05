@@ -1,1 +1,0 @@
-# Project-specific Python requirements

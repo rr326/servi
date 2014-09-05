@@ -21,7 +21,7 @@
       - libapache2-mod-macro
       - zsh
 
--   name: Apt: Autoremove unused packages  # Not sure why these are here?
+-   name: Apt - Autoremove unused packages  # Not sure why these are here?
     shell: apt-get autoremove
 
 #

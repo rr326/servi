@@ -1,1 +1,1 @@
-../../../../requirements_py3.txt
+# Project-specific Python requirements

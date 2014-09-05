@@ -5,6 +5,6 @@
 * commands: 
     * lans, rans
     * diff
-* Ansible
-    * Move rrosen326 stuff out to be usable for others
-    
+* Script to run from serviplate directory
+* Ansible needs python 2??
+* Is TEMPLATE_VERSION.json being copied??
