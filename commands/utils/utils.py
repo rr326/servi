@@ -29,7 +29,7 @@ def copy_files(man, exclude_files):
     assert man.source == TEMPLATE
     
     for normalized_fname, template_hash in man.manifest["files"].items():
-        if normalized_fname == pathfor(VERSION_FILE, TEMPLATE):
+        if normalized_fname == VERSION_FILE:
             continue  # No need to copy version file (its in servi_data.json)
 
         template_fname = pathfor(normalized_fname, TEMPLATE)
@@ -54,10 +54,10 @@ def copy_files(man, exclude_files):
 
         # Copy template to master
         destdir = os.path.normpath(os.path.dirname(master_fname))
-        if os.path.dirname(destdir):
+        if destdir:
             # noinspection PyArgumentList
             os.makedirs(destdir, exist_ok=True)
-        shutil.copyfile(template_fname, master_fname)
+        shutil.copy2(template_fname, master_fname)
         if existing:
             qprint('Updated: {0}'.format(master_fname))
         else:

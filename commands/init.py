@@ -26,23 +26,23 @@ class InitCommand(Command):
     def run(self, args):
         g.quiet = args.quiet
 
-        m_existing_fresh = Manifest(MASTER)
-        m_existing_fresh.create()
-        m_template_fresh = Manifest(TEMPLATE)
-        m_template_fresh.create()
+        m_master = Manifest(MASTER)
+        m_master.create()
+        m_template = Manifest(TEMPLATE)
+        m_template.create()
 
-        changed_files = m_existing_fresh.changed_files(m_template_fresh)
+        changed_files = m_master.changed_files(
+            m_template, include_deleted=False)
 
         error_if_changed(
             force=args.force, changed_files=changed_files,
-            existing_version=m_template_fresh.template_version,
-            new_version=m_existing_fresh)
+            existing_version=m_template.template_version,
+            new_version=m_master.template_version)
 
-        qprint('Initializing repository with Servi template version: {0}'.
-               format(m_template_fresh))
-        qprint('Master (destination directory): {0}'.format(MASTER_DIR))
+        qprint('Master Directory: {0}'
+               .format(os.path.abspath(MASTER_DIR)))
 
-        copy_files(m_template_fresh, exclude_files=[])
+        copy_files(m_template, exclude_files=[])
 
 
 command = InitCommand()

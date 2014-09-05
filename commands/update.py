@@ -21,7 +21,7 @@ class UpdateCommand(Command):
         m_template_fresh.create()
 
         changed_files = m_existing_fresh.changed_files(
-            m_template_fresh)
+            m_template_fresh, include_deleted=True)
 
         changed_but_ignored_files = ignored_files(changed_files)
 

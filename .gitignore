@@ -1,9 +1,1 @@
-Vagrantfile
-ansible_config/
-apache_config/
-backup_*
-requirements_py2.txt
-requirements_py3.txt
-server_vars.yml
-src/
-template_version.json
+

@@ -15,7 +15,7 @@ class Manifest(object):
         # use the files in TEMPLATE_DIR as the source list
         self.manifest = {
             "files": {},
-            "template_version": get_template_version(),
+            "template_version": SemanticVersion(get_template_version()),
         }
 
         for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
@@ -48,9 +48,9 @@ class Manifest(object):
                 and
                 (SemanticVersion(self.template_version) ==
                  SemanticVersion(otherval('template_version')))
-                )
+        )
 
-    def changed_files(self, orig):
+    def changed_files(self, orig, include_deleted):
         """
         compares self to orig.manifest
         if normalize_path, it allows you to compare MASTER to TEMPLATE
@@ -58,8 +58,13 @@ class Manifest(object):
         :returns  files changed (includes deleted)
         """
 
-        diff = DictDiffer(self.manifest["files"], orig.manifest["files"])
-        return diff.changed()
+        mod_manifest = {k: v for k, v in self.manifest["files"].items()
+                        if v != MISSING_HASH}
+        diff = DictDiffer(mod_manifest, orig.manifest["files"])
+        retval = diff.changed()
+        if include_deleted:
+            retval |= diff.removed()
+        return retval
 
 
 #
