@@ -13,9 +13,11 @@ class Manifest(object):
     def create(self):
         # create a new manifest
         # use the files in TEMPLATE_DIR as the source list
+        self.template_version = SemanticVersion(get_template_version())
+
         self.manifest = {
             "files": {},
-            "template_version": SemanticVersion(get_template_version()),
+            "template_version": str(self.template_version),
         }
 
         for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
@@ -30,7 +32,6 @@ class Manifest(object):
                 fname = normalize_path(template_file, TEMPLATE)
                 self.manifest["files"][fname] = hashv
 
-        self.template_version = self.manifest["template_version"]
         self.manifest["source"] = self.source
         self.manifest["source_dir"] = TEMPLATE_DIR if TEMPLATE else MASTER_DIR
 
