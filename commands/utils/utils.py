@@ -121,3 +121,5 @@ def normalize_path(path, source):
 
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
+
+# TODO - put ignore list in servi_config.yml
