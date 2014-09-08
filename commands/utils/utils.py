@@ -7,6 +7,8 @@ from datetime import datetime
 
 from config import *
 from utils import *
+from servi_exceptions import *
+import yaml
 
 
 def rename_master_file(fname):
@@ -76,12 +78,22 @@ def hash_of_file(fname):
 
 def ignored_files(files):
     """
-    Looks in VERSION_FILE for a list of ignored files (regex)
+    Looks in servi_config.yml for a list of ignored files (regex)
     Returns the subset of input files that are matched.
+    (Note - looks for config in MASTER. If not found, uses default in TEMPLATE)
     """
-    with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
-        data = json.load(f)
-    ignore_list = data["ignore"]
+    try:
+        with open(pathfor(SERVI_CONFIG_YML, MASTER)) as f:
+            data = yaml.load(f)
+    except FileNotFoundError:
+        with open(pathfor(SERVI_CONFIG_YML, TEMPLATE)) as f:
+            data = yaml.load(f)
+
+    if "SERVI_IGNORE_FILES" not in data:
+        raise ServiError('SERVI_IGNORE_FILES not in {0}'.
+                         format(SERVI_CONFIG_YML))
+
+    ignore_list = data["SERVI_IGNORE_FILES"]
     ignore_re_string = '('+'|'.join(ignore_list)+')'
     ignore_re = re.compile(ignore_re_string)
 
@@ -122,4 +134,3 @@ def normalize_path(path, source):
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
 
-# TODO - put ignore list in servi_config.yml

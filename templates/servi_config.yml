@@ -16,3 +16,8 @@ MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
 PY_VENV_DIR : "/var/penv"
 
 MAIN_USERNAME : rrosen326
+
+SERVI_IGNORE_FILES:
+  - "^TEMPLATE_VERSION.json"
+  - "^ansible_config/roles/projectSpecific/.*"
+  - "^apache_config/sites-available/THISSITE.conf"

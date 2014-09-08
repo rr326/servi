@@ -64,7 +64,7 @@ class Manifest(object):
         :returns  files changed (in/ex -cludes deleted)
         """
 
-        _, changed, removed = self.changed_files(orig)
+        _, changed, removed = self.diff_files(orig)
         retval = changed
         if include_deleted:
             retval |= removed

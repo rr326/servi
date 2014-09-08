@@ -11,3 +11,6 @@
     * diff
 
 * Look at Docker - would that have done all of this???
+
+
+* Do setuptools - to install pyyaml dependecy.

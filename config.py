@@ -10,5 +10,6 @@ MASTER_DIR = os.path.normpath(os.path.join(SERVI_DIR, '..'))
 
 MANIFEST_FILE = "servi_data.json"
 VERSION_FILE = "TEMPLATE_VERSION.json"
+SERVI_CONFIG_YML = "servi_config.yml"
 
 MISSING_HASH = 'FILE NOT FOUND'

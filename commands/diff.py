@@ -40,8 +40,9 @@ class DiffCommand(Command):
         if not removed:
             print('(no removed template files)')
         else:
-            print('\t{0} {1}'.format(
-                file, '[on "ignore" list]' if file in ignored else ''))
+            for file in removed:
+                print('\t{0} {1}'.format(
+                    file, '[on "ignore" list]' if file in ignored else ''))
         print()
         print('Added (to master and not in template)')
         print('=====================================')
