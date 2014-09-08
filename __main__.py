@@ -40,7 +40,7 @@ def main():
     args = servi_parser.parse_args()
     if args.command:
         try:
-            print('Servi - Running: {0}'.format(args.command))
+            print('Servi - Running: {0}\n'.format(args.command))
             args.command_func(args)
         except (ForceError, ServiError) as e:
             print(e)

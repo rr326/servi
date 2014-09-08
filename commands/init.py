@@ -46,4 +46,3 @@ class InitCommand(Command):
 
 
 command = InitCommand()
-

@@ -49,22 +49,25 @@ class Manifest(object):
                 and
                 (SemanticVersion(self.template_version) ==
                  SemanticVersion(otherval('template_version')))
-        )
+                )
+
+    def diff_files(self, orig):
+        mod_manifest = {k: v for k, v in self.manifest["files"].items()
+                        if v != MISSING_HASH}
+
+        diff = DictDiffer(mod_manifest, orig.manifest["files"])
+        return diff.added(), diff.changed(), diff.removed()
 
     def changed_files(self, orig, include_deleted):
         """
         compares self to orig.manifest
-        if normalize_path, it allows you to compare MASTER to TEMPLATE
-         manifests
-        :returns  files changed (includes deleted)
+        :returns  files changed (in/ex -cludes deleted)
         """
 
-        mod_manifest = {k: v for k, v in self.manifest["files"].items()
-                        if v != MISSING_HASH}
-        diff = DictDiffer(mod_manifest, orig.manifest["files"])
-        retval = diff.changed()
+        _, changed, removed = self.changed_files(orig)
+        retval = changed
         if include_deleted:
-            retval |= diff.removed()
+            retval |= removed
         return retval
 
 
