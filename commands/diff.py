@@ -19,6 +19,7 @@ class DiffCommand(Command):
         m_template.create()
 
         _, changed, removed = m_master.diff_files(m_template)
+        ignored = ignored_files(list(changed) + list(removed))
 
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
@@ -31,15 +32,16 @@ class DiffCommand(Command):
             print('(no changed files)')
         else:
             for file in changed:
-                print('\t{0}'.format(file))
+                print('\t{0} {1}'.format(
+                    file, '[ignored]' if file in ignored else ''))
         print()
-        print('Removed Template files: ')
-        print('========================')
+        print('Removed (Template files not found in Master): ')
+        print('==============================================')
         if not removed:
             print('(no removed template files)')
         else:
-            for file in removed:
-                print('\t{0}'.format(file))
+            print('\t{0} {1}'.format(
+                file, '[ignored]' if file in ignored else ''))
         print()
         print('Added (to master and not in template)')
         print('=====================================')
