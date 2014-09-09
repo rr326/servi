@@ -9,7 +9,7 @@ from config import *
 from utils import *
 from servi_exceptions import *
 import yaml
-
+import getconfig
 
 def rename_master_file(fname):
     # Renames the file  fname --> backup_fname__2014-09-04T17:32:44
@@ -111,14 +111,8 @@ def templatepath_to_destpath(template_path):
 
 
 def pathfor(fname, source):
-    assert source in [TEMPLATE, MASTER]
-
-    if source == TEMPLATE:
-        path = os.path.normpath(os.path.join(TEMPLATE_DIR, fname))
-    else:  # MASTER
-        path = os.path.normpath(os.path.join(MASTER_DIR, fname))
-
-    return path
+    return getconfig.pathfor(fname, source, TEMPLATE, MASTER,
+                             TEMPLATE_DIR, MASTER_DIR)
 
 
 def normalize_path(path, source):

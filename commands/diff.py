@@ -2,6 +2,7 @@ from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
 import subprocess
+from config import *
 
 
 class DiffCommand(Command):
@@ -9,7 +10,9 @@ class DiffCommand(Command):
 
         parser_init = sub_parsers.add_parser(
             'diff', help="Diff changes betweeen your server "
-                         "config and servi's")
+                         "config and servi's. "
+                         "Note - set the DIFFTOOL parameter in {0}"
+                         .format(SERVI_CONFIG_YML))
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
@@ -51,10 +54,11 @@ class DiffCommand(Command):
         print('Showing git diff MASTER TEMPLATE\n')
         for file in changed:
             subprocess.call(
-                ['git', '--no-pager', 'diff',
-                 os.path.abspath(pathfor(file, MASTER)),
-                 os.path.abspath(pathfor(file, TEMPLATE))
-                 ])
+                '{command} {path1} {path2}'.format(
+                    command = DIFFTOOL,
+                     path1 = os.path.abspath(pathfor(file, MASTER)),
+                     path2 = os.path.abspath(pathfor(file, TEMPLATE))
+                ), shell=True)
 
 
 command = DiffCommand()

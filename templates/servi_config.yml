@@ -1,23 +1,55 @@
-# These variables are used by the Vagrantfile AND ansible
+# These configuration parameters affect Vagrant, ansible, and servi
 ---
 
-WEBDEV_UID : 1100
-WEBDEV_GID : 900
+#
+#
+# Parameters you may want to modify
+#
+#
+
+HOST_NAME: "thishost" # Hostname for your server.
+
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
-HOST_NAME: "thishost"
-LOCAL_DIR : "src"
+LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
+SITE_SUFFIX: "thissite" # will be used for /var/www/thissite and
+                        # /var/log/apache2/thissite
 
-SITE_SUFFIX: "thissite"
-REMOTE_DIR : "/var/www/thissite"
-APACHE_LOG_DIR: "/var/log/apache2/thissite"
-
+# This is your rsa key for ssh. You should store it in an envornment
+# variable in your shell.
 MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
 
-PY_VENV_DIR : "/var/penv"
-
+# Main user account name and user id for ssh
 MAIN_USERNAME : rrosen326
 
+#
+# These are files you are going to change in Master and don't want to
+# get updates from Template
+#
 SERVI_IGNORE_FILES:
   - "^TEMPLATE_VERSION.json"
   - "^ansible_config/roles/projectSpecific/.*"
   - "^apache_config/sites-available/THISSITE.conf"
+
+
+#
+# Tool for diffing. It will be called as follows:
+# $ DIFFTOOL <fullpath to MASTER file> <fullpath to TEMPLATE file>
+#
+
+# DIFFTOOL: "git --no-pager diff"  # use simple git
+DIFFTOOL: "/Applications/PyCharm.app/Contents/MacOS/pycharm diff" # use pycharm
+
+
+
+#
+#
+# Parameters you probably don't want to override (but can)
+#
+#
+# webdev - the servi template uses a 'webdev' group. But it needs a
+# UID & GID to bootstrap it. These are the defaults
+WEBDEV_UID : 1100
+WEBDEV_GID : 900
+
+# Python virtual environment root
+PY_VENV_DIR : "/var/penv"

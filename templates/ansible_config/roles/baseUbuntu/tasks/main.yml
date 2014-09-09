@@ -21,8 +21,9 @@
       - libapache2-mod-macro
       - zsh
 
--   name: Apt - Autoremove unused packages  # Not sure why these are here?
-    shell: apt-get autoremove
+- debug: msg="**** FIX AUTOREMOVE - getting hung up somewhere? *****"
+#-   name: Apt -  Autoremove unused packages  # Not sure why these are here?
+#    shell: apt-get autoremove
 
 #
 # Set up admin user & group

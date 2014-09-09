@@ -2,7 +2,7 @@
 
 -   debug: msg="Create Main User account {{ MAIN_USERNAME }} with proper ssh keys, home directory, zsh, and .zshrc"
 
--   user: name="Create Main User ({{ MAIN_USERNAME }}) "
+-   user: name="{{ MAIN_USERNAME }}"
       createhome=yes shell=/usr/bin/zsh
       group=webdev groups=adm,admin,sudo,webdev,www-data
 
