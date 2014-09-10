@@ -3,6 +3,7 @@ from glob import glob
 import argparse
 from importlib import import_module
 from servi_exceptions import *
+import sys
 
 
 def find_plugins():
@@ -44,9 +45,13 @@ def main():
             args.command_func(args)
         except (ForceError, ServiError) as e:
             print(e)
+            sys.exit("Servi Error. Aborting.")
     else:
         print('\n***** Error ******\nNo command on command line.\n')
         servi_parser.print_help()
+        sys.exit("Error - No command line. Aborting")
+
+    sys.exit(0)
 
 if __name__ == "__main__":
     main()
