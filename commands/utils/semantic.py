@@ -1,3 +1,5 @@
+from itertools import zip_longest
+
 # Simple semantic versioning (1.2.13) tools
 MAJOR = 'major'
 MINOR = 'minor'
@@ -15,10 +17,14 @@ class SemanticVersion(object):
         if sv_string is None:
             return None
 
+        if type(sv_string) is not str:
+            raise ValueError('Bad semantic version - must be string: |{0}|'
+                             .format(sv_string))
+
         sv_ar = sv_string.split('.')
         if len(sv_ar) > 3 or len(sv_ar) == 0:
-            raise Exception('Bad semantic version string: |{0}|'
-                            .format(sv_string))
+            raise ValueError('Bad semantic version string: |{0}|'
+                             .format(sv_string))
         try:
             sv_ar = [int(s) for s in sv_ar]
             sv_val = self.sv_ar_to_sv(sv_ar)
@@ -26,6 +32,8 @@ class SemanticVersion(object):
             raise ValueError('Bad semantic version string: |{0}|'
                              .format(sv_string))
         # print('sv_string_to_ver: {0} --> {1}'.format(sv_string, sv_val))
+        sv_ar = [a1+a2 for a1, a2 in
+                 zip_longest(sv_ar, [0, 0, 0], fillvalue=0)]
         return sv_val, sv_ar
 
     @staticmethod
@@ -65,5 +73,6 @@ class SemanticVersion(object):
             pos = 2
         self.sv_ar[pos] += 1
         self.sv = self.sv_ar_to_sv(self.sv_ar)
+        return self
 
 
