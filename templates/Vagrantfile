@@ -6,7 +6,7 @@ require 'yaml'
 vars = YAML.load_file 'servi_config.yml'
 vars["IS_VAGRANT"] = true
 vars["REMOTE_DIR"] = "/var/www/" + vars["SITE_SUFFIX"]
-var["APACHE_LOG_DIR"] = "/var/log/apache2/" + vars["SITE_SUFFIX"]
+vars["APACHE_LOG_DIR"] = "/var/log/apache2/" + vars["SITE_SUFFIX"]
 
 VAGRANTFILE_API_VERSION = "2"
 
@@ -31,11 +31,14 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.synced_folder vars["LOCAL_DIR"], vars["REMOTE_DIR"], create: true,
         owner: vars["WEBDEV_UID"], group: vars["WEBDEV_GID"], mount_options: ["dmode=775","fmode=664"]
 
-    # Run ansible with playbook.yml (next to Vagrantfile)
+    # Run ansible with ansible_config/playbook.yml
     config.vm.provision "ansible" do |ansible|
         ansible.extra_vars = {
             IS_VAGRANT: true,
-            SYS_TYPE: "virtual_machine"
+            SYS_TYPE: "virtual_machine",
+            REMOTE_DIR: vars["REMOTE_DIR"],
+            APACHE_LOG_DIR: vars["APACHE_LOG_DIR"]
+
         }
         ansible.playbook = "ansible_config/playbook.yml"
         # ansible.verbose = "vvvv"

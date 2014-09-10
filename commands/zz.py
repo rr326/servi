@@ -10,7 +10,8 @@ class ZZCommand(Command):
             'zz', help="Developer functions for maintaining servi. "
                        "(you shouldn't need this)")
         parser_update.add_argument('--save_manifest',  action='store_true',
-                                   help='save manifest to template directory')
+                                   help='save manifest to template directory'
+                                        ' and bump the version')
         parser_update.add_argument('--bump', choices=SEMANTIC_VERSIONS,
                                    help='Bump the version')
         parser_update.set_defaults(command_func=self.run)
@@ -24,6 +25,7 @@ class ZZCommand(Command):
 
 
 def save_manifest():
+    bump(PATCH)
     m_template_fresh = Manifest(TEMPLATE)
     m_template_fresh.save()
     print('New manifest of the current template directory saved to: {0}'

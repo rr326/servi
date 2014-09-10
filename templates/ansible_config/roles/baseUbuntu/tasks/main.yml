@@ -80,8 +80,13 @@
 #
 # Turn off SSH DNS lookup
 #
--   name: Turn off DNS in ssh since it causes a delay logging in on a trusty development box
-    lineinfile: dest=/etc/ssh/sshd_config state=present create=yes line='UseDNS no'
+# Note - I am copying an sshd_config file rather than just doing a lineinfile
+# because lineinfile isn't leading with a newline, thereby causing ssh to fail
+# due to misconfiguration.
+# -   name: Turn off DNS in ssh since it causes a delay logging in on a trusty development box
+#     lineinfile: dest=/etc/ssh/sshd_config state=present create=yes line='\nUseDNS no'
+-   name: Copy sshd_config to /etc/ssh/sshd_conf
+    copy: src=sshd_config dest=/etc/ssh/sshd_config backup=yes force=yes
 -   service: name=ssh state=restarted
 
 #
