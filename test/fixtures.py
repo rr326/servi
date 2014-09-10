@@ -74,3 +74,9 @@ def modify_file(fname):
 @pytest.fixture()
 def dirty_master():
     modify_file(pathfor('Vagrantfile', MASTER))
+
+@pytest.fixture()
+def dirty_ignored_files():
+    modify_file(
+        pathfor('ansible_config/roles/projectSpecific/tasks/main.yml', MASTER))
+    os.remove(pathfor("apache_config/sites-available/THISSITE.conf", MASTER))
