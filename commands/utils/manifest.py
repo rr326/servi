@@ -3,14 +3,18 @@ from commands.utils.semantic import *
 
 
 class Manifest(object):
-    def __init__(self, source):
+    def __init__(self, source, load=False):
         assert source in [TEMPLATE, MASTER]
         self.source = source
         self.fname = pathfor(MANIFEST_FILE, source)
         self.manifest = None
         self.template_version = None
+        if load:
+            self._load()
+        else:
+            self._create()
 
-    def create(self):
+    def _create(self):
         # create a new manifest
         # use the files in TEMPLATE_DIR as the source list
         self.template_version = SemanticVersion(get_template_version())
@@ -35,7 +39,7 @@ class Manifest(object):
         self.manifest["source"] = self.source
         self.manifest["source_dir"] = TEMPLATE_DIR if TEMPLATE else MASTER_DIR
 
-    def load(self):
+    def _load(self):
         with open(self.fname, 'r') as fp:
             self.manifest = json.load(fp)
 

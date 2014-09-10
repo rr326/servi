@@ -23,9 +23,7 @@ class DiffCommand(Command):
 
     def run(self, args):
         m_master = Manifest(MASTER)
-        m_master.create()
         m_template = Manifest(TEMPLATE)
-        m_template.create()
 
         _, changed, removed = m_master.diff_files(m_template)
         ignored = ignored_files(list(changed) + list(removed))

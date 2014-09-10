@@ -16,9 +16,7 @@ class UpdateCommand(Command):
         g.quiet = args.quiet
 
         m_existing_fresh = Manifest(MASTER)
-        m_existing_fresh.create()
         m_template_fresh = Manifest(TEMPLATE)
-        m_template_fresh.create()
 
         changed_files = m_existing_fresh.changed_files(
             m_template_fresh, include_deleted=True)

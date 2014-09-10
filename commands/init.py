@@ -27,9 +27,7 @@ class InitCommand(Command):
         g.quiet = args.quiet
 
         m_master = Manifest(MASTER)
-        m_master.create()
         m_template = Manifest(TEMPLATE)
-        m_template.create()
 
         changed_files = m_master.changed_files(
             m_template, include_deleted=False)

@@ -25,7 +25,6 @@ class ZZCommand(Command):
 
 def save_manifest():
     m_template_fresh = Manifest(TEMPLATE)
-    m_template_fresh.create()
     m_template_fresh.save()
     print('New manifest of the current template directory saved to: {0}'
           .format(m_template_fresh.fname))

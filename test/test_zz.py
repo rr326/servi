@@ -13,8 +13,7 @@ def test_zz_save_manifest():
     assert file_exists(pathfor(MANIFEST_FILE, TEMPLATE))
     # While we're at it, let's test that it's a good manifest, and that
     # manifest.load works
-    new_man = man.Manifest(TEMPLATE)
-    new_man.load()
+    new_man = man.Manifest(TEMPLATE, load=True)
     assert "files" in new_man.manifest
 
 # test_zz_bump()
