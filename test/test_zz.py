@@ -9,7 +9,7 @@ import tempfile
 
 def test_zz_save_manifest():
     fp = tempfile.NamedTemporaryFile(delete=False)
-    tmp_filename=fp.name
+    tmp_filename = fp.name
     fp.close()
     shutil.copy2(pathfor(VERSION_FILE, TEMPLATE), tmp_filename)
 

@@ -2,6 +2,7 @@ from test.fixtures import *
 import pytest
 from commands.utils.semantic import *
 
+
 def test_semantic_version():
     assert SemanticVersion('1.1') > SemanticVersion('1.0')
     assert SemanticVersion('1.0.0') == SemanticVersion('1.0')

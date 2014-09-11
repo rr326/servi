@@ -16,7 +16,7 @@ class UpdateCommand(Command):
     def run(self, args):
         g.quiet = args.quiet
 
-        tmgr=TemplateManager()
+        tmgr = TemplateManager()
 
         changed_or_removed_files = tmgr.changed_files | tmgr.removed_files
 
@@ -30,10 +30,11 @@ class UpdateCommand(Command):
                 '(with automatic backup) run "servi init -f"'
                 .format(changed_or_removed_files - changed_but_ignored_files))
 
-        if changed_or_removed_files:
+        if changed_but_ignored_files:
             print('\nWarning\n'
-                  'The following files from the template were changed'
-                  ' unexpectedly and will not be updated: {0}\n'
+                  'The following files from the template were changed but '
+                  'are on your SERVI_IGNORE_FILES list and will not be '
+                  'updated: {0}\n'
                   .format(changed_but_ignored_files))
 
         qprint('Updating repository with Servi template version: {0}'

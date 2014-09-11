@@ -17,7 +17,7 @@ def confirm_proper_directory():
 def clean_master():
     """
     Clean the master directory, making it empty.
-    (Exclude the servi directory and anything named _SAVEDxxx)
+    (Exclude the servi directory and anything named BACKUP_PREFIX*)
     """
     confirm_proper_directory()
     timestamp = datetime.utcnow()
@@ -27,7 +27,6 @@ def clean_master():
             print('ignoring: {0}'.format(path))
             continue
         TemplateManager.rename_master_file_static(path, timestamp)
-
 
 
 @pytest.fixture()
@@ -68,8 +67,18 @@ def modify_file(fname):
 def dirty_master():
     modify_file(pathfor('Vagrantfile', MASTER))
 
+
 @pytest.fixture()
 def dirty_ignored_files():
     modify_file(
         pathfor('ansible_config/roles/projectSpecific/tasks/main.yml', MASTER))
     os.remove(pathfor("apache_config/sites-available/THISSITE.conf", MASTER))
+
+
+# To simplify translating Linux process error codes into asserts
+def process_failed(exit_code):
+    return exit_code != 0
+
+
+def process_succeeded(exit_code):
+    return exit_code == 0

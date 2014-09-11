@@ -29,8 +29,6 @@ class DiffCommand(Command):
         removed = tmgr.removed_files
         ignored = tmgr.changed_but_ignored_files
 
-
-
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
         print('Template Directory: {0}'.format(os.path.abspath(TEMPLATE_DIR)))

@@ -6,7 +6,7 @@ import subprocess
 import re
 
 
-def test_empty(clean_master, servi_init ):
+def test_empty(clean_master, servi_init):
     m = mfest.Manifest(TEMPLATE)
     for file, sha1 in m.manifest["files"].items():
         if re.search(VERSION_FILE+'$', file):

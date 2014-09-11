@@ -1,8 +1,10 @@
+from config import *
 from commands.utils.manifest import *
 from commands.utils.utils import *
 from datetime import datetime
 
 BACKUP_PREFIX = '_BACKUP_'
+
 
 class TemplateManager(object):
     def __init__(self):
@@ -12,15 +14,16 @@ class TemplateManager(object):
         self.added_files, self.changed_files, self.removed_files = \
             self.m_master.diff_files(self.m_template)
 
-        self.changed_but_ignored_files = _ignored_files(self.changed_files | self.removed_files)
+        self.changed_but_ignored_files = _ignored_files(
+            self.changed_files | self.removed_files)
 
-        self.timestamp = datetime.utcnow() # used for backups
+        self.timestamp = datetime.utcnow()  # used for backups
 
     def init_master(self):
-        _copy_files(self.m_template, exclude_files=[])
+        self.copy_files(exclude_files=[])
 
     def update_master(self):
-        _copy_files(self.m_template, exclude_files=self.changed_but_ignored_files)
+        self.copy_files(exclude_files=self.changed_but_ignored_files)
 
     def rename_master_file(self, fname):
         self.rename_master_file_static(fname, self.timestamp)
@@ -39,24 +42,52 @@ class TemplateManager(object):
         qprint('backing up: {0}'.format(fname))
         shutil.move(pathfor(fname, MASTER), backupdir)
 
+    def copy_files(self, exclude_files):
+        for normalized_fname, template_hash in \
+                self.m_template.manifest["files"].items():
+
+            # No need to copy version file (its in servi_data.json)
+            if normalized_fname == VERSION_FILE:
+                continue
+
+            template_fname = pathfor(normalized_fname, TEMPLATE)
+            master_fname = pathfor(normalized_fname, MASTER)
+
+            master_hash = hash_of_file(master_fname)
+
+            # Exclude unchanged files
+            if master_hash == template_hash:
+                continue
+
+            # Exclude ignored files
+            if normalized_fname in exclude_files:
+                continue
+
+            # Always backup (never overwrite) master
+            if file_exists(master_fname):
+                self.rename_master_file(normalized_fname)
+                existing = True
+            else:
+                existing = False
+
+            # Copy template to master
+            destdir = os.path.normpath(os.path.dirname(master_fname))
+            if destdir:
+                # noinspection PyArgumentList
+                os.makedirs(destdir, exist_ok=True)
+            shutil.copy2(template_fname, master_fname)
+            if existing:
+                qprint('Updated: {0}'.format(master_fname))
+            else:
+                qprint('Created: {0}'.format(master_fname))
+
+
 def _ignored_files(files):
     """
-    Looks in servi_config.yml for a list of ignored files (regex)
-    Returns the subset of input files that are matched.
-    (Note - looks for config in MASTER. If not found, uses default in TEMPLATE)
+    Sees if any of files are in the ignore regex set by servi_config.yml
+    (initialized in config.py)
     """
-    try:
-        with open(pathfor(SERVI_CONFIG_YML, MASTER)) as f:
-            data = yaml.load(f)
-    except FileNotFoundError:
-        with open(pathfor(SERVI_CONFIG_YML, TEMPLATE)) as f:
-            data = yaml.load(f)
-
-    if "SERVI_IGNORE_FILES" not in data:
-        raise ServiError('SERVI_IGNORE_FILES not in {0}'.
-                         format(SERVI_CONFIG_YML))
-
-    ignore_list = data["SERVI_IGNORE_FILES"]
+    ignore_list = SERVI_IGNORE_FILES
     ignore_re_string = '('+'|'.join(ignore_list)+')'
     ignore_re = re.compile(ignore_re_string)
 
@@ -64,49 +95,4 @@ def _ignored_files(files):
 
     return ignored
 
-
-def _copy_files(man, exclude_files):
-    """
-    man = manifest class for TEMPLATE (must be current)
-    exclude_files = optional list of files to ignore
-
-    Copies files from TEMPLATE_DIR to MASTER_DIR
-    *Never* overrwrites - will always make a backup if file exists.
-    """
-    assert man.source == TEMPLATE
-
-    for normalized_fname, template_hash in man.manifest["files"].items():
-        if normalized_fname == VERSION_FILE:
-            continue  # No need to copy version file (its in servi_data.json)
-
-        template_fname = pathfor(normalized_fname, TEMPLATE)
-        master_fname = pathfor(normalized_fname, MASTER)
-
-        master_hash = hash_of_file(master_fname)
-
-        # Exclude unchanged files
-        if master_hash == template_hash:
-            continue
-
-        # Exclude ignored files
-        if normalized_fname in exclude_files:
-            continue
-
-        # Always backup (never overwrite) master
-        if file_exists(master_fname):
-            rename_master_file(master_fname)
-            existing = True
-        else:
-            existing = False
-
-        # Copy template to master
-        destdir = os.path.normpath(os.path.dirname(master_fname))
-        if destdir:
-            # noinspection PyArgumentList
-            os.makedirs(destdir, exist_ok=True)
-        shutil.copy2(template_fname, master_fname)
-        if existing:
-            qprint('Updated: {0}'.format(master_fname))
-        else:
-            qprint('Created: {0}'.format(master_fname))
 

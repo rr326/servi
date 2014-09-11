@@ -12,16 +12,6 @@ import yaml
 import getconfig
 
 
-def rename_master_file(fname):
-    # Renames the file  fname --> backup_fname__2014-09-04T17:32:44
-    path = os.path.dirname(fname)
-    newfname = 'backup_{0}_{1}'.format(
-        os.path.basename(fname), datetime.utcnow().isoformat())
-
-    shutil.move(fname, os.path.join(path, newfname))
-
-
-
 def hash_of_file(fname):
     try:
         with open(fname, 'rb') as fp:
@@ -31,8 +21,7 @@ def hash_of_file(fname):
         hashv = MISSING_HASH
     return hashv
 
-
-
+#
 # Path functions
 #
 

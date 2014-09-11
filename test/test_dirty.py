@@ -38,23 +38,25 @@ DIFF_END = \
 
 def test_dirty(clean_master, servi_init, dirty_master):
     # init should fail (since Master has been updated)
-    assert subprocess.call('python servi init', shell=True)
+    assert process_failed(subprocess.call('python servi init', shell=True))
 
     # update should also fail
-    assert subprocess.call('python servi update', shell=True)
+    assert process_failed(subprocess.call('python servi update', shell=True))
 
     # init -f should succeed (force)
-    assert not subprocess.call('python servi init -f', shell=True)
+    assert process_succeeded(
+        subprocess.call('python servi init -f', shell=True))
 
 
 def test_init_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should fail - init does't ignore
-    assert subprocess.call('python servi init', shell=True)
+    assert process_failed(subprocess.call('python servi init', shell=True))
 
 
 def test_update_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should succeed since ignored files
-    assert not subprocess.call('python servi update', shell=True)
+    assert process_succeeded(
+        subprocess.call('python servi update', shell=True))
 
 
 def test_diff(clean_master, servi_init, dirty_ignored_files):

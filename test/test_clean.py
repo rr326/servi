@@ -6,7 +6,7 @@ import subprocess
 import re
 
 
-def test_clean(clean_master, servi_init ):
+def test_clean(clean_master, servi_init):
     # init on a clean directory should work
     assert not subprocess.call('python servi init', shell=True)
 

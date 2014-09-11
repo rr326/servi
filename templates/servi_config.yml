@@ -36,8 +36,8 @@ SERVI_IGNORE_FILES:
 # $ DIFFTOOL <fullpath to MASTER file> <fullpath to TEMPLATE file>
 #
 
-# DIFFTOOL: "git --no-pager diff"  # use simple git
-DIFFTOOL: "/Applications/PyCharm.app/Contents/MacOS/pycharm diff" # use pycharm
+DIFFTOOL: "git --no-pager diff"  # use simple git
+# DIFFTOOL: "/Applications/PyCharm.app/Contents/MacOS/pycharm diff" # use pycharm
 
 
 

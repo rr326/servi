@@ -20,8 +20,12 @@ TEMPLATE = 'template'
 MASTER = 'master'
 MISSING_HASH = 'FILE NOT FOUND'
 
+# The following must be set in servi_config.yml
+SERVI_IGNORE_FILES, DIFFTOOL = None, None
+
 # Now read in config from SERVI_CONFIG_YML
-config = getconfig(SERVI_CONFIG_YML, TEMPLATE, MASTER, TEMPLATE_DIR, MASTER_DIR)
+config = getconfig(SERVI_CONFIG_YML, TEMPLATE, MASTER,
+                   TEMPLATE_DIR, MASTER_DIR)
 g = globals()
 for key, value in config.items():
     g[key] = value
