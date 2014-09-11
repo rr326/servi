@@ -11,6 +11,7 @@ from servi_exceptions import *
 import yaml
 import getconfig
 
+
 def rename_master_file(fname):
     # Renames the file  fname --> backup_fname__2014-09-04T17:32:44
     path = os.path.dirname(fname)

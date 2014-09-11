@@ -1,6 +1,7 @@
 from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
+from commands.utils.template_mgr import *
 
 
 def error_if_changed(force, changed_files, existing_version, new_version):
@@ -26,21 +27,19 @@ class InitCommand(Command):
     def run(self, args):
         g.quiet = args.quiet
 
-        m_master = Manifest(MASTER)
-        m_template = Manifest(TEMPLATE)
+        tmgr = TemplateManager()
 
-        changed_files = m_master.changed_files(
-            m_template, include_deleted=False)
+        changed_files = tmgr.changed_files
 
         error_if_changed(
             force=args.force, changed_files=changed_files,
-            existing_version=m_template.template_version,
-            new_version=m_master.template_version)
+            existing_version=tmgr.m_template.template_version,
+            new_version=tmgr.m_master.template_version)
 
         qprint('Master Directory: {0}'
                .format(os.path.abspath(MASTER_DIR)))
 
-        copy_files(m_template, exclude_files=[])
+        tmgr.init_master()
 
 
 command = InitCommand()
