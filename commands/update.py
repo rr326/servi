@@ -1,7 +1,8 @@
 from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
-from commands.utils.template_mgr import *
+from commands.utils.template_mgr import TemplateManager
+
 
 class UpdateCommand(Command):
     def register_command_line(self, sub_parsers):
@@ -19,7 +20,7 @@ class UpdateCommand(Command):
 
         changed_or_removed_files = tmgr.changed_files | tmgr.removed_files
 
-        changed_but_ignored_files = ignored_files(changed_or_removed_files)
+        changed_but_ignored_files = tmgr.changed_but_ignored_files
 
         if len(changed_or_removed_files - changed_but_ignored_files) > 0:
             raise ServiError(

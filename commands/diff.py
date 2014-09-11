@@ -3,6 +3,7 @@ from commands.utils.manifest import *
 from servi_exceptions import *
 import subprocess
 from config import *
+from commands.utils.template_mgr import TemplateManager
 
 
 class DiffCommand(Command):
@@ -22,11 +23,13 @@ class DiffCommand(Command):
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
-        m_master = Manifest(MASTER)
-        m_template = Manifest(TEMPLATE)
+        tmgr = TemplateManager()
 
-        _, changed, removed = m_master.diff_files(m_template)
-        ignored = ignored_files(list(changed) + list(removed))
+        changed = tmgr.changed_files
+        removed = tmgr.removed_files
+        ignored = tmgr.changed_but_ignored_files
+
+
 
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
