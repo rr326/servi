@@ -15,7 +15,6 @@
 
 # TODO LogRotate
 # TODO Mailer
-# TODO Virtualenvs
 # TODO mod-Pagespeed
 # TODO Monitoring
 # TODO errors (fail2ban) to mail

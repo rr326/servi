@@ -64,7 +64,5 @@ def test_diff(clean_master, servi_init, dirty_ignored_files):
     output = str(output)
 
     assert DIFF_SUMMARY in output
-    assert '-#-   debug: msg="DoinHERE IS SOME NEW TEXT Vagrant-only tasks"' \
-           in output
-
+    assert re.search('-.*HERE IS SOME NEW TEXT', output)
     assert DIFF_END in output

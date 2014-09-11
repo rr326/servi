@@ -1,16 +1,21 @@
 # Servi
 
 ## TODO
-* Ansible needs python 2. How to deal with that?
-    * Try a vanilla ansible install (not in a venv)
-* Install servi.sh in /usr/bin (or whatever is the right directory)?
-
-* Test scripts (py.test)
-* commands: 
-    * lans, rans
-    * diff
+* Ansible
+    * Logrotate
+    * Mailer
+    * Mod-pagespeed
+    * fail2ban and other errors to mail
+    * ?? Monitoring
+* Servi
+    * setuptools? (or just installation instructions?)
+    * Template - playbook.yml - only copy roles that are used?
+        (so I can have a library of roles)
+    * Remove servi.sh - install to /usr/bin?
+    * commands:
+        * lans, rans
+        * diff
 
 * Look at Docker - would that have done all of this???
 
 
-* Do setuptools - to install pyyaml dependecy.

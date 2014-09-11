@@ -107,7 +107,7 @@ def ignored_files(files):
 
 
 def templatepath_to_destpath(template_path):
-    return os.path.join(MASTER_DIR,  template_path[len(TEMPLATE_DIR)+1:])
+    return pathfor(normalize_path(template_path, TEMPLATE), MASTER)
 
 
 def pathfor(fname, source):

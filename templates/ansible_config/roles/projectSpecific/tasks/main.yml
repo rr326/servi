@@ -59,6 +59,4 @@
 
 
 
-#  TODO - is this still true:  Note - you need to restart apache after the first 'vagrant up', because the shared drives (with the proper vhost file) aren't set up until after ansible finishes provisioning.
-
 
