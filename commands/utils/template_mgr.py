@@ -1,6 +1,8 @@
 from commands.utils.manifest import *
 from commands.utils.utils import *
+from datetime import datetime
 
+BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self):
@@ -12,12 +14,30 @@ class TemplateManager(object):
 
         self.changed_but_ignored_files = _ignored_files(self.changed_files | self.removed_files)
 
+        self.timestamp = datetime.utcnow() # used for backups
+
     def init_master(self):
         _copy_files(self.m_template, exclude_files=[])
 
     def update_master(self):
         _copy_files(self.m_template, exclude_files=self.changed_but_ignored_files)
 
+    def rename_master_file(self, fname):
+        self.rename_master_file_static(fname, self.timestamp)
+
+    @staticmethod
+    def rename_master_file_static(fname, timestamp):
+        """
+        This basically backs up fname (but MOVES it).
+        fname is the normalized fname
+        Stored in a dirctory: _BACKUP_{UTC_TIMESTAMP}
+        """
+        backupdir = '{0}_{1}'.format(BACKUP_PREFIX, timestamp.isoformat())
+        if not os.path.exists(backupdir):
+            os.mkdir(backupdir)
+
+        qprint('backing up: {0}'.format(fname))
+        shutil.move(pathfor(fname, MASTER), backupdir)
 
 def _ignored_files(files):
     """

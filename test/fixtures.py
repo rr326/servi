@@ -6,8 +6,8 @@ import pytest
 from config import *
 from commands.utils.utils import *
 import subprocess
+from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 
-BACKUP_PREFIX = '_OLD'
 
 def confirm_proper_directory():
     assert os.path.abspath(os.getcwd()) == os.path.abspath(MASTER_DIR)
@@ -20,21 +20,14 @@ def clean_master():
     (Exclude the servi directory and anything named _SAVEDxxx)
     """
     confirm_proper_directory()
+    timestamp = datetime.utcnow()
 
-    tomove = []
     for path in os.listdir(MASTER_DIR):
         if re.match('({0}.*|servi$)'.format(BACKUP_PREFIX), path):
             print('ignoring: {0}'.format(path))
             continue
-        tomove.append(path)
+        TemplateManager.rename_master_file_static(path, timestamp)
 
-    if tomove:
-        backupdir = '{0}_{1}'.format(BACKUP_PREFIX,
-                                     datetime.utcnow().isoformat())
-        os.mkdir(backupdir)
-        for path in tomove:
-            print('backing up: {0}'.format(path))
-            shutil.move(path, backupdir)
 
 
 @pytest.fixture()
