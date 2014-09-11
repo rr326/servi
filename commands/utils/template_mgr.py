@@ -14,7 +14,7 @@ class TemplateManager(object):
         self.added_files, self.changed_files, self.removed_files = \
             self.m_master.diff_files(self.m_template)
 
-        self.changed_but_ignored_files = _ignored_files(
+        self.changed_but_ignored_files = self._ignored_files(
             self.changed_files | self.removed_files)
 
         self.timestamp = datetime.utcnow()  # used for backups
@@ -38,9 +38,12 @@ class TemplateManager(object):
         backupdir = '{0}_{1}'.format(BACKUP_PREFIX, timestamp.isoformat())
         if not os.path.exists(backupdir):
             os.mkdir(backupdir)
+        subdir = os.path.join(backupdir, os.path.dirname(fname))
+        if not os.path.exists(subdir):
+            os.makedirs(subdir)
 
         qprint('backing up: {0}'.format(fname))
-        shutil.move(pathfor(fname, MASTER), backupdir)
+        shutil.move(pathfor(fname, MASTER), subdir)
 
     def copy_files(self, exclude_files):
         for normalized_fname, template_hash in \
@@ -53,10 +56,9 @@ class TemplateManager(object):
             template_fname = pathfor(normalized_fname, TEMPLATE)
             master_fname = pathfor(normalized_fname, MASTER)
 
-            master_hash = hash_of_file(master_fname)
-
             # Exclude unchanged files
-            if master_hash == template_hash:
+            if (self.m_master.manifest["files"][normalized_fname] ==
+                    template_hash):
                 continue
 
             # Exclude ignored files
@@ -71,28 +73,27 @@ class TemplateManager(object):
                 existing = False
 
             # Copy template to master
-            destdir = os.path.normpath(os.path.dirname(master_fname))
-            if destdir:
-                # noinspection PyArgumentList
-                os.makedirs(destdir, exist_ok=True)
+            destdir = os.path.dirname(master_fname)
+            if destdir and not os.path.exists(destdir):
+                os.makedirs(destdir)
             shutil.copy2(template_fname, master_fname)
             if existing:
                 qprint('Updated: {0}'.format(master_fname))
             else:
                 qprint('Created: {0}'.format(master_fname))
 
+    @staticmethod
+    def _ignored_files(files):
+        """
+        Sees if any of files are in the ignore regex set by servi_config.yml
+        (initialized in config.py)
+        """
+        ignore_list = SERVI_IGNORE_FILES
+        ignore_re_string = '('+'|'.join(ignore_list)+')'
+        ignore_re = re.compile(ignore_re_string)
 
-def _ignored_files(files):
-    """
-    Sees if any of files are in the ignore regex set by servi_config.yml
-    (initialized in config.py)
-    """
-    ignore_list = SERVI_IGNORE_FILES
-    ignore_re_string = '('+'|'.join(ignore_list)+')'
-    ignore_re = re.compile(ignore_re_string)
+        ignored = {file for file in files if ignore_re.search(file)}
 
-    ignored = {file for file in files if ignore_re.search(file)}
-
-    return ignored
+        return ignored
 
 
