@@ -4,8 +4,6 @@ import pytest
 import tempfile
 
 
-pytestmark = pytest.mark.wip
-
 PLAYBOOK_TESTDATA = '''
 ---
 -   hosts: all
@@ -72,7 +70,3 @@ def test_role_of_fname():
     assert tmgr._role_of_fname('apache_config/sites-available/THISSITE') \
            is None
 
-
-def test_mock(mock_template_dir):
-    assert not subprocess.call('python servi init', shell=True)
-    assert 0

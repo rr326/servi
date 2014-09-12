@@ -42,6 +42,6 @@ for key, value in c.items():
 _overrides = ['TEMPLATE_DIR']
 for _override in _overrides:
     if _override in os.environ:
-        print('config: {0} override set in environment variable: '.
-            format(_override, os.environ[_override]))
+        print('config: {0} override set in environment variable: {1} '.
+              format(_override, os.environ[_override]))
         globals()[_override] = os.environ[_override]

@@ -91,6 +91,7 @@ def mock_template_dir(monkeypatch):
     Set TEMPLATE_DIR enviornment variable to the new dir
     (config.py will override TEMPLATE_DIR based on the env variable)
     """
+    print('in mock_template_dir')
     temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
     temp_dir = os.path.join(temp_dir, 'templates')
     shutil.copytree(TEMPLATE_DIR, temp_dir)
