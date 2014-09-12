@@ -4,7 +4,7 @@ import argparse
 from importlib import import_module
 from servi_exceptions import *
 import sys
-import config
+import config as c
 
 
 def find_plugins():

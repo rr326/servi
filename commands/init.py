@@ -37,7 +37,7 @@ class InitCommand(Command):
             new_version=tmgr.m_master.template_version)
 
         qprint('Master Directory: {0}'
-               .format(os.path.abspath(MASTER_DIR)))
+               .format(os.path.abspath(c.MASTER_DIR)))
 
         tmgr.init_master()
 

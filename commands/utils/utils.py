@@ -5,7 +5,7 @@ import hashlib
 import re
 from datetime import datetime
 
-from config import *
+import config as c
 from utils import *
 from servi_exceptions import *
 import yaml
@@ -18,7 +18,7 @@ def hash_of_file(fname):
             content = fp.read()
             hashv = hashlib.sha1(content).hexdigest()
     except FileNotFoundError:
-        hashv = MISSING_HASH
+        hashv = c.MISSING_HASH
     return hashv
 
 #
@@ -27,17 +27,17 @@ def hash_of_file(fname):
 
 
 def templatepath_to_destpath(template_path):
-    return pathfor(normalize_path(template_path, TEMPLATE), MASTER)
+    return pathfor(normalize_path(template_path, c.TEMPLATE), c.MASTER)
 
 
 def pathfor(fname, source):
-    return getconfig.pathfor(fname, source, TEMPLATE, MASTER,
-                             TEMPLATE_DIR, MASTER_DIR)
+    return getconfig.pathfor(fname, source, c.TEMPLATE, c.MASTER,
+                             c.TEMPLATE_DIR, c.MASTER_DIR)
 
 
 def normalize_path(path, source):
-    assert source in [TEMPLATE, MASTER]
-    prefix = TEMPLATE_DIR if source is TEMPLATE else MASTER_DIR
+    assert source in [c.TEMPLATE, c.MASTER]
+    prefix = c.TEMPLATE_DIR if source is c.TEMPLATE else c.MASTER_DIR
     prefix += '/'
     if not os.path.commonprefix([prefix, path]) == prefix:
         raise Exception('Expected prefix ({0}) not found in path ({1})'

@@ -25,7 +25,7 @@ class ZZCommand(Command):
 
 
 def save_manifest():
-    m_template_fresh = Manifest(TEMPLATE)
+    m_template_fresh = Manifest(c.TEMPLATE)
     m_template_fresh.save()
     bump(PATCH)
     print('New manifest of the current template directory saved to: {0}'
@@ -33,7 +33,7 @@ def save_manifest():
 
 
 def bump(ver_type):
-    with open(pathfor(VERSION_FILE, TEMPLATE), 'r') as fp:
+    with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'r') as fp:
         data = json.load(fp)
 
     sv = SemanticVersion(data["template_version"])
@@ -41,7 +41,7 @@ def bump(ver_type):
 
     data["template_version"] = str(sv)
 
-    with open(pathfor(VERSION_FILE, TEMPLATE), 'w') as fp:
+    with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'w') as fp:
         json.dump(data, fp, indent=4)
 
     print('Updated VERSION_FILE')

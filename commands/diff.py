@@ -2,7 +2,7 @@ from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
 import subprocess
-from config import *
+import config as c
 from commands.utils.template_mgr import TemplateManager
 
 
@@ -13,7 +13,7 @@ class DiffCommand(Command):
             'diff', help="Diff changes betweeen your server "
                          "config and servi's. "
                          "Note - set the DIFFTOOL parameter in {0}"
-                         .format(SERVI_CONFIG_YML))
+                         .format(c.SERVI_CONFIG_YML))
 
         parser_init.add_argument(
             '--difftool', action='store', help=
@@ -31,8 +31,8 @@ class DiffCommand(Command):
 
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
-        print('Template Directory: {0}'.format(os.path.abspath(TEMPLATE_DIR)))
-        print('Master Directory:   {0}'.format(os.path.abspath(MASTER_DIR)))
+        print('Template Directory: {0}'.format(os.path.abspath(c.TEMPLATE_DIR)))
+        print('Master Directory:   {0}'.format(os.path.abspath(c.MASTER_DIR)))
         print()
         print('Changed files:')
         print('===============')
@@ -60,9 +60,9 @@ class DiffCommand(Command):
         for file in changed:
             subprocess.call(
                 '{command} {path1} {path2}'.format(
-                command=args.difftool if args.difftool else DIFFTOOL,
-                path1=os.path.abspath(pathfor(file, MASTER)),
-                path2=os.path.abspath(pathfor(file, TEMPLATE))
+                command=args.difftool if args.difftool else c.DIFFTOOL,
+                path1=os.path.abspath(pathfor(file, c.MASTER)),
+                path2=os.path.abspath(pathfor(file, c.TEMPLATE))
                 ), shell=True)
 
 

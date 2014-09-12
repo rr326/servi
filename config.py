@@ -3,7 +3,7 @@ from getconfig import getconfig
 
 #
 # Global configuration for servi files
-# Use as from config import *
+# Use as import config as c
 # Note - this will also read in additional variables (and overrides) from
 # SERVI_CONFIG_YML
 #
@@ -38,7 +38,7 @@ for key, value in c.items():
 # For testing I may need to set an environment variable to ovverride a config
 # parameter (eg: TEMPLATE_DIR = 'tmp/mock/templates'
 # (I can't just use pytest monkeypatch because A) I do a subprocess() call
-# and B) do 'from config import *')
+# and B) do 'import config as c')
 _overrides = ['TEMPLATE_DIR']
 for _override in _overrides:
     if _override in os.environ:

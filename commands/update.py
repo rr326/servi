@@ -40,7 +40,7 @@ class UpdateCommand(Command):
 
         qprint('Updating repository with Servi template version: {0}'
                .format(tmgr.m_template.template_version))
-        qprint('Master (destination directory): {0}'.format(MASTER_DIR))
+        qprint('Master (destination directory): {0}'.format(c.MASTER_DIR))
 
         tmgr.update_master()
 

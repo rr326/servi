@@ -1,4 +1,4 @@
-from config import *
+import config as c
 from commands.utils.manifest import *
 from commands.utils.utils import *
 from datetime import datetime
@@ -12,12 +12,12 @@ BACKUP_PREFIX = '_BACKUP_'
 class TemplateManager(object):
     def __init__(self):
         print('*'*100)
-        print('TemplateManager: TEMPLATE_DIR: ', TEMPLATE_DIR)
+        print('TemplateManager: TEMPLATE_DIR: ', c.TEMPLATE_DIR)
 
-        self.m_master = Manifest(MASTER)
-        self.m_template = Manifest(TEMPLATE)
+        self.m_master = Manifest(c.MASTER)
+        self.m_template = Manifest(c.TEMPLATE)
         try:
-            self.m_master_saved = Manifest(MASTER, load=True)
+            self.m_master_saved = Manifest(c.MASTER, load=True)
         except FileNotFoundError:
             self.m_master_saved = None
 
@@ -68,18 +68,18 @@ class TemplateManager(object):
             os.makedirs(subdir)
 
         qprint('backing up: {0}'.format(fname))
-        shutil.move(pathfor(fname, MASTER), subdir)
+        shutil.move(pathfor(fname, c.MASTER), subdir)
 
     def copy_files(self, exclude_files):
         for normalized_fname, template_hash in \
                 self.m_template.manifest["files"].items():
 
             # No need to copy version file (its in servi_data.json)
-            if normalized_fname == VERSION_FILE:
+            if normalized_fname == c.VERSION_FILE:
                 continue
 
-            template_fname = pathfor(normalized_fname, TEMPLATE)
-            master_fname = pathfor(normalized_fname, MASTER)
+            template_fname = pathfor(normalized_fname, c.TEMPLATE)
+            master_fname = pathfor(normalized_fname, c.MASTER)
 
             # Exclude unchanged files
             if (self.m_master.manifest["files"][normalized_fname] ==
@@ -129,7 +129,7 @@ class TemplateManager(object):
 
     @staticmethod
     def _get_template_roles():
-        template_dir = os.path.join(TEMPLATE_DIR, 'ansible_config/roles')
+        template_dir = os.path.join(c.TEMPLATE_DIR, 'ansible_config/roles')
         roles = [path for path in
                  os.listdir(template_dir)
                  if os.path.isdir(os.path.join(template_dir, path))]
@@ -143,7 +143,7 @@ class TemplateManager(object):
             playbook_raw = test_raw
         else:
             try:
-                with open(pathfor('ansible_config/playbook.yml', MASTER), 'r') as fp:
+                with open(pathfor('ansible_config/playbook.yml', c.MASTER), 'r') as fp:
                     playbook = yaml.load(fp)
                     playbook = playbook[0]
                     playbook_raw = fp.read()
@@ -153,7 +153,7 @@ class TemplateManager(object):
         if 'roles' not in playbook:
             raise ServiError(
                 '"roles" not found in {0}'
-                .format(pathfor('ansible_config/playbook.yml', MASTER)))
+                .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
         roles = set(playbook['roles'])
 
         # also find 'possible' roles - any template role that is commented out
@@ -170,7 +170,7 @@ class TemplateManager(object):
         Sees if any of files are in the ignore regex set by servi_config.yml
         (initialized in config.py)
         """
-        ignore_list = SERVI_IGNORE_FILES
+        ignore_list = c.SERVI_IGNORE_FILES
         ignore_re_string = '('+'|'.join(ignore_list)+')'
         ignore_re = re.compile(ignore_re_string)
 

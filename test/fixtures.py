@@ -4,14 +4,14 @@ import shutil
 import re
 import pytest
 import config
-from config import *
+import config as c
 from commands.utils.utils import *
 import subprocess
 from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 import tempfile
 
 def confirm_proper_directory():
-    assert os.path.abspath(os.getcwd()) == os.path.abspath(MASTER_DIR)
+    assert os.path.abspath(os.getcwd()) == os.path.abspath(c.MASTER_DIR)
 
 
 @pytest.fixture()
@@ -23,7 +23,7 @@ def clean_master():
     confirm_proper_directory()
     timestamp = datetime.utcnow()
 
-    for path in os.listdir(MASTER_DIR):
+    for path in os.listdir(c.MASTER_DIR):
         if re.match('({0}.*|servi$)'.format(BACKUP_PREFIX), path):
             print('ignoring: {0}'.format(path))
             continue
@@ -66,14 +66,14 @@ def modify_file(fname):
 
 @pytest.fixture()
 def dirty_master():
-    modify_file(pathfor('Vagrantfile', MASTER))
+    modify_file(pathfor('Vagrantfile', c.MASTER))
 
 
 @pytest.fixture()
 def dirty_ignored_files():
     modify_file(
-        pathfor('ansible_config/roles/projectSpecific/tasks/main.yml', MASTER))
-    os.remove(pathfor("apache_config/sites-available/THISSITE.conf", MASTER))
+        pathfor('ansible_config/roles/projectSpecific/tasks/main.yml', c.MASTER))
+    os.remove(pathfor("apache_config/sites-available/THISSITE.conf", c.MASTER))
 
 
 # To simplify translating Linux process error codes into asserts
@@ -94,6 +94,6 @@ def mock_template_dir(monkeypatch):
     print('in mock_template_dir')
     temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
     temp_dir = os.path.join(temp_dir, 'templates')
-    shutil.copytree(TEMPLATE_DIR, temp_dir)
+    shutil.copytree(c.TEMPLATE_DIR, temp_dir)
     print('mock_template_dir - temp_dir: ', temp_dir)
     monkeypatch.setenv('TEMPLATE_DIR', temp_dir)

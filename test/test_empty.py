@@ -7,9 +7,9 @@ import re
 
 
 def test_empty(clean_master, servi_init):
-    m = mfest.Manifest(TEMPLATE)
+    m = mfest.Manifest(c.TEMPLATE)
     for file, sha1 in m.manifest["files"].items():
-        if re.search(VERSION_FILE+'$', file):
+        if re.search(c.VERSION_FILE+'$', file):
             continue
-        assert file_exists(pathfor(file, MASTER))
+        assert file_exists(pathfor(file, c.MASTER))
 

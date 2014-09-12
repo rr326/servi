@@ -4,9 +4,9 @@ from commands.utils.semantic import *
 
 class Manifest(object):
     def __init__(self, source, load=False):
-        assert source in [TEMPLATE, MASTER]
+        assert source in [c.TEMPLATE, c.MASTER]
         self.source = source
-        self.fname = pathfor(MANIFEST_FILE, source)
+        self.fname = pathfor(c.MANIFEST_FILE, source)
         self.manifest = None
         self.template_version = None
         if load:
@@ -24,20 +24,20 @@ class Manifest(object):
             "template_version": str(self.template_version),
         }
 
-        for (dirpath, dirnames, filenames) in os.walk(TEMPLATE_DIR):
+        for (dirpath, dirnames, filenames) in os.walk(c.TEMPLATE_DIR):
             for file in filenames:
                 template_file = os.path.join(dirpath, file)
-                if self.source is MASTER:
+                if self.source is c.MASTER:
                     hashv = hash_of_file(
                         templatepath_to_destpath(template_file))
                 else:
                     hashv = hash_of_file(template_file)
 
-                fname = normalize_path(template_file, TEMPLATE)
+                fname = normalize_path(template_file, c.TEMPLATE)
                 self.manifest["files"][fname] = hashv
 
         self.manifest["source"] = self.source
-        self.manifest["source_dir"] = TEMPLATE_DIR if TEMPLATE else MASTER_DIR
+        self.manifest["source_dir"] = c.TEMPLATE_DIR if c.TEMPLATE else c.MASTER_DIR
 
     def _load(self):
         with open(self.fname, 'r') as fp:
@@ -57,7 +57,7 @@ class Manifest(object):
 
     def diff_files(self, orig):
         mod_manifest = {k: v for k, v in self.manifest["files"].items()
-                        if v != MISSING_HASH}
+                        if v != c.MISSING_HASH}
 
         diff = DictDiffer(mod_manifest, orig.manifest["files"])
         return diff.added(), diff.changed(), diff.removed()
@@ -81,7 +81,7 @@ class Manifest(object):
 
 
 def get_template_version():
-    with open(pathfor(VERSION_FILE, TEMPLATE)) as f:
+    with open(pathfor(c.VERSION_FILE, c.TEMPLATE)) as f:
         data = json.load(f)
     return data["template_version"]
 
