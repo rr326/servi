@@ -2,6 +2,9 @@ from config import *
 from commands.utils.manifest import *
 from commands.utils.utils import *
 from datetime import datetime
+from servi_exceptions import *
+import yaml
+import re
 
 BACKUP_PREFIX = '_BACKUP_'
 
@@ -18,6 +21,9 @@ class TemplateManager(object):
             self.changed_files | self.removed_files)
 
         self.timestamp = datetime.utcnow()  # used for backups
+
+        self.roles, self.possible_roles = self._get_master_roles(
+            self._get_template_roles())
 
     def init_master(self):
         self.copy_files(exclude_files=[])
@@ -65,6 +71,11 @@ class TemplateManager(object):
             if normalized_fname in exclude_files:
                 continue
 
+            # Possibly exclude roles
+            if self._role_of_fname(normalized_fname) not in self.roles:
+                qprint('Skipping unused role file: {0}'
+                       .format(normalized_fname))
+
             # Always backup (never overwrite) master
             if file_exists(master_fname):
                 self.rename_master_file(normalized_fname)
@@ -81,6 +92,58 @@ class TemplateManager(object):
                 qprint('Updated: {0}'.format(master_fname))
             else:
                 qprint('Created: {0}'.format(master_fname))
+
+
+    @staticmethod
+    def _role_of_fname(normalized_fname):
+        """
+        returns a role if normalized_fname looks like a role
+        ansible_config/roles/baseUbuntu/* --> baseUbuntu
+        apache_config/sites_available/THISSITE --> None
+        """
+        match = re.match('ansible_config/roles/([^/]*)(/.+|)',
+                         normalized_fname)
+        if not match:
+            return None
+        else:
+            return match.group(1)
+
+    @staticmethod
+    def _get_template_roles():
+        template_dir = os.path.join(TEMPLATE_DIR, 'ansible_config/roles')
+        roles = [path for path in
+                 os.listdir(template_dir)
+                 if os.path.isdir(os.path.join(template_dir, path))]
+        return set(roles)
+
+    @staticmethod
+    def _get_master_roles(template_roles, test_raw=None):
+        if test_raw:
+            playbook = yaml.load(test_raw)
+            playbook = playbook[0]
+            playbook_raw = test_raw
+        else:
+            try:
+                with open(pathfor('ansible_config/playbook.yml', MASTER), 'r') as fp:
+                    playbook = yaml.load(fp)
+                    playbook = playbook[0]
+                    playbook_raw = fp.read()
+            except FileNotFoundError:
+                return set(), set()
+
+        if 'roles' not in playbook:
+            raise ServiError(
+                '"roles" not found in {0}'
+                .format(pathfor('ansible_config/playbook.yml', MASTER)))
+        roles = set(playbook['roles'])
+
+        # also find 'possible' roles - any template role that is commented out
+        possible_roles = set()
+        for t_role in template_roles:
+            if re.search('.*#.*{0}\s'.format(t_role), playbook_raw,
+                         flags=re.IGNORECASE):
+                possible_roles.add(t_role)
+        return roles, possible_roles
 
     @staticmethod
     def _ignored_files(files):
