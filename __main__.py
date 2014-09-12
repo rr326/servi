@@ -4,6 +4,7 @@ import argparse
 from importlib import import_module
 from servi_exceptions import *
 import sys
+import config
 
 
 def find_plugins():
@@ -39,6 +40,7 @@ def main():
     load_plugins(sub_parsers)
 
     args = servi_parser.parse_args()
+
     if args.command:
         try:
             print('Servi - Running: {0}\n'.format(args.command))

@@ -3,11 +3,12 @@ from datetime import datetime
 import shutil
 import re
 import pytest
+import config
 from config import *
 from commands.utils.utils import *
 import subprocess
 from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
-
+import tempfile
 
 def confirm_proper_directory():
     assert os.path.abspath(os.getcwd()) == os.path.abspath(MASTER_DIR)
@@ -82,3 +83,16 @@ def process_failed(exit_code):
 
 def process_succeeded(exit_code):
     return exit_code == 0
+
+@pytest.fixture()
+def mock_template_dir(monkeypatch):
+    """
+    Copy TEMPLATE_DIR to a tmp directory
+    Set TEMPLATE_DIR enviornment variable to the new dir
+    (config.py will override TEMPLATE_DIR based on the env variable)
+    """
+    temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
+    temp_dir = os.path.join(temp_dir, 'templates')
+    shutil.copytree(TEMPLATE_DIR, temp_dir)
+    print('mock_template_dir - temp_dir: ', temp_dir)
+    monkeypatch.setenv('TEMPLATE_DIR', temp_dir)

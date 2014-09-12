@@ -11,14 +11,33 @@ BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self):
+        print('*'*100)
+        print('TemplateManager: TEMPLATE_DIR: ', TEMPLATE_DIR)
+
         self.m_master = Manifest(MASTER)
         self.m_template = Manifest(TEMPLATE)
+        try:
+            self.m_master_saved = Manifest(MASTER, load=True)
+        except FileNotFoundError:
+            self.m_master_saved = None
 
+        # These compare master to template
         self.added_files, self.changed_files, self.removed_files = \
             self.m_master.diff_files(self.m_template)
-
         self.changed_but_ignored_files = self._ignored_files(
             self.changed_files | self.removed_files)
+
+        # These compare current master to the saved master manifest
+        if self.m_master_saved:
+            self.mm_added_files, self.mm_changed_files, \
+                self.mm_removed_files = \
+                self.m_master.diff_files(self.m_master_saved)
+            self.mm_changed_but_ignored_files = self._ignored_files(
+                self.mm_changed_files | self.mm_removed_files)
+        else:
+            self.mm_added_files, self.mm_changed_files, \
+                self.mm_removed_files, self.mm_changed_but_ignored_files = \
+                set(), set(), set(), set()
 
         self.timestamp = datetime.utcnow()  # used for backups
 

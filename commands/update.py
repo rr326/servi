@@ -18,9 +18,10 @@ class UpdateCommand(Command):
 
         tmgr = TemplateManager()
 
-        changed_or_removed_files = tmgr.changed_files | tmgr.removed_files
+        changed_or_removed_files = (tmgr.mm_changed_files |
+                                    tmgr.mm_removed_files)
 
-        changed_but_ignored_files = tmgr.changed_but_ignored_files
+        changed_but_ignored_files = tmgr.mm_changed_but_ignored_files
 
         if len(changed_or_removed_files - changed_but_ignored_files) > 0:
             raise ServiError(
