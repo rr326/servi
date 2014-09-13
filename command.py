@@ -78,10 +78,10 @@ def process_and_run_command_line(command_line=None):
             args.command_func(args)
         except (ForceError, ServiError) as e:
             print(e)
-            sys.exit("Servi Error. Aborting.")
+            raise
     else:
         print('\n***** Error ******\nNo command on command line.\n')
         servi_parser.print_help()
-        sys.exit("Error - No command line. Aborting")
+        raise ServiError
 
     return True

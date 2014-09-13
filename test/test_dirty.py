@@ -39,10 +39,12 @@ DIFF_END = \
 
 def test_dirty(clean_master, servi_init, dirty_master):
     # init should fail (since Master has been updated)
-    assert not servi_run('init')
+    with pytest.raises(ForceError):
+        servi_run('init')
 
     # update should also fail
-    assert not servi_run('update')
+    with pytest.raises(ServiError):
+        servi_run('update')
 
     # init -f should succeed (force)
     assert servi_run('init -f')
@@ -50,7 +52,8 @@ def test_dirty(clean_master, servi_init, dirty_master):
 
 def test_init_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should fail - init does't ignore
-    assert not servi_run('init')
+    with pytest.raises(ForceError):
+        servi_run('init')
 
 
 def test_update_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
