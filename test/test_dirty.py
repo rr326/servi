@@ -36,6 +36,7 @@ DIFF_END = \
 -the end of the file
 """
 
+pytestmark = pytest.mark.wip
 
 def test_dirty(clean_master, servi_init, dirty_master):
     # init should fail (since Master has been updated)
@@ -60,6 +61,14 @@ def test_update_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should succeed since ignored files
     assert servi_run('update')
 
+
+def test_update_dirty_template_clean_master(clean_master, servi_init, dirty_template):
+    servi_run('update')
+
+
+def test_update_dirty_both(clean_master, servi_init, dirty_template_and_master):
+    with pytest.raises(ServiError):
+        servi_run('update')
 
 def test_diff(clean_master, servi_init, dirty_ignored_files):
     output = subprocess.check_output('python servi diff --difftool "git diff"',

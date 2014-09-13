@@ -20,3 +20,4 @@
 
 
 ## TODO - better error if saved manifest doesn't match (probalby didn't run 'save_manifest'
+## TODO Remove TEMPLATE_VERSION from error / warning messages (and maybe simplfify special handling

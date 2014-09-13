@@ -54,6 +54,7 @@ def modify_file(fname):
 
     # Add to end
     lines.append('Here\nare\nsome\nnew\nlines\nat\nthe end of the file\n')
+    lines.append(datetime.utcnow().isoformat()) # So every one is different
 
     # Modify in middle
     mid = len(lines) // 2
@@ -102,3 +103,16 @@ def mock_template_dir(monkeypatch):
     shutil.copytree(c.TEMPLATE_DIR, temp_dir)
     monkeypatch.setattr(c, 'TEMPLATE_DIR', temp_dir)
     print('mock_template_dir - c.TEMPLATE_DIR: ', c.TEMPLATE_DIR)
+
+@pytest.fixture()
+def dirty_template(monkeypatch):
+    mock_template_dir(monkeypatch)
+    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml', c.TEMPLATE))
+
+@pytest.fixture()
+def dirty_template_and_master(monkeypatch):
+    mock_template_dir(monkeypatch)
+    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
+        c.TEMPLATE))
+    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
+        c.MASTER))
