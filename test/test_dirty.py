@@ -4,6 +4,7 @@ import commands.utils.manifest as mfest
 from commands.utils.utils import *
 import subprocess
 import re
+from command import process_and_run_command_line as servi_run
 
 # noinspection PyPep8
 DIFF_SUMMARY = \
@@ -38,25 +39,23 @@ DIFF_END = \
 
 def test_dirty(clean_master, servi_init, dirty_master):
     # init should fail (since Master has been updated)
-    assert process_failed(subprocess.call('python servi init', shell=True))
+    assert not servi_run('init')
 
     # update should also fail
-    assert process_failed(subprocess.call('python servi update', shell=True))
+    assert not servi_run('update')
 
     # init -f should succeed (force)
-    assert process_succeeded(
-        subprocess.call('python servi init -f', shell=True))
+    assert servi_run('init -f')
 
 
 def test_init_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should fail - init does't ignore
-    assert process_failed(subprocess.call('python servi init', shell=True))
+    assert not servi_run('init')
 
 
 def test_update_dirty_ignore(clean_master, servi_init, dirty_ignored_files):
     # Should succeed since ignored files
-    assert process_succeeded(
-        subprocess.call('python servi update', shell=True))
+    assert servi_run('update')
 
 
 def test_diff(clean_master, servi_init, dirty_ignored_files):

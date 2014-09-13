@@ -4,12 +4,13 @@ import commands.utils.manifest as mfest
 from commands.utils.utils import *
 import subprocess
 import re
+from command import process_and_run_command_line as servi_run
 
 
 def test_clean(clean_master, servi_init):
     # init on a clean directory should work
-    assert not subprocess.call('python servi init', shell=True)
+    assert servi_run('init')
 
     # Update on a clean directory should work too
-    assert not subprocess.call('python servi update', shell=True)
+    assert servi_run('update')
 

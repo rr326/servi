@@ -42,6 +42,7 @@ class Manifest(object):
     def _load(self):
         with open(self.fname, 'r') as fp:
             self.manifest = json.load(fp)
+        self.template_version = SemanticVersion(self.manifest["template_version"])
 
     def save(self):
         with open(self.fname, 'w') as fp:

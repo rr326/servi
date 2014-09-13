@@ -5,6 +5,7 @@ import subprocess
 import os
 import commands.utils.manifest as man
 import tempfile
+from command import process_and_run_command_line as servi_run
 
 
 def test_zz_save_manifest():
@@ -15,8 +16,7 @@ def test_zz_save_manifest():
 
     try:
         os.remove(pathfor(c.MANIFEST_FILE, c.TEMPLATE))
-        retval = subprocess.call('python servi zz --save_manifest', shell=True)
-        assert not retval
+        retval = servi_run('zz --save_manifest')
         assert file_exists(pathfor(c.MANIFEST_FILE, c.TEMPLATE))
         # While we're at it, let's test that it's a good manifest, and that
         # manifest.load works

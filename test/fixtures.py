@@ -3,12 +3,12 @@ from datetime import datetime
 import shutil
 import re
 import pytest
-import config
 import config as c
 from commands.utils.utils import *
 import subprocess
 from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 import tempfile
+from command import process_and_run_command_line as servi_run
 
 def confirm_proper_directory():
     assert os.path.abspath(os.getcwd()) == os.path.abspath(c.MASTER_DIR)
@@ -35,7 +35,7 @@ def clean_master():
 def servi_init():
     # use the --template_dir so that you can pass a monkeypatched TEMPLATE_DIR
     # (such as from mock_template_dir) to the new process
-    subprocess.call('python servi --template_dir {0} init'.format(c.TEMPLATE_DIR), shell=True)
+    servi_run('--template_dir {0} init'.format(c.TEMPLATE_DIR))
 
 
 def modify_file(fname):
@@ -94,6 +94,8 @@ def mock_template_dir(monkeypatch):
     Set TEMPLATE_DIR enviornment variable to the new dir
     (config.py will override TEMPLATE_DIR based on the env variable)
     """
+    # TODO - Is there a less hacky way to do set the template_dir?
+
     print('in mock_template_dir')
     temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
     temp_dir = os.path.join(temp_dir, 'templates')
