@@ -19,3 +19,4 @@
 * Look at Docker - would that have done all of this???
 
 
+## TODO - better error if saved manifest doesn't match (probalby didn't run 'save_manifest'
