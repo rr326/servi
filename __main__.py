@@ -34,12 +34,20 @@ def load_plugins(main_parser):
 def main():
     global servi_parser
     servi_parser = argparse.ArgumentParser(description='Servi Main Commands')
+
+    # Only for testing
+    servi_parser.add_argument('--template_dir', type=str, help=argparse.SUPPRESS)
+
     sub_parsers = servi_parser.add_subparsers(
         title='Commands', metavar='', dest='command')
 
     load_plugins(sub_parsers)
 
     args = servi_parser.parse_args()
+
+    if args.template_dir:
+        c.TEMPLATE_DIR = args.template_dir
+        print('*** WARNING: Just set TEMPLATE_DIR to |{0}|'.format(c.TEMPLATE_DIR))
 
     if args.command:
         try:

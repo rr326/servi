@@ -20,6 +20,7 @@ def clean_master():
     Clean the master directory, making it empty.
     (Exclude the servi directory and anything named BACKUP_PREFIX*)
     """
+    print('clean_master()')
     confirm_proper_directory()
     timestamp = datetime.utcnow()
 
@@ -32,7 +33,9 @@ def clean_master():
 
 @pytest.fixture()
 def servi_init():
-    subprocess.call('python servi init', shell=True)
+    # use the --template_dir so that you can pass a monkeypatched TEMPLATE_DIR
+    # (such as from mock_template_dir) to the new process
+    subprocess.call('python servi --template_dir {0} init'.format(c.TEMPLATE_DIR), shell=True)
 
 
 def modify_file(fname):
@@ -95,5 +98,5 @@ def mock_template_dir(monkeypatch):
     temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
     temp_dir = os.path.join(temp_dir, 'templates')
     shutil.copytree(c.TEMPLATE_DIR, temp_dir)
-    print('mock_template_dir - temp_dir: ', temp_dir)
-    monkeypatch.setenv('TEMPLATE_DIR', temp_dir)
+    monkeypatch.setattr(c, 'TEMPLATE_DIR', temp_dir)
+    print('mock_template_dir - c.TEMPLATE_DIR: ', c.TEMPLATE_DIR)
