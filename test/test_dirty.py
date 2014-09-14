@@ -36,7 +36,6 @@ DIFF_END = \
 -the end of the file
 """
 
-pytestmark = pytest.mark.wip
 
 def test_dirty(clean_master, servi_init, dirty_master):
     # init should fail (since Master has been updated)
@@ -70,6 +69,7 @@ def test_update_dirty_both(clean_master, servi_init, dirty_template_and_master):
     with pytest.raises(ServiError):
         servi_run('update')
 
+
 def test_diff(clean_master, servi_init, dirty_ignored_files):
     output = subprocess.check_output('python servi diff --difftool "git diff"',
                                      shell=True,
@@ -79,3 +79,53 @@ def test_diff(clean_master, servi_init, dirty_ignored_files):
     assert DIFF_SUMMARY in output
     assert re.search('-.*HERE IS SOME NEW TEXT', output)
     assert DIFF_END in output
+
+
+ROLETEST_PLAYBOOK = '''
+---
+-   hosts: all
+    vars_files:
+      - ../servi_config.yml
+    sudo: yes
+    tasks:
+    roles:
+        # - baseUbuntu
+        #mainAccount
+        - hardenedUbuntu
+        - hardenedApache
+        - projectSpecific
+'''
+
+TEST_STRING1= \
+'''Warning
+The following lines in your ansible_confg/playbook.yml looked like roles that are commented out.
+The Template and Master versions differ.
+** Because they are commented, they are ignored.**
+['baseUbuntu', 'mainAccount']'''
+
+TEST_STRING2 = \
+'''Skipping unused role file: ansible_config/roles/baseUbuntu/tasks/main.yml
+Skipping unused role file: ansible_config/roles/mainAccount/tasks/main.yml'''
+
+@pytest.mark.wip
+def test_role_handling(clean_master, servi_init, mock_template_dir, capsys):
+    # Role in master, not in template directory -- ignored
+
+    # Role commented in master and also in template:
+    # 1) don't copy
+    # 2) Do warn
+    with open(pathfor('ansible_config/playbook.yml', c.MASTER), 'w') as fp:
+        fp.write(ROLETEST_PLAYBOOK)
+    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
+                c.TEMPLATE))
+    modify_file(pathfor('ansible_config/roles/mainAccount/tasks/main.yml',
+                c.TEMPLATE))
+
+    assert servi_run('update')
+
+    out, _ = capsys.readouterr()
+    assert TEST_STRING1 in out
+    assert TEST_STRING2 in out
+    # NOTE - if these fail, first check sorting. 
+
+    # TODO - make sure a new role file is also caught

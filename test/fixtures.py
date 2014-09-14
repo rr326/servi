@@ -10,25 +10,24 @@ from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 import tempfile
 from command import process_and_run_command_line as servi_run
 
-def confirm_proper_directory():
-    assert os.path.abspath(os.getcwd()) == os.path.abspath(c.MASTER_DIR)
-
 
 @pytest.fixture()
 def clean_master():
     """
     Clean the master directory, making it empty.
     (Exclude the servi directory and anything named BACKUP_PREFIX*)
+    Note - this will NOT backup the master directory. You should do that
+    with conftest.py with 'backup_master() autouse/session
     """
     print('clean_master()')
-    confirm_proper_directory()
-    timestamp = datetime.utcnow()
-
     for path in os.listdir(c.MASTER_DIR):
         if re.match('({0}.*|servi$)'.format(BACKUP_PREFIX), path):
             print('ignoring: {0}'.format(path))
             continue
-        TemplateManager.rename_master_file_static(path, timestamp)
+        if os.path.isdir(path):
+            shutil.rmtree(path)
+        else:
+            os.remove(path)
 
 
 @pytest.fixture()

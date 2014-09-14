@@ -26,17 +26,26 @@ class UpdateCommand(Command):
         if len(changed_or_removed_files - changed_but_ignored_files) > 0:
             raise ServiError(
                 'The following files were changed in your master and updated '
-                'in the template:\n  {0}\n'
-                '\nIf you want to reinitialize your templates '
+                'in the template:\n'
+                '{0}\n\n'
+                'If you want to reinitialize your templates '
                 '(with automatic backup) run "servi init -f"'
                 .format(changed_or_removed_files - changed_but_ignored_files))
 
         if changed_but_ignored_files:
             print('\nWarning\n'
-                  'The following files from the template were changed but '
+                  'The following files from the template were changed but\n'
                   'are on your SERVI_IGNORE_FILES list and will not be '
-                  'updated: {0}\n'
-                  .format(changed_but_ignored_files))
+                  'updated:\n'
+                  '{0}\n'.format(sorted(changed_but_ignored_files)))
+
+        if tmgr.modified_possible_roles:
+            print('\nWarning\n'
+                  'The following lines in your ansible_confg/playbook.yml '
+                  'looked like roles that are commented out.\n'
+                  'The Template and Master versions differ.\n'
+                  '** Because they are commented, they are ignored.**\n'
+                  '{0}\n'.format(sorted(tmgr.modified_possible_roles)))
 
         qprint('Updating repository with Servi template version: {0}'
                .format(tmgr.m_template.template_version))

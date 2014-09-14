@@ -21,6 +21,9 @@ class TemplateManager(object):
         except FileNotFoundError:
             self.m_master_saved = None
 
+        self.master_playbook_exists = file_exists(
+            pathfor('ansible_config/playbook.yml', c.MASTER))
+
         # These compare master to template
         self.added_files, self.changed_files, self.removed_files = \
             self.m_master.diff_files(self.m_template)
@@ -43,6 +46,8 @@ class TemplateManager(object):
 
         self.roles, self.possible_roles = self._get_master_roles(
             self._get_template_roles())
+
+        self.modified_possible_roles = self._get_modified_possible_roles()
 
     def init_master(self):
         self.copy_files(exclude_files=[])
@@ -91,9 +96,11 @@ class TemplateManager(object):
                 continue
 
             # Possibly exclude roles
-            if self._role_of_fname(normalized_fname) not in self.roles:
+            _cur_role = self._role_of_fname(normalized_fname)
+            if _cur_role and self.master_playbook_exists and _cur_role not in self.roles:
                 qprint('Skipping unused role file: {0}'
                        .format(normalized_fname))
+                continue
 
             # Always backup (never overwrite) master
             if file_exists(master_fname):
@@ -120,7 +127,7 @@ class TemplateManager(object):
         ansible_config/roles/baseUbuntu/* --> baseUbuntu
         apache_config/sites_available/THISSITE --> None
         """
-        match = re.match('ansible_config/roles/([^/]*)(/.+|)',
+        match = re.search('ansible_config/roles/([^/]*)(/.+|)',
                          normalized_fname)
         if not match:
             return None
@@ -145,6 +152,7 @@ class TemplateManager(object):
             try:
                 with open(pathfor('ansible_config/playbook.yml', c.MASTER), 'r') as fp:
                     playbook = yaml.load(fp)
+                    fp.seek(0)
                     playbook = playbook[0]
                     playbook_raw = fp.read()
             except FileNotFoundError:
@@ -159,10 +167,20 @@ class TemplateManager(object):
         # also find 'possible' roles - any template role that is commented out
         possible_roles = set()
         for t_role in template_roles:
-            if re.search('.*#.*{0}\s'.format(t_role), playbook_raw,
-                         flags=re.IGNORECASE):
+            if re.search('^.*#.*{0}\s'.format(t_role), playbook_raw,
+                         flags=re.IGNORECASE | re.MULTILINE):
                 possible_roles.add(t_role)
         return roles, possible_roles
+
+    def _get_modified_possible_roles(self):
+        retval = set()
+        for fname in self.changed_files:
+            role = self._role_of_fname(fname)
+            if role in self.possible_roles:
+                retval |= {role}
+        return retval
+
+
 
     @staticmethod
     def _ignored_files(files):
