@@ -96,16 +96,6 @@ ROLETEST_PLAYBOOK = '''
         - projectSpecific
 '''
 
-TEST_STRING1= \
-'''Warning
-The following lines in your ansible_confg/playbook.yml looked like roles that are commented out.
-The Template and Master versions differ.
-** Because they are commented, they are ignored.**
-['baseUbuntu', 'mainAccount']'''
-
-TEST_STRING2 = \
-'''Skipping unused role file: ansible_config/roles/baseUbuntu/tasks/main.yml
-Skipping unused role file: ansible_config/roles/mainAccount/tasks/main.yml'''
 
 @pytest.mark.wip
 def test_role_handling(clean_master, servi_init, mock_template_dir, capsys):
@@ -123,9 +113,11 @@ def test_role_handling(clean_master, servi_init, mock_template_dir, capsys):
 
     assert servi_run('update')
 
-    out, _ = capsys.readouterr()
-    assert TEST_STRING1 in out
-    assert TEST_STRING2 in out
-    # NOTE - if these fail, first check sorting. 
+    tmgr = TemplateManager()
+    assert tmgr.possible_roles == {'baseUbuntu', 'mainAccount'}
+    assert tmgr.modified_possible_roles == {'baseUbuntu', 'mainAccount'}
+    assert 'ansible_config/playbook.yml' in tmgr.changed_but_ignored_files
+
 
     # TODO - make sure a new role file is also caught
+    # TODO ? - switch to using raw_template_playbook ? (like test_template_manager)

@@ -10,7 +10,7 @@ BACKUP_PREFIX = '_BACKUP_'
 
 
 class TemplateManager(object):
-    def __init__(self):
+    def __init__(self, raw_template_playbook=None):
         print('*'*100)
         print('TemplateManager: TEMPLATE_DIR: ', c.TEMPLATE_DIR)
 
@@ -44,10 +44,11 @@ class TemplateManager(object):
 
         self.timestamp = datetime.utcnow()  # used for backups
 
-        self.roles, self.possible_roles = self._get_master_roles(
-            self._get_template_roles())
-
-        self.modified_possible_roles = self._get_modified_possible_roles()
+        rm = RoleManager(self.changed_files, raw_template_playbook)
+        self.roles = rm.roles
+        self.possible_roles = rm.possible_roles
+        self.modified_possible_roles = rm.modified_possible_roles
+        self.role_of_fname = rm.role_of_fname
 
     def init_master(self):
         self.copy_files(exclude_files=[])
@@ -96,7 +97,7 @@ class TemplateManager(object):
                 continue
 
             # Possibly exclude roles
-            _cur_role = self._role_of_fname(normalized_fname)
+            _cur_role = self.role_of_fname(normalized_fname)
             if _cur_role and self.master_playbook_exists and _cur_role not in self.roles:
                 qprint('Skipping unused role file: {0}'
                        .format(normalized_fname))
@@ -119,16 +120,38 @@ class TemplateManager(object):
             else:
                 qprint('Created: {0}'.format(master_fname))
 
+    @staticmethod
+    def _ignored_files(files):
+        """
+        Sees if any of files are in the ignore regex set by servi_config.yml
+        (initialized in config.py)
+        """
+        ignore_list = c.SERVI_IGNORE_FILES
+        ignore_re_string = '('+'|'.join(ignore_list)+')'
+        ignore_re = re.compile(ignore_re_string)
+
+        ignored = {file for file in files if ignore_re.search(file)}
+
+        return ignored
+
+
+class RoleManager(object):
+    def __init__(self, changed_files, raw_template_playbook=None):
+        self.roles, self.possible_roles = self._get_master_roles(
+            self._get_template_roles(), raw_template_playbook)
+
+        self.modified_possible_roles = self._get_modified_possible_roles(
+            changed_files, self.possible_roles)
 
     @staticmethod
-    def _role_of_fname(normalized_fname):
+    def role_of_fname(normalized_fname):
         """
         returns a role if normalized_fname looks like a role
         ansible_config/roles/baseUbuntu/* --> baseUbuntu
         apache_config/sites_available/THISSITE --> None
         """
         match = re.search('ansible_config/roles/([^/]*)(/.+|)',
-                         normalized_fname)
+            normalized_fname)
         if not match:
             return None
         else:
@@ -150,7 +173,8 @@ class TemplateManager(object):
             playbook_raw = test_raw
         else:
             try:
-                with open(pathfor('ansible_config/playbook.yml', c.MASTER), 'r') as fp:
+                with open(pathfor('ansible_config/playbook.yml', c.MASTER),
+                        'r') as fp:
                     playbook = yaml.load(fp)
                     fp.seek(0)
                     playbook = playbook[0]
@@ -161,39 +185,24 @@ class TemplateManager(object):
         if 'roles' not in playbook:
             raise ServiError(
                 '"roles" not found in {0}'
-                .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
+                    .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
         roles = set(playbook['roles'])
 
         # also find 'possible' roles - any template role that is commented out
         possible_roles = set()
         for t_role in template_roles:
             if re.search('^.*#.*{0}\s'.format(t_role), playbook_raw,
-                         flags=re.IGNORECASE | re.MULTILINE):
+                    flags=re.IGNORECASE | re.MULTILINE):
                 possible_roles.add(t_role)
         return roles, possible_roles
 
-    def _get_modified_possible_roles(self):
+    @staticmethod
+    def _get_modified_possible_roles(changed_files, possible_roles):
         retval = set()
-        for fname in self.changed_files:
-            role = self._role_of_fname(fname)
-            if role in self.possible_roles:
+        for fname in changed_files:
+            role = RoleManager.role_of_fname(fname)
+            if role in possible_roles:
                 retval |= {role}
         return retval
-
-
-
-    @staticmethod
-    def _ignored_files(files):
-        """
-        Sees if any of files are in the ignore regex set by servi_config.yml
-        (initialized in config.py)
-        """
-        ignore_list = c.SERVI_IGNORE_FILES
-        ignore_re_string = '('+'|'.join(ignore_list)+')'
-        ignore_re = re.compile(ignore_re_string)
-
-        ignored = {file for file in files if ignore_re.search(file)}
-
-        return ignored
 
 
