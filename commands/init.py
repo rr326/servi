@@ -40,6 +40,7 @@ class InitCommand(Command):
                .format(os.path.abspath(c.MASTER_DIR)))
 
         tmgr.init_master()
+        return True
 
 
 command = InitCommand()

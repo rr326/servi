@@ -26,6 +26,10 @@ class Manifest(object):
 
         for (dirpath, dirnames, filenames) in os.walk(c.TEMPLATE_DIR):
             for file in filenames:
+                # Keep the version file and manifest files out of the manifest
+                if file == c.VERSION_FILE or file == c.MANIFEST_FILE:
+                    continue
+
                 template_file = os.path.join(dirpath, file)
                 if self.source is c.MASTER:
                     hashv = hash_of_file(
@@ -53,21 +57,34 @@ class Manifest(object):
             del mod_manifest["files"][c.MANIFEST_FILE]
 
         with open(self.fname, 'w') as fp:
-            json.dump(mod_manifest, fp, indent=4)
+            json.dump(mod_manifest, fp, indent=4, sort_keys=True)
+
+    @staticmethod
+    def equal_versions(m1, m2):
+        return (SemanticVersion(m1.manifest.template_version) ==
+                SemanticVersion(m2.manifest.template_version))
+
+    @staticmethod
+    def equal_files(m1, m2):
+        if not m1 or not m2:
+            return False
+
+        diff = DictDiffer(m1.manifest["files"], m2.manifest["files"])
+        return set() == diff.added() | diff.changed() | diff.removed()
 
     def __eq__(self, other):
-        otherval = lambda x: getattr(other, x, None)
-        return (self.manifest == otherval('manifest')
-                and
-                (SemanticVersion(self.template_version) ==
-                 SemanticVersion(otherval('template_version')))
-                )
+        return (Manifest.equal_versions(self, other) and
+                Manifest.equal_files(self, other))
 
     def diff_files(self, orig):
-        mod_manifest = {k: v for k, v in self.manifest["files"].items()
+        return Manifest.diff_files_static(self, orig)
+
+    @staticmethod
+    def diff_files_static(m1, m2):
+        mod_manifest = {k: v for k, v in m1.manifest["files"].items()
                         if v != c.MISSING_HASH}
 
-        diff = DictDiffer(mod_manifest, orig.manifest["files"])
+        diff = DictDiffer(mod_manifest, m2.manifest["files"])
         return diff.added(), diff.changed(), diff.removed()
 
     def changed_files(self, orig, include_deleted):
@@ -81,6 +98,7 @@ class Manifest(object):
         if include_deleted:
             retval |= removed
         return retval
+
 
 
 #

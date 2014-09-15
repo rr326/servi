@@ -64,6 +64,7 @@ class DiffCommand(Command):
                 path1=os.path.abspath(pathfor(file, c.MASTER)),
                 path2=os.path.abspath(pathfor(file, c.TEMPLATE))
                 ), shell=True)
+        return True
 
 
 command = DiffCommand()

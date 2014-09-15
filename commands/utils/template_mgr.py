@@ -80,10 +80,6 @@ class TemplateManager(object):
         for normalized_fname, template_hash in \
                 self.m_template.manifest["files"].items():
 
-            # No need to copy version file (its in servi_data.json)
-            if normalized_fname == c.VERSION_FILE:
-                continue
-
             template_fname = pathfor(normalized_fname, c.TEMPLATE)
             master_fname = pathfor(normalized_fname, c.MASTER)
 

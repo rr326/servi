@@ -8,12 +8,13 @@ SEMANTIC_VERSIONS = [MAJOR, MINOR, PATCH]
 
 
 class SemanticVersion(object):
-    mult = [10000, 100, 1]
+    mult = [10**8, 10**4, 10**0]
 
     def __init__(self, sv_string):
         self.sv, self.sv_ar = self.sv_string_to_ver(sv_string)
 
-    def sv_string_to_ver(self, sv_string):
+    @staticmethod
+    def sv_string_to_ver(sv_string):
         if sv_string is None:
             return None
 
@@ -27,7 +28,7 @@ class SemanticVersion(object):
                              .format(sv_string))
         try:
             sv_ar = [int(s) for s in sv_ar]
-            sv_val = self.sv_ar_to_sv(sv_ar)
+            sv_val = SemanticVersion.sv_ar_to_sv(sv_ar)
         except ValueError:
             raise ValueError('Bad semantic version string: |{0}|'
                              .format(sv_string))
@@ -38,9 +39,8 @@ class SemanticVersion(object):
 
     @staticmethod
     def sv_ar_to_sv(sv_ar):
-        sv_val = 0
-        for i in range(len(sv_ar)):
-            sv_val += sv_ar[i] * SemanticVersion.mult[i]
+        sv_zip = zip_longest(SemanticVersion.mult, sv_ar, fillvalue=0)
+        sv_val = [m * v for m, v in sv_zip]
         return sv_val
 
     def __lt__(self, other):

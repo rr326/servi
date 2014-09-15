@@ -53,4 +53,6 @@ class UpdateCommand(Command):
 
         tmgr.update_master()
 
+        return True
+
 command = UpdateCommand()

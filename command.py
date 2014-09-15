@@ -75,7 +75,7 @@ def process_and_run_command_line(command_line=None):
     if args.command:
         try:
             print('Servi - Running: {0}\n'.format(args.command))
-            args.command_func(args)
+            retval = args.command_func(args)
         except (ForceError, ServiError) as e:
             print(e)
             raise
@@ -84,4 +84,4 @@ def process_and_run_command_line(command_line=None):
         servi_parser.print_help()
         raise ServiError
 
-    return True
+    return retval
