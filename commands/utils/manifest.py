@@ -40,8 +40,6 @@ class Manifest(object):
                 fname = normalize_path(template_file, c.TEMPLATE)
                 self.manifest["files"][fname] = hashv
 
-        self.manifest["source"] = self.source
-        self.manifest["source_dir"] = c.TEMPLATE_DIR if c.TEMPLATE else c.MASTER_DIR
 
     def _load(self):
         with open(self.fname, 'r') as fp:
@@ -76,15 +74,15 @@ class Manifest(object):
         return (Manifest.equal_versions(self, other) and
                 Manifest.equal_files(self, other))
 
-    def diff_files(self, orig):
-        return Manifest.diff_files_static(self, orig)
-
     @staticmethod
-    def diff_files_static(m1, m2):
-        mod_manifest = {k: v for k, v in m1.manifest["files"].items()
-                        if v != c.MISSING_HASH}
+    def diff_files(m1, m0):
+        mod_m0 = {k: v for k, v in m0.manifest["files"].items()
+                  if v != c.MISSING_HASH}
 
-        diff = DictDiffer(mod_manifest, m2.manifest["files"])
+        mod_m1 = {k: v for k, v in m1.manifest["files"].items()
+                  if v != c.MISSING_HASH}
+
+        diff = DictDiffer(mod_m1, mod_m0)
         return diff.added(), diff.changed(), diff.removed()
 
     def changed_files(self, orig, include_deleted):
@@ -93,7 +91,7 @@ class Manifest(object):
         :returns  files changed (in/ex -cludes deleted)
         """
 
-        _, changed, removed = self.diff_files(orig)
+        _, changed, removed = Manifest.diff_files(self, orig)
         retval = changed
         if include_deleted:
             retval |= removed

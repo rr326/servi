@@ -115,3 +115,55 @@ def dirty_template_and_master(monkeypatch):
         c.TEMPLATE))
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
         c.MASTER))
+
+@pytest.fixture()
+def synced_file_template_dirty(monkeypatch):
+    clean_master()
+    mock_template_dir(monkeypatch)
+    servi_init()
+    modify_file(pathfor('Vagrantfile', c.TEMPLATE))
+
+
+@pytest.fixture()
+def synced_file_template_and_master_dirty(monkeypatch):
+    clean_master()
+    mock_template_dir(monkeypatch)
+    servi_init()
+    modify_file(pathfor('Vagrantfile', c.TEMPLATE))
+    modify_file(pathfor('Vagrantfile', c.MASTER))
+
+@pytest.fixture()
+def template_only_unused_role(monkeypatch):
+    clean_master()
+    mock_template_dir(monkeypatch)
+    servi_init()
+    shutil.copytree(pathfor('ansible_config/roles/baseUbuntu', c.TEMPLATE),
+                    pathfor('ansible_config/roles/UnusedRole', c.TEMPLATE))
+
+@pytest.fixture()
+def master_only():
+    clean_master()
+    servi_init()
+    shutil.copy2(pathfor('Vagrantfile', c.MASTER),
+                 pathfor('myscript.py', c.MASTER))
+
+@pytest.fixture()
+def template_but_ignored(monkeypatch):
+    clean_master()
+    mock_template_dir(monkeypatch)
+    servi_init()
+    modify_file(pathfor('apache_config/sites-available/THISSITE.conf',
+                c.TEMPLATE))
+
+
+
+"""
+Scenarios
+* No master
+* Changed master or template:
+    * Synced file: In Template and Master (eg: Vagrantfile)
+    * Template_only: eg: UnusedRole (mongo)
+    * Master_only: eg: myscript.sh
+    * Template_but_ignored: eg: THISSFILE.conf, ansible_config/playbook.yml
+    * [skipping] Ignored_Entirely: servi_data.json, VERSION_FILE.json
+"""

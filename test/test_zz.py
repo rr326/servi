@@ -8,7 +8,6 @@ import tempfile
 from command import process_and_run_command_line as servi_run
 
 
-@pytest.mark.wip
 def test_zz_update_manifest(mock_template_dir):
     # Test changed manifest
     modify_file(pathfor('ansible_config/playbook.yml', c.TEMPLATE))

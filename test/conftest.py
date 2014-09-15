@@ -19,4 +19,4 @@ def backup_master():
         if re.match('({0}.*|servi$)'.format(BACKUP_PREFIX), path):
             print('ignoring: {0}'.format(path))
             continue
-        TemplateManager.rename_master_file_static(path, timestamp)
+        TemplateManager.rename_master_file(path, timestamp)

@@ -17,6 +17,9 @@ class UpdateCommand(Command):
         g.quiet = args.quiet
 
         tmgr = TemplateManager()
+        if not tmgr.m_master_saved:
+            raise ServiError('No saved manifest in master directory.\n'
+                             'Run "servi init" first.')
 
         changed_or_removed_files = (tmgr.mm_changed_files |
                                     tmgr.mm_removed_files)

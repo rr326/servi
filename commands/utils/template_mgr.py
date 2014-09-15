@@ -11,11 +11,34 @@ BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
-        print('*'*100)
-        print('TemplateManager: TEMPLATE_DIR: ', c.TEMPLATE_DIR)
+        if c.TEMPLATE_DIR != 'servi/templates':
+            print('****** TEMPLATE_DIR: {0}'.format(c.TEMPLATE_DIR))
+            
+        self.m_master = None
+        self.m_master_saved = None
+        self.m_template = None
+        self.master_playbook_exists = ForceError
+        self.added_files = set()
+        self.changed_files = set()
+        self.removed_files = set()
+        self.changed_but_ignored_files = set()
+        self.mm_added_files = set()
+        self.mm_changed_files = set()
+        self.mm_removed_files = set()
+        self.mm_changed_but_ignored_files = set()
+        self.roles = set()
+        self.possible_roles = set()
+        self.modified_possible_roles = set()
+        self.role_of_fname = None
+        self.timestamp = datetime.utcnow()
+        self.raw_template_playbook = raw_template_playbook
 
         self.m_master = Manifest(c.MASTER)
         self.m_template = Manifest(c.TEMPLATE)
+
+        self.update_tmgr()
+
+    def update_tmgr(self):
         try:
             self.m_master_saved = Manifest(c.MASTER, load=True)
         except FileNotFoundError:
@@ -26,7 +49,7 @@ class TemplateManager(object):
 
         # These compare master to template
         self.added_files, self.changed_files, self.removed_files = \
-            self.m_master.diff_files(self.m_template)
+            Manifest.diff_files(self.m_master, self.m_template)
         self.changed_but_ignored_files = self._ignored_files(
             self.changed_files | self.removed_files)
 
@@ -34,7 +57,7 @@ class TemplateManager(object):
         if self.m_master_saved:
             self.mm_added_files, self.mm_changed_files, \
                 self.mm_removed_files = \
-                self.m_master.diff_files(self.m_master_saved)
+                Manifest.diff_files(self.m_master, self.m_master_saved)
             self.mm_changed_but_ignored_files = self._ignored_files(
                 self.mm_changed_files | self.mm_removed_files)
         else:
@@ -42,9 +65,7 @@ class TemplateManager(object):
                 self.mm_removed_files, self.mm_changed_but_ignored_files = \
                 set(), set(), set(), set()
 
-        self.timestamp = datetime.utcnow()  # used for backups
-
-        rm = RoleManager(self.changed_files, raw_template_playbook)
+        rm = RoleManager(self.changed_files, self.raw_template_playbook)
         self.roles = rm.roles
         self.possible_roles = rm.possible_roles
         self.modified_possible_roles = rm.modified_possible_roles
@@ -56,11 +77,8 @@ class TemplateManager(object):
     def update_master(self):
         self.copy_files(exclude_files=self.changed_but_ignored_files)
 
-    def rename_master_file(self, fname):
-        self.rename_master_file_static(fname, self.timestamp)
-
     @staticmethod
-    def rename_master_file_static(fname, timestamp):
+    def rename_master_file(fname, timestamp):
         """
         This basically backs up fname (but MOVES it).
         fname is the normalized fname
@@ -101,7 +119,7 @@ class TemplateManager(object):
 
             # Always backup (never overwrite) master
             if file_exists(master_fname):
-                self.rename_master_file(normalized_fname)
+                self.rename_master_file(normalized_fname, self.timestamp)
                 existing = True
             else:
                 existing = False
@@ -115,6 +133,13 @@ class TemplateManager(object):
                 qprint('Updated: {0}'.format(master_fname))
             else:
                 qprint('Created: {0}'.format(master_fname))
+
+        # Recreate the master manifest
+        m = Manifest(c.MASTER)
+        m.save()
+        # Then update the template manager based on current (updated) status
+        self.update_tmgr()
+        return True
 
     @staticmethod
     def _ignored_files(files):
