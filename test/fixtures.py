@@ -116,6 +116,10 @@ def dirty_template_and_master(monkeypatch):
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
         c.MASTER))
 
+#
+# New, simplified test scenarios
+#
+
 @pytest.fixture()
 def synced_file_template_dirty(monkeypatch):
     clean_master()
