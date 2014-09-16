@@ -43,6 +43,11 @@ def modify_file(fname):
     Note - it does NOT do this intelligently. So a .json file will no longer
     be correct.
     """
+    if re.search('.*\.yml', fname, flags=re.IGNORECASE):
+        # yaml - modify in a safe way
+        modify_yaml(fname)
+        return
+
 
     with open(fname, 'r') as fp:
         lines = fp.readlines()
@@ -52,8 +57,8 @@ def modify_file(fname):
         lines = lines[0:1] + (lines[2:])
 
     # Add to end
-    lines.append('Here\nare\nsome\nnew\nlines\nat\nthe end of the file\n')
-    lines.append(datetime.utcnow().isoformat()) # So every one is different
+    lines.append('#Here\nare\nsome\nnew\nlines\nat\nthe end of the file\n')
+    lines.append('#'+datetime.utcnow().isoformat()) # So every one is different
 
     # Modify in middle
     mid = len(lines) // 2
@@ -66,6 +71,11 @@ def modify_file(fname):
     with open(fname, 'w') as fp:
         fp.writelines(lines)
 
+
+def modify_yaml(fname):
+    with open(fname, 'a') as fp:
+        fp.write('\n# HERE IS SOME NEW TEXT: {0}'
+                 .format(datetime.utcnow().isoformat()))
 
 @pytest.fixture()
 def dirty_master():

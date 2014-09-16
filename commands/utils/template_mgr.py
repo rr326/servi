@@ -11,7 +11,7 @@ BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
-        if c.TEMPLATE_DIR != 'servi/templates':
+        if re.search('_tmp_', c.TEMPLATE_DIR):
             print('****** TEMPLATE_DIR: {0}'.format(c.TEMPLATE_DIR))
             
         self.m_master = None

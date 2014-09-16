@@ -6,7 +6,6 @@ import subprocess
 import re
 from command import process_and_run_command_line as servi_run
 
-@pytest.mark.wip
 class TestUpdate():
 
     def test_clean(self, clean_master, servi_init):
