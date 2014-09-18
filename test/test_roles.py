@@ -24,8 +24,8 @@ ROLETEST_PLAYBOOK = '''
         - projectSpecific
 '''
 
-
-def test_role_handling(clean_master, servi_init, mock_template_dir, capsys):
+@pytest.mark.wip
+def test_role_handling(clean_master, servi_init, mock_template_dir):
     # Role in master, not in template directory -- ignored
 
     # Role commented in master and also in template:
@@ -40,11 +40,10 @@ def test_role_handling(clean_master, servi_init, mock_template_dir, capsys):
 
     assert servi_run('update')
 
-    tmgr = TemplateManager()
+    tmgr = TemplateManager(raw_template_playbook=ROLETEST_PLAYBOOK)
     assert tmgr.possible_roles == {'baseUbuntu', 'mainAccount'}
     assert tmgr.modified_possible_roles == {'baseUbuntu', 'mainAccount'}
     assert 'ansible_config/playbook.yml' in tmgr.changed_but_ignored_files
 
 
     # TODO - make sure a new role file is also caught
-    # TODO ? - switch to using raw_template_playbook ? (like test_template_manager)

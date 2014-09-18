@@ -8,7 +8,6 @@ from command import process_and_run_command_line as servi_run
 from commands.utils.manifest import Manifest
 
 
-@pytest.mark.wip
 def test_diff(clean_master, mock_template_dir, servi_init):
     m0 = Manifest(c.TEMPLATE)
 
