@@ -2,6 +2,7 @@ from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
 from commands.utils.template_mgr import TemplateManager
+from utils import *
 
 
 def error_if_changed(force, changed_files, existing_version, new_version):

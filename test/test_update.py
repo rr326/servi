@@ -2,9 +2,9 @@ from test.fixtures import *
 import pytest
 from commands.utils.manifest import Manifest
 from commands.utils.utils import *
-import subprocess
-import re
 from command import process_and_run_command_line as servi_run
+from servi_exceptions import *
+
 
 class TestUpdate():
 
@@ -27,8 +27,6 @@ class TestUpdate():
 
     def test_synced_file_template_and_master_dirty(
             self, synced_file_template_and_master_dirty):
-        m0 = Manifest(c.MASTER)
-
         with pytest.raises(ServiError):
             servi_run('update')
 
@@ -39,7 +37,6 @@ class TestUpdate():
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert added | changed | removed == set()
-
 
     def test_master_only(self, master_only):
         m0 = Manifest(c.MASTER)

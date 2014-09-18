@@ -1,10 +1,11 @@
-import config as c
 from commands.utils.manifest import *
 from commands.utils.utils import *
 from datetime import datetime
 from servi_exceptions import *
 import yaml
 import re
+import shutil
+from utils import *
 
 BACKUP_PREFIX = '_BACKUP_'
 
@@ -111,8 +112,10 @@ class TemplateManager(object):
                 continue
 
             # Possibly exclude roles
+            # noinspection PyCallingNonCallable
             _cur_role = self.role_of_fname(normalized_fname)
-            if _cur_role and self.master_playbook_exists and _cur_role not in self.roles:
+            if (_cur_role and self.master_playbook_exists
+                    and _cur_role not in self.roles):
                 qprint('Skipping unused role file: {0}'
                        .format(normalized_fname))
                 continue
@@ -172,7 +175,7 @@ class RoleManager(object):
         apache_config/sites_available/THISSITE --> None
         """
         match = re.search('ansible_config/roles/([^/]*)(/.+|)',
-            normalized_fname)
+                          normalized_fname)
         if not match:
             return None
         else:
@@ -195,7 +198,7 @@ class RoleManager(object):
         else:
             try:
                 with open(pathfor('ansible_config/playbook.yml', c.MASTER),
-                        'r') as fp:
+                          'r') as fp:
                     playbook = yaml.load(fp)
                     fp.seek(0)
                     playbook = playbook[0]
@@ -206,14 +209,14 @@ class RoleManager(object):
         if 'roles' not in playbook:
             raise ServiError(
                 '"roles" not found in {0}'
-                    .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
+                .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
         roles = set(playbook['roles'])
 
         # also find 'possible' roles - any template role that is commented out
         possible_roles = set()
         for t_role in template_roles:
             if re.search('^.*#.*{0}\s'.format(t_role), playbook_raw,
-                    flags=re.IGNORECASE | re.MULTILINE):
+                         flags=re.IGNORECASE | re.MULTILINE):
                 possible_roles.add(t_role)
         return roles, possible_roles
 

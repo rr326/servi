@@ -1,13 +1,8 @@
 from test.fixtures import *
 import pytest
-import commands.utils.manifest as mfest
 from commands.utils.utils import *
-import subprocess
-import re
 from command import process_and_run_command_line as servi_run
-
-
-
+from commands.utils.template_mgr import TemplateManager
 
 ROLETEST_PLAYBOOK = '''
 ---
@@ -23,6 +18,7 @@ ROLETEST_PLAYBOOK = '''
         - hardenedApache
         - projectSpecific
 '''
+
 
 @pytest.mark.wip
 def test_role_handling(clean_master, servi_init, mock_template_dir):

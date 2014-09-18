@@ -1,6 +1,5 @@
 from command import Command
 from commands.utils.manifest import *
-from servi_exceptions import *
 import subprocess
 import config as c
 from commands.utils.template_mgr import TemplateManager
@@ -31,7 +30,8 @@ class DiffCommand(Command):
 
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
-        print('Template Directory: {0}'.format(os.path.abspath(c.TEMPLATE_DIR)))
+        print('Template Directory: {0}'.format(
+            os.path.abspath(c.TEMPLATE_DIR)))
         print('Master Directory:   {0}'.format(os.path.abspath(c.MASTER_DIR)))
         print()
         print('Changed files:')

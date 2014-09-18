@@ -5,6 +5,7 @@ import re
 import os
 import config as c
 
+
 @pytest.fixture(scope="session", autouse=True)
 def backup_master():
     # Automatically do, but only once per session

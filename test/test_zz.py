@@ -1,10 +1,7 @@
 from test.fixtures import *
-import pytest
 from commands.utils.utils import *
-import subprocess
 import os
 import commands.utils.manifest as man
-import tempfile
 from command import process_and_run_command_line as servi_run
 
 

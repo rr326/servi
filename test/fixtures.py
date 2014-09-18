@@ -1,12 +1,9 @@
-import os
 from datetime import datetime
 import shutil
 import re
 import pytest
-import config as c
 from commands.utils.utils import *
-import subprocess
-from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
+from commands.utils.template_mgr import BACKUP_PREFIX
 import tempfile
 from command import process_and_run_command_line as servi_run
 
@@ -48,7 +45,6 @@ def modify_file(fname):
         modify_yaml(fname)
         return
 
-
     with open(fname, 'r') as fp:
         lines = fp.readlines()
 
@@ -58,7 +54,7 @@ def modify_file(fname):
 
     # Add to end
     lines.append('#Here\nare\nsome\nnew\nlines\nat\nthe end of the file\n')
-    lines.append('#'+datetime.utcnow().isoformat()) # So every one is different
+    lines.append('#'+datetime.utcnow().isoformat())
 
     # Modify in middle
     mid = len(lines) // 2
@@ -77,6 +73,7 @@ def modify_yaml(fname):
         fp.write('\n# HERE IS SOME NEW TEXT: {0}'
                  .format(datetime.utcnow().isoformat()))
 
+
 @pytest.fixture()
 def dirty_master():
     modify_file(pathfor('Vagrantfile', c.MASTER))
@@ -85,7 +82,8 @@ def dirty_master():
 @pytest.fixture()
 def dirty_ignored_files():
     modify_file(
-        pathfor('ansible_config/roles/projectSpecific/tasks/main.yml', c.MASTER))
+        pathfor('ansible_config/roles/projectSpecific/tasks/main.yml',
+                c.MASTER))
     os.remove(pathfor("apache_config/sites-available/THISSITE.conf", c.MASTER))
 
 
@@ -96,6 +94,7 @@ def process_failed(exit_code):
 
 def process_succeeded(exit_code):
     return exit_code == 0
+
 
 @pytest.fixture()
 def mock_template_dir(monkeypatch):
@@ -113,22 +112,26 @@ def mock_template_dir(monkeypatch):
     monkeypatch.setattr(c, 'TEMPLATE_DIR', temp_dir)
     print('mock_template_dir - c.TEMPLATE_DIR: ', c.TEMPLATE_DIR)
 
+
 @pytest.fixture()
 def dirty_template(monkeypatch):
     mock_template_dir(monkeypatch)
-    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml', c.TEMPLATE))
+    modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
+                c.TEMPLATE))
+
 
 @pytest.fixture()
 def dirty_template_and_master(monkeypatch):
     mock_template_dir(monkeypatch)
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
-        c.TEMPLATE))
+                c.TEMPLATE))
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
-        c.MASTER))
+                c.MASTER))
 
 #
 # New, simplified test scenarios
 #
+
 
 @pytest.fixture()
 def synced_file_template_dirty(monkeypatch):
@@ -146,6 +149,7 @@ def synced_file_template_and_master_dirty(monkeypatch):
     modify_file(pathfor('Vagrantfile', c.TEMPLATE))
     modify_file(pathfor('Vagrantfile', c.MASTER))
 
+
 @pytest.fixture()
 def template_only_unused_role(monkeypatch):
     clean_master()
@@ -154,12 +158,14 @@ def template_only_unused_role(monkeypatch):
     shutil.copytree(pathfor('ansible_config/roles/baseUbuntu', c.TEMPLATE),
                     pathfor('ansible_config/roles/UnusedRole', c.TEMPLATE))
 
+
 @pytest.fixture()
 def master_only():
     clean_master()
     servi_init()
     shutil.copy2(pathfor('Vagrantfile', c.MASTER),
                  pathfor('myscript.py', c.MASTER))
+
 
 @pytest.fixture()
 def template_but_ignored(monkeypatch):
@@ -168,7 +174,6 @@ def template_but_ignored(monkeypatch):
     servi_init()
     modify_file(pathfor('apache_config/sites-available/THISSITE.conf',
                 c.TEMPLATE))
-
 
 
 """

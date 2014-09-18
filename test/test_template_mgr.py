@@ -1,7 +1,5 @@
 from commands.utils.template_mgr import *
 from test.fixtures import *
-import pytest
-import tempfile
 
 
 PLAYBOOK_TESTDATA = '''
@@ -53,8 +51,9 @@ def test_get_master_roles2():
     print('roles: ', tmgr.roles)
     print('possible_roles: ', tmgr.possible_roles)
     assert tmgr.roles == {'hardenedApache', 'projectSpecific',
-                     'HERE_IS_A_DIFFERENT_ROLE'}
-    assert tmgr.possible_roles == {'baseUbuntu', 'mainAccount', 'hardenedUbuntu'}
+                          'HERE_IS_A_DIFFERENT_ROLE'}
+    assert tmgr.possible_roles == {'baseUbuntu', 'mainAccount',
+                                   'hardenedUbuntu'}
 
 
 def test_role_of_fname():
@@ -63,8 +62,8 @@ def test_role_of_fname():
         'ansible_config/roles/mainAccount/tasks/main.yml') == 'mainAccount'
 
     assert tmgr.role_of_fname('ansible_config/roles/mainAccount') \
-           == 'mainAccount'
+        == 'mainAccount'
 
     assert tmgr.role_of_fname('apache_config/sites-available/THISSITE') \
-           is None
+        is None
 

@@ -1,6 +1,8 @@
 from commands.utils.utils import *
 from commands.utils.semantic import *
 from copy import deepcopy
+import json
+
 
 class Manifest(object):
     def __init__(self, source, load=False):
@@ -40,17 +42,17 @@ class Manifest(object):
                 fname = normalize_path(template_file, c.TEMPLATE)
                 self.manifest["files"][fname] = hashv
 
-
     def _load(self):
         with open(self.fname, 'r') as fp:
             self.manifest = json.load(fp)
-        self.template_version = SemanticVersion(self.manifest["template_version"])
+        self.template_version = SemanticVersion(
+            self.manifest["template_version"])
 
     def save(self):
         mod_manifest = deepcopy(self.manifest)
-        # don't include the manifest file in the saved version because it's hash
-        # will always be wrong! (you hash the existing, then write it, and now the hash
-        # has changed)
+        # don't include the manifest file in the saved version because
+        # it's hash will always be wrong! (you hash the existing,
+        #  then write it, and now the hash has changed)
         if c.MANIFEST_FILE in mod_manifest["files"]:
             del mod_manifest["files"][c.MANIFEST_FILE]
 
@@ -96,7 +98,6 @@ class Manifest(object):
         if include_deleted:
             retval |= removed
         return retval
-
 
 
 #

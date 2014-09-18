@@ -2,6 +2,7 @@ from command import Command
 from commands.utils.manifest import *
 from servi_exceptions import *
 from commands.utils.template_mgr import TemplateManager
+from utils import *
 
 
 class UpdateCommand(Command):

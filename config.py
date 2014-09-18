@@ -30,8 +30,6 @@ for key, value in c.items():
     g[key] = value
 
 
-
-
 #
 # Mock overrides
 #

@@ -1,11 +1,9 @@
 from glob import glob
 import os
 import argparse
-import sys
 from servi_exceptions import *
 import config as c
 from importlib import import_module
-
 
 
 class Command(object):
@@ -17,7 +15,6 @@ class Command(object):
 
     def run(self, args):
         pass
-
 
 
 def find_plugins():
@@ -43,13 +40,14 @@ def load_plugins(main_parser):
         p = command_dict[plugin] = mod.command
         p.register_command_line(main_parser)
 
+
 def setup_parsers():
     servi_parser = argparse.ArgumentParser(
         description='Servi Main Commands')
 
     # Only for testing
     servi_parser.add_argument('--template_dir', type=str,
-        help=argparse.SUPPRESS)
+                              help=argparse.SUPPRESS)
 
     sub_parsers = servi_parser.add_subparsers(
         title='Commands', metavar='', dest='command')

@@ -1,11 +1,7 @@
 from test.fixtures import *
-import pytest
-import commands.utils.manifest as mfest
 from commands.utils.utils import *
-import subprocess
-import re
-from command import process_and_run_command_line as servi_run
 from commands.utils.manifest import Manifest
+from commands.utils.template_mgr import TemplateManager
 
 
 def test_diff(clean_master, mock_template_dir, servi_init):
@@ -17,12 +13,10 @@ def test_diff(clean_master, mock_template_dir, servi_init):
 
     mod_templates = ['Vagrantfile',
                      'apache_config/sites-available/THISSITE.conf',
-                     'ansible_config/playbook.yml',
-                    ]
+                     'ansible_config/playbook.yml']
 
     mod_master = ['Vagrantfile',
-                  'ansible_config/playbook.yml',
-                 ]
+                  'ansible_config/playbook.yml']
 
     del_master = ['apache_config/sites-available/THISSITE.conf']
 
@@ -47,7 +41,8 @@ def test_diff(clean_master, mock_template_dir, servi_init):
     assert tmgr.added_files == set()
     assert tmgr.changed_files == {'Vagrantfile', 'ansible_config/playbook.yml'}
     # Also UnusedRole stuff
-    assert tmgr.removed_files >= {'apache_config/sites-available/THISSITE.conf'}
+    assert tmgr.removed_files >= \
+        {'apache_config/sites-available/THISSITE.conf'}
     assert tmgr.changed_but_ignored_files == {
         'apache_config/sites-available/THISSITE.conf',
         'ansible_config/playbook.yml'}
