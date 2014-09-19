@@ -1,5 +1,5 @@
 class ForceError(Exception):
-    def __init__(self, msg):
+    def __init__(self, msg=None):
         self.msg = msg
 
     def __str__(self):
@@ -12,7 +12,7 @@ class ForceError(Exception):
 
 class ServiError(Exception):
     # Expected errrors. Handle gracefully (ie: no stack dump)
-    def __init__(self, msg):
+    def __init__(self, msg=None):
         self.msg = msg
 
     def __str__(self):

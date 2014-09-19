@@ -1,9 +1,14 @@
 import sys
 from command import process_and_run_command_line
+from servi_exceptions import *
 
 
 def main():
-    process_and_run_command_line()
+    try:
+        process_and_run_command_line()
+    except (ServiError, ForceError):
+        return False
+
 
     sys.exit(0)
 

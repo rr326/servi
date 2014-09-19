@@ -56,30 +56,30 @@ def setup_parsers():
 
 
 def process_and_run_command_line(command_line=None):
-    servi_parser, sub_parsers = setup_parsers()
+        servi_parser, sub_parsers = setup_parsers()
 
-    load_plugins(sub_parsers)
+        load_plugins(sub_parsers)
 
-    if command_line:
-        args = servi_parser.parse_args(command_line.split())
-    else:
-        args = servi_parser.parse_args()
+        if command_line:
+            args = servi_parser.parse_args(command_line.split())
+        else:
+            args = servi_parser.parse_args()
 
-    if args.template_dir:
-        c.TEMPLATE_DIR = args.template_dir
-        print('*** WARNING: Just set TEMPLATE_DIR to |{0}|'.format(
-            c.TEMPLATE_DIR))
+        if args.template_dir:
+            c.TEMPLATE_DIR = args.template_dir
+            print('*** WARNING: Just set TEMPLATE_DIR to |{0}|'.format(
+                c.TEMPLATE_DIR))
 
-    if args.command:
-        try:
-            print('Servi - Running: {0}\n'.format(args.command))
-            retval = args.command_func(args)
-        except (ForceError, ServiError) as e:
-            print(e)
-            raise
-    else:
-        print('\n***** Error ******\nNo command on command line.\n')
-        servi_parser.print_help()
-        raise ServiError
+        if args.command:
+            try:
+                print('Servi - Running: {0}\n'.format(args.command))
+                retval = args.command_func(args)
+            except (ForceError, ServiError) as e:
+                print(e)
+                raise
+        else:
+            print('\n***** Error ******\nNo command on command line.\n')
+            servi_parser.print_help()
+            raise ServiError('No command line')
 
-    return retval
+        return retval

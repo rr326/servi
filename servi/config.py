@@ -6,9 +6,15 @@ from getconfig import getconfig
 # Use as import config as c
 # Note - this will also read in additional variables (and overrides) from
 # SERVI_CONFIG_YML
+# Proper dir structure
+#   ...\projectdir
+#           \servi
+#               \servi   # Kinda ugly that it has the smae name, but helpful
+                         # for argparse
+#               \templates
 #
 
-SERVI_DIR = os.path.normpath(os.path.dirname(__file__))
+SERVI_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 TEMPLATE_DIR = os.path.normpath(os.path.join(SERVI_DIR, 'templates'))
 MASTER_DIR = os.path.normpath(os.path.join(SERVI_DIR, '..'))
 
