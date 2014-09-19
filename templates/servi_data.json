@@ -1,6 +1,5 @@
 {
     "files": {
-        "TEMPLATE_VERSION.JSON": "cc10036320ef4e80a4104520b57009eac564a087",
         "Vagrantfile": "e88d83cea2e03f1a48cff23d7ba677e8c3c3a195",
         "ansible_config/ansible.cfg": "04d0166a363e0c2237005d01b89e09611255cffa",
         "ansible_config/playbook.yml": "dd8984da63345c7a90fff13e3d30dec5d7a98b7e",
@@ -24,5 +23,5 @@
         "servi_config.yml": "e6332e2e4dcba96f9713106f64478e323cbaf14c",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.0.7"
+    "template_version": "0.0.6"
 }
