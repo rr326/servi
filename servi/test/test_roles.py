@@ -20,7 +20,6 @@ ROLETEST_PLAYBOOK = '''
 '''
 
 
-@pytest.mark.wip
 def test_role_handling(clean_master, servi_init, mock_template_dir):
     # Role in master, not in template directory -- ignored
 
