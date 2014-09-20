@@ -1,1 +1,1 @@
-print('__init__.py *************')
+print('*** servi/__init__.py')

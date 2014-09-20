@@ -1,4 +1,4 @@
-from test.fixtures import *
+from .fixtures import *
 from commands.utils.utils import *
 import os
 import commands.utils.manifest as man

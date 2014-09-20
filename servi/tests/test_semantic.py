@@ -1,4 +1,4 @@
-from test.fixtures import *
+from tests.fixtures import *
 import pytest
 from commands.utils.semantic import *
 

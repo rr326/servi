@@ -1,4 +1,4 @@
-from test.fixtures import *
+from tests.fixtures import *
 import pytest
 import os
 import subprocess as sp

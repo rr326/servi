@@ -1,5 +1,5 @@
 from commands.utils.template_mgr import *
-from test.fixtures import *
+from tests.fixtures import *
 
 
 PLAYBOOK_TESTDATA = '''
