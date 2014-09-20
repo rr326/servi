@@ -1,6 +1,7 @@
+import os
+
 from .fixtures import *
 from commands.utils.utils import *
-import os
 import commands.utils.manifest as man
 from command import process_and_run_command_line as servi_run
 
