@@ -41,3 +41,13 @@ def normalize_path(path, source):
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
 
+
+def find_up(starting_dir, dirname):
+    cur_dir = starting_dir
+
+    while cur_dir != '/':
+        if os.path.basename(cur_dir) == dirname:
+            return cur_dir
+        cur_dir = os.path.normpath(os.path.join(cur_dir, '..'))
+
+    return None
