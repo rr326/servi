@@ -1,10 +1,11 @@
-import pytest
 from datetime import datetime
-from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 import re
 import os
+
+import pytest
+
+from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
 import config as c
-from commands.utils.utils import find_up
 
 
 @pytest.fixture(scope="session", autouse=True)

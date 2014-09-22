@@ -66,9 +66,9 @@ def process_and_run_command_line(command_line=None):
             args = servi_parser.parse_args()
 
         if args.template_dir:
-            c.TEMPLATE_DIR = args.template_dir
-            print('*** WARNING: Just set TEMPLATE_DIR to |{0}|'.format(
-                c.TEMPLATE_DIR))
+            c.MSTR_TMPL_DIR = args.template_dir
+            print('*** WARNING: Just set MSTR_TMPL_DIR to |{0}|'.format(
+                c.MSTR_TMPL_DIR))
 
         if args.command:
             try:

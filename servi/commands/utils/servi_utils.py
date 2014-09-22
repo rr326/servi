@@ -1,8 +1,10 @@
-import os
+# servi_utils - utils that require servi/config.py
+
 import hashlib
 
 import config as c
 import getconfig
+from servi_exceptions import *
 
 
 def hash_of_file(fname):
@@ -25,12 +27,12 @@ def templatepath_to_destpath(template_path):
 
 def pathfor(fname, source):
     return getconfig.pathfor(fname, source, c.TEMPLATE, c.MASTER,
-                             c.TEMPLATE_DIR, c.MASTER_DIR)
+                             c.MSTR_TMPL_DIR, c.MASTER_DIR)
 
 
 def normalize_path(path, source):
     assert source in [c.TEMPLATE, c.MASTER]
-    prefix = c.TEMPLATE_DIR if source is c.TEMPLATE else c.MASTER_DIR
+    prefix = c.MSTR_TMPL_DIR if source is c.TEMPLATE else c.MASTER_DIR
     prefix += '/'
     if not os.path.commonprefix([prefix, path]) == prefix:
         raise Exception('Expected prefix ({0}) not found in path ({1})'
@@ -38,16 +40,5 @@ def normalize_path(path, source):
     return path.split(sep=prefix, maxsplit=1)[1]
 
 
-def file_exists(path):
-    return os.path.isfile(path) and os.access(path, os.R_OK)
 
 
-def find_up(starting_dir, dirname):
-    cur_dir = starting_dir
-
-    while cur_dir != '/':
-        if os.path.basename(cur_dir) == dirname:
-            return cur_dir
-        cur_dir = os.path.normpath(os.path.join(cur_dir, '..'))
-
-    return None

@@ -2,7 +2,7 @@ from datetime import datetime
 import shutil
 import re
 import pytest
-from commands.utils.utils import *
+from commands.utils.servi_utils import *
 from commands.utils.template_mgr import BACKUP_PREFIX
 import tempfile
 from command import process_and_run_command_line as servi_run
@@ -29,9 +29,9 @@ def clean_master():
 
 @pytest.fixture()
 def servi_init():
-    # use the --template_dir so that you can pass a monkeypatched TEMPLATE_DIR
+    # use the --template_dir so that you can pass a monkeypatched MSTR_TMPL_DIR
     # (such as from mock_template_dir) to the new process
-    servi_run('--template_dir {0} init'.format(c.TEMPLATE_DIR))
+    servi_run('--template_dir {0} init'.format(c.MSTR_TMPL_DIR))
 
 
 def modify_file(fname):
@@ -99,18 +99,18 @@ def process_succeeded(exit_code):
 @pytest.fixture()
 def mock_template_dir(monkeypatch):
     """
-    Copy TEMPLATE_DIR to a tmp directory
-    Set TEMPLATE_DIR enviornment variable to the new dir
-    (config.py will override TEMPLATE_DIR based on the env variable)
+    Copy MSTR_TMPL_DIR to a tmp directory
+    Set MSTR_TMPL_DIR enviornment variable to the new dir
+    (config.py will override MSTR_TMPL_DIR based on the env variable)
     """
     # TODO - Is there a less hacky way to do set the template_dir?
 
     print('in mock_template_dir')
     temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
     temp_dir = os.path.join(temp_dir, 'templates')
-    shutil.copytree(c.TEMPLATE_DIR, temp_dir)
-    monkeypatch.setattr(c, 'TEMPLATE_DIR', temp_dir)
-    print('mock_template_dir - c.TEMPLATE_DIR: ', c.TEMPLATE_DIR)
+    shutil.copytree(c.MSTR_TMPL_DIR, temp_dir)
+    monkeypatch.setattr(c, 'MSTR_TMPL_DIR', temp_dir)
+    print('mock_template_dir - c.MSTR_TMPL_DIR: ', c.MSTR_TMPL_DIR)
 
 
 @pytest.fixture()
@@ -174,6 +174,22 @@ def template_but_ignored(monkeypatch):
     servi_init()
     modify_file(pathfor('apache_config/sites-available/THISSITE.conf',
                 c.TEMPLATE))
+
+@pytest.fixture(scope='session')
+def fake_master():
+    """
+    parent
+        /master
+            /servi
+                \servi_templates
+    """
+    temp_dir = tempfile.mkdtemp(prefix='_tmp_')
+    os.chdir(temp_dir)
+    os.makedirs('master/servi/servi_templates')
+    os.makedirs('nonmaster/anotherpath')
+
+
+
 
 
 """

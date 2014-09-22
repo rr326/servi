@@ -1,4 +1,4 @@
-from commands.utils.utils import *
+from commands.utils.servi_utils import *
 from commands.utils.semantic import *
 from copy import deepcopy
 import json
@@ -18,7 +18,7 @@ class Manifest(object):
 
     def _create(self):
         # create a new manifest
-        # use the files in TEMPLATE_DIR as the source list
+        # use the files in MSTR_TMPL_DIR as the source list
         self.template_version = SemanticVersion(get_template_version())
 
         self.manifest = {
@@ -26,7 +26,7 @@ class Manifest(object):
             "template_version": str(self.template_version),
         }
 
-        for (dirpath, dirnames, filenames) in os.walk(c.TEMPLATE_DIR):
+        for (dirpath, dirnames, filenames) in os.walk(c.MSTR_TMPL_DIR):
             for file in filenames:
                 # Keep the version file and manifest files out of the manifest
                 if file == c.VERSION_FILE or file == c.MANIFEST_FILE:

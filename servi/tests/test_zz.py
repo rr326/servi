@@ -1,12 +1,14 @@
 import os
 
-from .fixtures import *
-from commands.utils.utils import *
+from tests.fixtures import *
+from commands.utils.servi_utils import *
 import commands.utils.manifest as man
 from command import process_and_run_command_line as servi_run
+from utils import file_exists
 
 
 def test_zz_update_manifest(mock_template_dir):
+    pass
     # Test changed manifest
     modify_file(pathfor('ansible_config/playbook.yml', c.TEMPLATE))
     assert servi_run('zz --update_manifest')

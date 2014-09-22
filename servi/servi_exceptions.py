@@ -1,3 +1,6 @@
+import os
+
+
 class ForceError(Exception):
     def __init__(self, msg=None):
         self.msg = msg
@@ -20,3 +23,17 @@ class ServiError(Exception):
             '\n***** ERROR *****\n'
             '{0}\n'
             '\n**Servi Aborting**'.format(self.msg))
+
+
+class MasterNotFound(Exception):
+    def __init__(self, cwd):
+        self.cwd = cwd
+
+    def __str__(self):
+        return (
+            '\n***** ERROR *****\n'
+            'Master directory not found at or above current directory.\n'
+            'Looking for: <master>/servi/servi_templates\n'
+            'Above cwd: {0}\n'
+            'Run "servi init <dirname>"\n'
+            '\n**Servi Aborting**'.format(self.cwd))

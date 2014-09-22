@@ -1,5 +1,5 @@
 from tests.fixtures import *
-from commands.utils.utils import *
+from commands.utils.servi_utils import *
 from commands.utils.manifest import Manifest
 from commands.utils.template_mgr import TemplateManager
 

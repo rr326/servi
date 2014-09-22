@@ -31,7 +31,7 @@ class DiffCommand(Command):
         print('Diff of servi template and existing MASTER dir.')
         print('===============================================')
         print('Template Directory: {0}'.format(
-            os.path.abspath(c.TEMPLATE_DIR)))
+            os.path.abspath(c.MSTR_TMPL_DIR)))
         print('Master Directory:   {0}'.format(os.path.abspath(c.MASTER_DIR)))
         print()
         print('Changed files:')

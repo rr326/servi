@@ -1,19 +1,19 @@
 from commands.utils.manifest import *
-from commands.utils.utils import *
+from commands.utils.servi_utils import *
 from datetime import datetime
 from servi_exceptions import *
 import yaml
 import re
 import shutil
-from utils import *
+from utils import qprint, file_exists
 
 BACKUP_PREFIX = '_BACKUP_'
 
 
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
-        if re.search('_tmp_', c.TEMPLATE_DIR):
-            print('****** TEMPLATE_DIR: {0}'.format(c.TEMPLATE_DIR))
+        if re.search('_tmp_', c.MSTR_TMPL_DIR):
+            print('****** MSTR_TMPL_DIR: {0}'.format(c.MSTR_TMPL_DIR))
             
         self.m_master = None
         self.m_master_saved = None
@@ -183,7 +183,7 @@ class RoleManager(object):
 
     @staticmethod
     def _get_template_roles():
-        template_dir = os.path.join(c.TEMPLATE_DIR, 'ansible_config/roles')
+        template_dir = os.path.join(c.MSTR_TMPL_DIR, 'ansible_config/roles')
         roles = [path for path in
                  os.listdir(template_dir)
                  if os.path.isdir(os.path.join(template_dir, path))]
