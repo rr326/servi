@@ -23,13 +23,19 @@ def pathfor(fname, source, template, master, template_dir, master_dir):
 
 
 def getconfig(fname, template, master, template_dir, master_dir):
-    try:
-        with open(pathfor(fname, master, template, master,
-                  template_dir, master_dir)) as f:
-            data = yaml.load(f)
-    except FileNotFoundError:
-        with open(pathfor(fname, template, template, master,
-                  template_dir, master_dir)) as f:
-            data = yaml.load(f)
+    if master_dir:
+        try:
+            with open(pathfor(fname, master, template, master,
+                      template_dir, master_dir)) as f:
+                data = yaml.load(f)
+                return data
+        except FileNotFoundError:
+            # ok - retry with template
+            pass
+
+    # master_dir is None or FileNotFoundError
+    with open(pathfor(fname, template, template, master,
+            template_dir, master_dir)) as f:
+        data = yaml.load(f)
 
     return data

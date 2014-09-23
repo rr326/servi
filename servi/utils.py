@@ -31,16 +31,22 @@ def find_ancestor_with(starting_dir, dirname):
     return None
 
 
-def find_master_dir():
+def find_master_dir(fail_ok=False):
     """
     Returns the master dir with the following signature at or above cwd:
     MASTER_DIR
         \servi
             \servi_templates
     raises MasterNotFound if not found
+    (if failok, and not found, returns None)
     """
     servi_dir = find_ancestor_with(os.getcwd(), 'servi')
     if (not servi_dir or
-            not os.path.exists(os.path.join(servi_dir, 'servi/servi_templates'))):
-        raise MasterNotFound(os.getcwd())
+            not os.path.exists(
+                os.path.join(servi_dir, 'servi/servi_templates'))):
+
+        if fail_ok:
+            return None
+        else:
+            raise MasterNotFound(os.getcwd())
     return servi_dir

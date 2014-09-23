@@ -1,4 +1,4 @@
-from command import Command
+from command import Command, set_master_dir, load_user_config
 from commands.utils.manifest import *
 from servi_exceptions import *
 from commands.utils.template_mgr import TemplateManager
@@ -21,12 +21,40 @@ class InitCommand(Command):
     def register_command_line(self, sub_parsers):
 
         parser_init = sub_parsers.add_parser('init', help='Init project')
+        parser_init.add_argument(
+            'dir',
+            help='Directory to initialize servi with. '
+                 'This is usually the root dir of your project. '
+                 '"." is a good choice.')
         parser_init.add_argument('-f', '--force', action='store_true')
         parser_init.add_argument('-q', '--quiet', action='store_true')
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
         g.quiet = args.quiet
+        print('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
+        print('cwd: {0}'.format(os.getcwd()))
+
+        try:
+            os.chdir(args.dir)
+            existing_servi = find_master_dir()
+        except MasterNotFound:
+            pass  # Good
+        except FileNotFoundError:
+            raise ServiError('Directory not found: {0} '
+                .format(os.path.abspath(args.dir)))
+        else:
+            # Uh oh - there is another one already
+            raise ForceError(
+                'There is already a servi directory at or '
+                'above the directory you provided:\n'
+                '\tprovided: {0}\n'
+                '\tfound: {1}'
+                .format(os.path.abspath(args.dir), existing_servi))
+
+        set_master_dir(set_dir_to=os.path.abspath(args.dir))
+
+        load_user_config()
 
         tmgr = TemplateManager()
 

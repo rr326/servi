@@ -3,7 +3,7 @@ ez_setup.use_setuptools()
 import servi.config as c
 import os
 
-from setuptools import setup, Command
+from setuptools import setup, Command, find_packages
 
 
 # For pytest
@@ -25,7 +25,8 @@ class PyTest(Command):
 setup(
     name = "servi",
     version = "0.1",
-    packages = ['servi'],
+    #packages = ['servi'],
+    packages = find_packages(),
     include_package_data=True,
     # package_data={    }, # Not needed - should pick up ./templates from git
     exclude_package_data = {
@@ -34,7 +35,10 @@ setup(
 
     cmdclass={'test': PyTest},
 
-    scripts = ['bin/servi'],
+    entry_points = {
+      'console_scripts' :
+            [ 'servi = servi.__main__:main']
+    },
 
     install_requires = ['PyYAML>=3.11', 'pytest>=2.6.2'],
 

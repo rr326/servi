@@ -1,1 +1,1 @@
-print('*** servi/__init__.py')
+pass
