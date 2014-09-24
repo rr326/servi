@@ -5,9 +5,8 @@ import shutil
 import yaml
 
 from servi.manifest import *
-from servi.servi_utils import *
 from servi.servi_exceptions import *
-from servi.utils import qprint, file_exists
+from servi.utils import qprint, file_exists, pathfor
 
 
 BACKUP_PREFIX = '_BACKUP_'
@@ -15,8 +14,8 @@ BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
-        if re.search('_tmp_', c.MSTR_TMPL_DIR):
-            print('****** MSTR_TMPL_DIR: {0}'.format(c.MSTR_TMPL_DIR))
+        if re.search('_tmp_', c.TMPL_DIR_SITE):
+            print('****** TMPL_DIR_SITE: {0}'.format(c.TMPL_DIR_SITE))
             
         self.m_master = None
         self.m_master_saved = None
@@ -186,7 +185,7 @@ class RoleManager(object):
 
     @staticmethod
     def _get_template_roles():
-        template_dir = os.path.join(c.MSTR_TMPL_DIR, 'ansible_config/roles')
+        template_dir = os.path.join(c.TMPL_DIR_SITE, 'ansible_config/roles')
         roles = [path for path in
                  os.listdir(template_dir)
                  if os.path.isdir(os.path.join(template_dir, path))]

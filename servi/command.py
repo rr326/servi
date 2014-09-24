@@ -1,11 +1,12 @@
 from glob import glob
-import os
 import argparse
+from importlib import import_module
+
 from servi.servi_exceptions import *
 import servi.config as c
-from importlib import import_module
-from servi.utils import find_master_dir
-from servi.getconfig import getconfig
+
+from servi.config import set_master_dir, load_user_config
+
 
 class Command(object):
     def __init__(self):
@@ -56,30 +57,6 @@ def setup_parsers():
     return servi_parser, sub_parsers
 
 
-def set_master_dir(set_dir_to=None):
-    """
-    sets c.MASTER_DIR
-        by finding the first ancestor(default)
-        to set_dir_to (if supplied - only for servi init)
-    """
-    if not dir:
-        c.MASTER_DIR = find_master_dir()
-    else:
-        c.MASTER_DIR = set_dir_to
-
-    c.MSTR_TMPL_DIR = None if not c.MASTER_DIR else \
-        os.path.normpath(os.path.join(c.MASTER_DIR, 'servi/servi_templates'))
-
-
-def load_user_config():
-    user_config = getconfig(
-        c.SERVI_CONFIG_YML, c.TEMPLATE, c.MASTER, c.MSTR_TMPL_DIR,
-        c.MASTER_DIR)
-
-    for key, value in user_config.items():
-        setattr(c,key, value)
-
-
 def process_and_run_command_line(command_line=None):
         servi_parser, sub_parsers = setup_parsers()
 
@@ -91,9 +68,9 @@ def process_and_run_command_line(command_line=None):
             args = servi_parser.parse_args()
 
         if args.template_dir:
-            c.MSTR_TMPL_DIR = args.template_dir
-            print('*** WARNING: Just set MSTR_TMPL_DIR to |{0}|'.format(
-                c.MSTR_TMPL_DIR))
+            c.TMPL_DIR_SITE = args.template_dir
+            print('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
+                c.TMPL_DIR_SITE))
 
         if args.command:
             try:

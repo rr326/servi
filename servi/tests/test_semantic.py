@@ -1,6 +1,6 @@
 import pytest
 
-from semantic import *
+from servi.semantic import *
 
 
 def test_semantic_version():

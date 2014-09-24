@@ -1,31 +1,47 @@
 import pytest
 
-from manifest import Manifest
+from servi.manifest import Manifest
+from servi.command import process_and_run_command_line as servi_run
+from servi.servi_exceptions import *
+import servi.config as c
+from servi.tests.fixtures import *
 
-from servi_utils import *
 
-from command import process_and_run_command_line as servi_run
-from servi_exceptions import *
-
-
+@pytest.mark.wip
 class TestInit():
+    def test_command_line_params(self, tmpdir):
+        proj1 = tmpdir.mkdir('proj1')
+        assert servi_run('init {0}'.format(proj1))
+        with pytest.raises(ForceError):
+            assert servi_run('init {0}'.format(proj1))
+        assert servi_run('init -f proj1')
+
+        proj2 = tmpdir.mkdir('proj2')
+        proj2.chdir()
+        assert servi_run('init .')
+
+        # No directory stated
+        with pytest.raises(SystemExit):
+            assert servi_run('init')
+
+        # Given a file instead of directory should fail
+        fname = proj2.ensure('testfile.txt')
+        with pytest.raises(ServiError):
+            assert servi_run('init {0}'.format(fname))
 
     def test_clean(self, clean_master):
         # init on a clean directory should work
-        m0 = Manifest(c.MASTER)
-        assert servi_run('init')
+
+        assert servi_run('init .')
         m1 = Manifest(c.MASTER)
-        added, changed, removed = Manifest.diff_files(m1, m0)
-        assert changed == set()
-        assert removed == set()
-        assert len(added) > 10
+        assert len(m1.manifest['files']) > 10
 
     def test_synced_file_template_dirty(self, synced_file_template_dirty):
-        m0 = Manifest(c.MASTER)
+        m0 = synced_file_template_dirty["m0"]
         with pytest.raises(ForceError):
-            servi_run('init')
+            servi_run('init .')
 
-        assert servi_run('init -f')
+        assert servi_run('init . -f')
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
@@ -33,40 +49,39 @@ class TestInit():
 
     def test_synced_file_template_and_master_dirty(
             self, synced_file_template_and_master_dirty):
-        m0 = Manifest(c.MASTER)
+        m0 = synced_file_template_and_master_dirty["m0"]
 
         with pytest.raises(ForceError):
-            servi_run('init')
+            servi_run('init .')
 
-        assert servi_run('init -f')
+        assert servi_run('init . -f')
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert changed == {'Vagrantfile'}
 
     def test_template_only_unused_role(self, template_only_unused_role):
-        m0 = Manifest(c.MASTER)
-        assert servi_run('init')
+        m0 = template_only_unused_role["m0"]
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert added | changed | removed == set()
 
     def test_master_only(self, master_only):
-        m0 = Manifest(c.MASTER)
-        assert servi_run('init')
+        m0 = master_only["m0"]
+        assert servi_run('init -f .')
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert added | changed | removed == set()
 
     def test_template_but_ignored(self, template_but_ignored):
-        m0 = Manifest(c.MASTER)
+        m0 = template_but_ignored["m0"]
 
         with pytest.raises(ForceError):
-            servi_run('init')
+            servi_run('init .')
 
-        assert servi_run('init -f')
+        assert servi_run('init . -f')
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)

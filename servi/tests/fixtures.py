@@ -2,39 +2,64 @@ from datetime import datetime
 import shutil
 import re
 import tempfile
-
+import os
 import pytest
+from servi.utils import *
+from servi.template_mgr import BACKUP_PREFIX
+from servi.command import process_and_run_command_line as servi_run
+from servi.manifest import Manifest
 
-from servi_utils import *
 
-from template_mgr import BACKUP_PREFIX
-from command import process_and_run_command_line as servi_run
+#
+# Initialize a temporary dirctory for all fixture use
+
+
+
+
 
 
 @pytest.fixture()
-def clean_master():
+def clean_master(monkeypatch, tmpdir):
+    temp_dir = tmpdir.mkdir('serviplate')
+    monkeypatch.setattr(c, 'MASTER_DIR', str(temp_dir))
+    os.chdir(c.MASTER_DIR)
+    print('clean_master: c.MASTER_DIR {0}'.format(c.MASTER_DIR))
+
+@pytest.fixture()
+def mock_template_dir(monkeypatch):
     """
-    Clean the master directory, making it empty.
-    (Exclude the servi directory and anything named BACKUP_PREFIX*)
-    Note - this will NOT backup the master directory. You should do that
-    with conftest.py with 'backup_master() autouse/session
+    Copy TMPL_DIR_SITE to a tmp directory
+    Set TMPL_DIR_SITE enviornment variable to the new dir
+    (config.py will override TMPL_DIR_SITE based on the env variable)
     """
-    print('clean_master()')
-    for path in os.listdir(c.MASTER_DIR):
-        if re.match('({0}.*|servi$)'.format(BACKUP_PREFIX), path):
-            print('ignoring: {0}'.format(path))
-            continue
-        if os.path.isdir(path):
-            shutil.rmtree(path)
-        else:
-            os.remove(path)
+
+    print('in mock_template_dir')
+    temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
+    temp_dir = os.path.abspath(os.path.join(temp_dir, 'templates'))
+    shutil.copytree(c.TMPL_DIR_SITE, temp_dir)
+    monkeypatch.setattr(c, 'TMPL_DIR_SITE', temp_dir)
+    print('mock_template_dir - c.TMPL_DIR_SITE: ', c.TMPL_DIR_SITE)
+
+@pytest.fixture()
+def setup_empty(clean_master, mock_template_dir, ):
+    return
+
+@pytest.fixture()
+def setup_init(clean_master, mock_template_dir):
+    servi_run('--template_dir {0} init .'.format(c.TMPL_DIR_SITE))
+    m0 = Manifest(c.MASTER)
+    return {"m0": m0}
+
+
 
 
 @pytest.fixture()
 def servi_init():
-    # use the --template_dir so that you can pass a monkeypatched MSTR_TMPL_DIR
+    # use the --template_dir so that you can pass a monkeypatched TMPL_DIR_SITE
     # (such as from mock_template_dir) to the new process
-    servi_run('--template_dir {0} init'.format(c.MSTR_TMPL_DIR))
+    servi_run('--template_dir {0} init .'.format(c.TMPL_DIR_SITE))
+    m0 = Manifest(c.MASTER)
+    return {"m0": m0}
 
 
 def modify_file(fname):
@@ -99,33 +124,19 @@ def process_succeeded(exit_code):
     return exit_code == 0
 
 
-@pytest.fixture()
-def mock_template_dir(monkeypatch):
-    """
-    Copy MSTR_TMPL_DIR to a tmp directory
-    Set MSTR_TMPL_DIR enviornment variable to the new dir
-    (config.py will override MSTR_TMPL_DIR based on the env variable)
-    """
-    # TODO - Is there a less hacky way to do set the template_dir?
 
-    print('in mock_template_dir')
-    temp_dir = tempfile.mkdtemp(prefix='_tmp_', dir='.')
-    temp_dir = os.path.join(temp_dir, 'templates')
-    shutil.copytree(c.MSTR_TMPL_DIR, temp_dir)
-    monkeypatch.setattr(c, 'MSTR_TMPL_DIR', temp_dir)
-    print('mock_template_dir - c.MSTR_TMPL_DIR: ', c.MSTR_TMPL_DIR)
+
+
 
 
 @pytest.fixture()
-def dirty_template(monkeypatch):
-    mock_template_dir(monkeypatch)
+def dirty_template(setup_empty):
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
                 c.TEMPLATE))
 
 
 @pytest.fixture()
-def dirty_template_and_master(monkeypatch):
-    mock_template_dir(monkeypatch)
+def dirty_template_and_master(setup_empty):
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
                 c.TEMPLATE))
     modify_file(pathfor('ansible_config/roles/baseUbuntu/tasks/main.yml',
@@ -137,46 +148,36 @@ def dirty_template_and_master(monkeypatch):
 
 
 @pytest.fixture()
-def synced_file_template_dirty(monkeypatch):
-    clean_master()
-    mock_template_dir(monkeypatch)
-    servi_init()
+def synced_file_template_dirty(setup_init):
     modify_file(pathfor('Vagrantfile', c.TEMPLATE))
+    return {"m0": setup_init["m0"]}
 
 
 @pytest.fixture()
-def synced_file_template_and_master_dirty(monkeypatch):
-    clean_master()
-    mock_template_dir(monkeypatch)
-    servi_init()
+def synced_file_template_and_master_dirty(setup_init):
     modify_file(pathfor('Vagrantfile', c.TEMPLATE))
     modify_file(pathfor('Vagrantfile', c.MASTER))
-
+    return {"m0": setup_init["m0"]}
 
 @pytest.fixture()
-def template_only_unused_role(monkeypatch):
-    clean_master()
-    mock_template_dir(monkeypatch)
-    servi_init()
+def template_only_unused_role(setup_init):
     shutil.copytree(pathfor('ansible_config/roles/baseUbuntu', c.TEMPLATE),
                     pathfor('ansible_config/roles/UnusedRole', c.TEMPLATE))
 
+    return {"m0": setup_init["m0"]}
+
 
 @pytest.fixture()
-def master_only():
-    clean_master()
-    servi_init()
+def master_only(setup_init):
     shutil.copy2(pathfor('Vagrantfile', c.MASTER),
                  pathfor('myscript.py', c.MASTER))
-
+    return {"m0": setup_init["m0"]}
 
 @pytest.fixture()
-def template_but_ignored(monkeypatch):
-    clean_master()
-    mock_template_dir(monkeypatch)
-    servi_init()
+def template_but_ignored(setup_init):
     modify_file(pathfor('apache_config/sites-available/THISSITE.conf',
                 c.TEMPLATE))
+    return {"m0": setup_init["m0"]}
 
 @pytest.fixture(scope='session')
 def fake_master():

@@ -1,7 +1,7 @@
-from tests.fixtures import *
-from servi_utils import *
-from command import process_and_run_command_line as servi_run
-from template_mgr import TemplateManager
+from servi.tests.fixtures import *
+from servi.utils import *
+from servi.command import process_and_run_command_line as servi_run
+from servi.template_mgr import TemplateManager
 
 ROLETEST_PLAYBOOK = '''
 ---

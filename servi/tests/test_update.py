@@ -1,11 +1,9 @@
 import pytest
 
-from manifest import Manifest
-
-from servi_utils import *
-
-from command import process_and_run_command_line as servi_run
-from servi_exceptions import *
+from servi.manifest import Manifest
+from servi.utils import *
+from servi.command import process_and_run_command_line as servi_run
+from servi.servi_exceptions import *
 
 
 class TestUpdate():

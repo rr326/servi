@@ -1,8 +1,11 @@
 from copy import deepcopy
 import json
+import os
 
-from servi.servi_utils import *
 from servi.semantic import *
+from servi.utils import hash_of_file, templatepath_to_destpath, pathfor, \
+    normalize_path
+import servi.config as c
 
 
 class Manifest(object):
@@ -19,7 +22,7 @@ class Manifest(object):
 
     def _create(self):
         # create a new manifest
-        # use the files in MSTR_TMPL_DIR as the source list
+        # use the files in TMPL_DIR_SITE as the source list
         self.template_version = SemanticVersion(get_template_version())
 
         self.manifest = {
@@ -27,7 +30,7 @@ class Manifest(object):
             "template_version": str(self.template_version),
         }
 
-        for (dirpath, dirnames, filenames) in os.walk(c.MSTR_TMPL_DIR):
+        for (dirpath, dirnames, filenames) in os.walk(c.TMPL_DIR_SITE):
             for file in filenames:
                 # Keep the version file and manifest files out of the manifest
                 if file == c.VERSION_FILE or file == c.MANIFEST_FILE:

@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from template_mgr import TemplateManager, BACKUP_PREFIX
-import config as c
+from servi.template_mgr import TemplateManager, BACKUP_PREFIX
+import servi.config as c
 
 
 @pytest.fixture(scope="session", autouse=True)

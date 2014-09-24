@@ -1,9 +1,10 @@
-from servi.command import Command, set_master_dir, load_user_config
-from servi.manifest import *
+from servi.command import Command
 from servi.servi_exceptions import *
-from servi.template_mgr import TemplateManager
 from servi.utils import *
 
+from servi.manifest import *
+from servi.template_mgr import TemplateManager
+from servi.config import find_master_dir, set_master_dir, load_user_config, servi_file_exists_in
 
 def error_if_changed(force, changed_files, existing_version, new_version):
     if not force and changed_files:
@@ -31,30 +32,46 @@ class InitCommand(Command):
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
+        """
+        servi init [-f] dir
+
+        if -f
+            do it
+        else
+            if ServiFile exists
+                ForceError
+            else
+                do it
+
+        do it:
+            if no directory:
+                Make directory
+            do_init
+
+        """
         g.quiet = args.quiet
         print('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
         print('cwd: {0}'.format(os.getcwd()))
 
-        try:
-            os.chdir(args.dir)
-            existing_servi = find_master_dir()
-        except MasterNotFound:
-            pass  # Good
-        except FileNotFoundError:
-            raise ServiError('Directory not found: {0} '
-                .format(os.path.abspath(args.dir)))
+        def assert_doit():
+            if args.force:
+                return True
+            else:
+                if servi_file_exists_in(args.dir):
+                    raise ForceError(
+                        'ServiFile already exists in: {0}.\n'
+                            .format(os.path.abspath(args.dir)))
+
+        assert_doit()
+        if not os.path.exists(args.dir):
+            os.mkdir(args.dir)
         else:
-            # Uh oh - there is another one already
-            raise ForceError(
-                'There is already a servi directory at or '
-                'above the directory you provided:\n'
-                '\tprovided: {0}\n'
-                '\tfound: {1}'
-                .format(os.path.abspath(args.dir), existing_servi))
+            if not os.path.isdir(args.dir):
+                raise ServiError("Provided directory isn't a directory: {0}"
+                    .format(args.dir))
 
         set_master_dir(set_dir_to=os.path.abspath(args.dir))
-
-        load_user_config()
+        os.chdir(c.MASTER_DIR)
 
         tmgr = TemplateManager()
 
@@ -69,6 +86,7 @@ class InitCommand(Command):
                .format(os.path.abspath(c.MASTER_DIR)))
 
         tmgr.init_master()
+        load_user_config()
         return True
 
 

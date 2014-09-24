@@ -1,8 +1,8 @@
-from tests.fixtures import *
-from servi_utils import *
-import manifest as man
-from command import process_and_run_command_line as servi_run
-from utils import file_exists
+from servi.tests.fixtures import *
+from servi.utils import *
+import servi.manifest as man
+from servi.command import process_and_run_command_line as servi_run
+from servi.utils import file_exists
 
 
 def test_zz_update_manifest(mock_template_dir):

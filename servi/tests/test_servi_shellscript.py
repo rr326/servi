@@ -1,8 +1,8 @@
-from tests.fixtures import *
+from servi.tests.fixtures import *
 import pytest
 import os
 import subprocess as sp
-import config as c
+import servi.config as c
 
 
 def test_servi_shellscript():

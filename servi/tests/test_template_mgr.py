@@ -1,5 +1,5 @@
-from template_mgr import *
-from tests.fixtures import *
+from servi.template_mgr import *
+from servi.tests.fixtures import *
 
 
 PLAYBOOK_TESTDATA = '''
@@ -23,10 +23,15 @@ PLAYBOOK_TESTDATA = '''
 TEMPLATE_ROLES = {'baseUbuntu', 'hardenedApache', 'hardenedUbuntu',
                   'mainAccount', 'projectSpecific'}
 
+tmgr = None
+
 # Do fixtures once for module
-clean_master()
-servi_init()
-tmgr = TemplateManager()
+@pytest.fixture(scope='module', autouse=True)
+def template_manager_setup():
+    global tmgr
+    clean_master()
+    servi_init()
+    tmgr = TemplateManager()
 
 
 def test_get_template_roles():

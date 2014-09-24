@@ -2,6 +2,7 @@ from pprint import pprint
 
 from servi.command import Command
 from servi.manifest import *
+from servi.utils import pathfor
 
 
 class ZZCommand(Command):

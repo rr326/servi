@@ -1,9 +1,8 @@
-from tests.fixtures import *
-from utils import find_ancestor_with, find_master_dir
+from servi.config import find_master_dir, find_ancestor_with
+from servi.tests.fixtures import *
 from contextlib import contextmanager
 
 
-@pytest.mark.wip
 def test_find_up(fake_master):
     master_dir =  os.path.join(os.getcwd(), 'master')
 
@@ -29,7 +28,6 @@ def allow_cwd_change():
     os.chdir(start_dir)
 
 
-@pytest.mark.wip
 def test_find_master_dir(fake_master):
     """
     parent

@@ -1,7 +1,7 @@
-from tests.fixtures import *
-from servi_utils import *
-from manifest import Manifest
-from template_mgr import TemplateManager
+from servi.tests.fixtures import *
+from servi.utils import *
+from servi.manifest import Manifest
+from servi.template_mgr import TemplateManager
 
 
 def test_diff(clean_master, mock_template_dir, servi_init):

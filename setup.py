@@ -37,7 +37,7 @@ setup(
 
     entry_points = {
       'console_scripts' :
-            [ 'servi = servi.__main__:main']
+            [ 'servi = main:main']
     },
 
     install_requires = ['PyYAML>=3.11', 'pytest>=2.6.2'],

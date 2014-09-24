@@ -1,6 +1,8 @@
+import hashlib
 import os
+import servi.config as c
+
 import servi.globals as g
-from servi.servi_exceptions import MasterNotFound
 
 
 def qprint(*args, **kwargs):
@@ -15,38 +17,30 @@ def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
 
 
-def find_ancestor_with(starting_dir, dirname):
-    """
-    returns first ancestor of starting_dir that contains dirname
-    (returns abspath())
-    returns None if not found
-    """
-    cur_dir = os.path.abspath(starting_dir)
-
-    while cur_dir != '/':
-        if os.path.exists(os.path.join(cur_dir, dirname)):
-            return cur_dir
-        cur_dir = os.path.abspath(os.path.normpath(os.path.join(cur_dir, '..')))
-
-    return None
+def hash_of_file(fname):
+    try:
+        with open(fname, 'rb') as fp:
+            content = fp.read()
+            hashv = hashlib.sha1(content).hexdigest()
+    except FileNotFoundError:
+        hashv = c.MISSING_HASH
+    return hashv
 
 
-def find_master_dir(fail_ok=False):
-    """
-    Returns the master dir with the following signature at or above cwd:
-    MASTER_DIR
-        \servi
-            \servi_templates
-    raises MasterNotFound if not found
-    (if failok, and not found, returns None)
-    """
-    servi_dir = find_ancestor_with(os.getcwd(), 'servi')
-    if (not servi_dir or
-            not os.path.exists(
-                os.path.join(servi_dir, 'servi/servi_templates'))):
+def templatepath_to_destpath(template_path):
+    return pathfor(normalize_path(template_path, c.TEMPLATE), c.MASTER)
 
-        if fail_ok:
-            return None
-        else:
-            raise MasterNotFound(os.getcwd())
-    return servi_dir
+
+def pathfor(fname, source):
+    return c.pathfor(fname, source, c.TEMPLATE, c.MASTER,
+                             c.TMPL_DIR_SITE, c.MASTER_DIR)
+
+
+def normalize_path(path, source):
+    assert source in [c.TEMPLATE, c.MASTER]
+    prefix = c.TMPL_DIR_SITE if source is c.TEMPLATE else c.MASTER_DIR
+    prefix += '/'
+    if not os.path.commonprefix([prefix, path]) == prefix:
+        raise Exception('Expected prefix ({0}) not found in path ({1})'
+                        .format(prefix, path))
+    return path.split(sep=prefix, maxsplit=1)[1]
