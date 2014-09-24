@@ -1,6 +1,7 @@
-from command import Command
-from commands.utils.manifest import *
 from pprint import pprint
+
+from servi.command import Command
+from servi.manifest import *
 
 
 class ZZCommand(Command):

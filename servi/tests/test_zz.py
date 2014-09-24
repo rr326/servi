@@ -1,8 +1,6 @@
-import os
-
 from tests.fixtures import *
-from commands.utils.servi_utils import *
-import commands.utils.manifest as man
+from servi_utils import *
+import manifest as man
 from command import process_and_run_command_line as servi_run
 from utils import file_exists
 

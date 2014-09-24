@@ -4,7 +4,7 @@ import os
 
 import pytest
 
-from commands.utils.template_mgr import TemplateManager, BACKUP_PREFIX
+from template_mgr import TemplateManager, BACKUP_PREFIX
 import config as c
 
 

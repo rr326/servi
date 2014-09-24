@@ -1,6 +1,6 @@
 import os
-import globals as g
-from servi_exceptions import MasterNotFound
+import servi.globals as g
+from servi.servi_exceptions import MasterNotFound
 
 
 def qprint(*args, **kwargs):

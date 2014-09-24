@@ -1,4 +1,4 @@
-from commands.utils.template_mgr import *
+from template_mgr import *
 from tests.fixtures import *
 
 

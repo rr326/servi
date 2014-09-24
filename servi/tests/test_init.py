@@ -1,7 +1,9 @@
-from tests.fixtures import *
 import pytest
-from commands.utils.manifest import Manifest
-from commands.utils.servi_utils import *
+
+from manifest import Manifest
+
+from servi_utils import *
+
 from command import process_and_run_command_line as servi_run
 from servi_exceptions import *
 

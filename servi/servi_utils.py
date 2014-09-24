@@ -2,9 +2,9 @@
 
 import hashlib
 
-import config as c
-import getconfig
-from servi_exceptions import *
+import servi.config as c
+import servi.getconfig
+from servi.servi_exceptions import *
 
 
 def hash_of_file(fname):

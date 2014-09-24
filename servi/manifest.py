@@ -1,7 +1,8 @@
-from commands.utils.servi_utils import *
-from commands.utils.semantic import *
 from copy import deepcopy
 import json
+
+from servi.servi_utils import *
+from servi.semantic import *
 
 
 class Manifest(object):

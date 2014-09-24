@@ -1,11 +1,14 @@
-from commands.utils.manifest import *
-from commands.utils.servi_utils import *
 from datetime import datetime
-from servi_exceptions import *
-import yaml
 import re
 import shutil
-from utils import qprint, file_exists
+
+import yaml
+
+from servi.manifest import *
+from servi.servi_utils import *
+from servi.servi_exceptions import *
+from servi.utils import qprint, file_exists
+
 
 BACKUP_PREFIX = '_BACKUP_'
 

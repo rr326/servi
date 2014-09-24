@@ -1,8 +1,8 @@
-from command import Command, set_master_dir, load_user_config
-from commands.utils.manifest import *
-from servi_exceptions import *
-from commands.utils.template_mgr import TemplateManager
-from utils import *
+from servi.command import Command, set_master_dir, load_user_config
+from servi.manifest import *
+from servi.servi_exceptions import *
+from servi.template_mgr import TemplateManager
+from servi.utils import *
 
 
 def error_if_changed(force, changed_files, existing_version, new_version):

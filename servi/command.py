@@ -1,11 +1,11 @@
 from glob import glob
 import os
 import argparse
-from servi_exceptions import *
-import config as c
+from servi.servi_exceptions import *
+import servi.config as c
 from importlib import import_module
-from utils import find_master_dir
-from getconfig import getconfig
+from servi.utils import find_master_dir
+from servi.getconfig import getconfig
 
 class Command(object):
     def __init__(self):
@@ -33,11 +33,11 @@ def load_plugins(main_parser):
     Loads plugins from ./commands directory.
     Each plugin must implement Command.Command class.
     """
-    import commands  # required for import_module()
+    import servi.commands  # required for import_module()
     plugins = find_plugins()
     command_dict = {}
     for plugin in plugins:
-        mod = import_module('commands.'+plugin, package='commands')
+        mod = import_module('servi.commands.'+plugin, package='servi.commands')
         p = command_dict[plugin] = mod.command
         p.register_command_line(main_parser)
 

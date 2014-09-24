@@ -1,6 +1,6 @@
-from tests.fixtures import *
 import pytest
-from commands.utils.semantic import *
+
+from semantic import *
 
 
 def test_semantic_version():

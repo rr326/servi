@@ -1,8 +1,9 @@
-from command import Command
-from commands.utils.manifest import *
 import subprocess
-import config as c
-from commands.utils.template_mgr import TemplateManager
+
+from servi.command import Command
+from servi.manifest import *
+import servi.config as c
+from servi.template_mgr import TemplateManager
 
 
 class DiffCommand(Command):

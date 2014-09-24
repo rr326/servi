@@ -1,10 +1,13 @@
 from datetime import datetime
 import shutil
 import re
-import pytest
-from commands.utils.servi_utils import *
-from commands.utils.template_mgr import BACKUP_PREFIX
 import tempfile
+
+import pytest
+
+from servi_utils import *
+
+from template_mgr import BACKUP_PREFIX
 from command import process_and_run_command_line as servi_run
 
 
