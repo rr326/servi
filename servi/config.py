@@ -67,9 +67,13 @@ def find_master_dir(start_dir, fail_ok=False):
     returns MasterNotFound or None (if fail_ok)
     """
     master_dir = find_ancestor_servifile(start_dir)
-    if not master_dir and not fail_ok:
-        raise MasterNotFound(os.getcwd())
-    return master_dir
+    if not master_dir:
+        if not fail_ok:
+            raise MasterNotFound(os.getcwd())
+        else:
+            return None
+    else:
+        return os.path.abspath(master_dir)
 
 
 def find_ancestor_servifile(starting_dir):

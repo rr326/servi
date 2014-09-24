@@ -7,7 +7,6 @@ from servi.servi_exceptions import *
 from servi.tests.fixtures import *
 
 
-@pytest.mark.wip
 class TestUpdate():
     def test_clean(self, setup_empty):
         with pytest.raises(MasterNotFound):

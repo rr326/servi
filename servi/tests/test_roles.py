@@ -19,7 +19,7 @@ ROLETEST_PLAYBOOK = '''
 '''
 
 
-def test_role_handling(clean_master, servi_init, mock_template_dir):
+def test_role_handling(setup_init):
     # Role in master, not in template directory -- ignored
 
     # Role commented in master and also in template:

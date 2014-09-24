@@ -1,31 +1,29 @@
 from servi.config import find_master_dir, find_ancestor_with
 from servi.tests.fixtures import *
 from contextlib import contextmanager
+from servi.servi_exceptions import MasterNotFound
+from servi.command import process_and_run_command_line as servi_run
 
-
-def test_find_up(fake_master):
-    master_dir =  os.path.join(os.getcwd(), 'master')
-
-    assert find_ancestor_with('master/servi/servi_templates', 'servi') == \
-        master_dir
-    assert find_ancestor_with('master/servi', 'servi') == master_dir
-    assert find_ancestor_with('master', 'servi') == master_dir
-
-    assert find_ancestor_with('nonmaster/anotherpath', 'servi') is None
-    assert find_ancestor_with('nonmaster', 'servi') is None
-    assert find_ancestor_with('.', 'servi') is None
-    assert find_ancestor_with('/', 'servi') is None
-
-
-@contextmanager
-def allow_cwd_change():
+@pytest.fixture()
+def fake_master(tmpdir):
     """
-    This is useful if your code may change the working directory
-    (possibly due to a raised error)
+    parent
+        /master
+            /servi
+                \servi_templates
     """
-    start_dir = os.getcwd()
-    yield
-    os.chdir(start_dir)
+    nonmaster = tmpdir.mkdir('nonmaster')
+    master = tmpdir.mkdir('master')
+    master.chdir()
+    servi_run('init .')
+
+    # os.makedirs('master/path1/path1.1/path1.1.1')
+    # os.makedirs('nonmaster/path1/path1.1/path1.1.1')
+    master.ensure_dir('master/path1/path1.1/path1.1.1')
+    nonmaster.ensure_dir('nonmaster/path1/path1.1/path1.1.1')
+    return os.path.abspath(str(master)), \
+           os.path.abspath(str(nonmaster))
+
 
 
 def test_find_master_dir(fake_master):
@@ -35,24 +33,19 @@ def test_find_master_dir(fake_master):
             /servi
                 \servi_templates
     """
-    with allow_cwd_change():
-        start_dir = os.getcwd()
-        master_dir = os.path.abspath(os.path.join(os.getcwd(), 'master'))
 
-        def assert_find_master(path):
-            os.chdir(os.path.join(start_dir, path))
-            retval = find_master_dir()
-            assert retval == master_dir
+    master, nonmaster = fake_master
 
-        assert_find_master('master/servi/servi_templates')
-        assert_find_master('master/servi')
-        assert_find_master('master')
+    assert find_master_dir('master/servi/servi_templates') == master
+    assert find_master_dir('master/servi') == master
+    assert find_master_dir('master') == master
 
-        with pytest.raises(MasterNotFound):
-            assert_find_master('.')
+    with pytest.raises(MasterNotFound):
+        find_master_dir(os.path.join(master, '..'))
 
-        with pytest.raises(MasterNotFound):
-            assert_find_master('nonmaster/anotherpath')
+    with pytest.raises(MasterNotFound):
+        find_master_dir(nonmaster)
+    assert find_master_dir(nonmaster, fail_ok=True) == None
 
-        with pytest.raises(MasterNotFound):
-            assert_find_master('/')
+    with pytest.raises(MasterNotFound):
+        find_master_dir('/')

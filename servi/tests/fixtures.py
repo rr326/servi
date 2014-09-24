@@ -179,18 +179,7 @@ def template_but_ignored(setup_init):
                 c.TEMPLATE))
     return {"m0": setup_init["m0"]}
 
-@pytest.fixture(scope='session')
-def fake_master():
-    """
-    parent
-        /master
-            /servi
-                \servi_templates
-    """
-    temp_dir = tempfile.mkdtemp(prefix='_tmp_')
-    os.chdir(temp_dir)
-    os.makedirs('master/servi/servi_templates')
-    os.makedirs('nonmaster/anotherpath')
+
 
 
 

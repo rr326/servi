@@ -77,7 +77,7 @@ def process_and_run_command_line(command_line=None):
             servi_parser.print_help()
             raise ServiError('No command line')
 
-        if args.command != 'init':
+        if args.command not in ['init', 'zz']:
             master_dir = c.find_master_dir(os.getcwd())
             set_master_dir(master_dir)
             load_user_config()
