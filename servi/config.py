@@ -30,13 +30,13 @@ MASTER_DIR = None
 
 MANIFEST_FILE = "servi_data.json"
 VERSION_FILE = "TEMPLATE_VERSION.json"
-SERVI_CONFIG_YML = "servi_config.yml"
+SERVI_CONFIG_YML = "Servifile.yml"
 
 TEMPLATE = 'template'
 MASTER = 'master'
 MISSING_HASH = 'FILE NOT FOUND'
 
-# The following must be set in servi_config.yml
+# The following must be set in Servifile.yml
 SERVI_IGNORE_FILES = []
 DIFFTOOL = 'git diff'
 

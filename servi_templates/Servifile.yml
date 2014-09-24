@@ -27,7 +27,7 @@ MAIN_USERNAME : rrosen326
 #
 SERVI_IGNORE_FILES:
   - "^TEMPLATE_VERSION.json"
-  - "^servi_config.yml"
+  - "^Servifile.yml"
   - "^ansible_config/playbook.yml"
   - "^ansible_config/roles/projectSpecific/.*"
   - "^apache_config/sites-available/THISSITE.conf"

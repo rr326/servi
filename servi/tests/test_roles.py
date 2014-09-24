@@ -7,7 +7,7 @@ ROLETEST_PLAYBOOK = '''
 ---
 -   hosts: all
     vars_files:
-      - ../servi_config.yml
+      - ../Servifile.yml
     sudo: yes
     tasks:
     roles:

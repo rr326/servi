@@ -149,7 +149,7 @@ class TemplateManager(object):
     @staticmethod
     def _ignored_files(files):
         """
-        Sees if any of files are in the ignore regex set by servi_config.yml
+        Sees if any of files are in the ignore regex set by Servifile.yml
         (initialized in config.py)
         """
         ignore_list = c.SERVI_IGNORE_FILES
