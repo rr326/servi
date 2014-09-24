@@ -18,8 +18,7 @@ class PyTest(Command):
 
     def run(self):
         import sys, subprocess
-        os.chdir(c.MASTER_DIR)
-        errno = subprocess.call([sys.executable, 'servi/runtests.py', 'servi/servi'])
+        errno = subprocess.call([sys.executable, 'runtests.py', 'tests'])
         raise SystemExit(errno)
 
 setup(

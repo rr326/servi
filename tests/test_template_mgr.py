@@ -1,5 +1,5 @@
 from servi.template_mgr import *
-from servi.tests.fixtures import *
+from tests.fixtures import *
 
 
 PLAYBOOK_TESTDATA = '''

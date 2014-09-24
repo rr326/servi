@@ -1,4 +1,4 @@
-from servi.tests.fixtures import *
+from tests.fixtures import *
 from servi.utils import *
 from servi.command import process_and_run_command_line as servi_run
 from servi.template_mgr import TemplateManager

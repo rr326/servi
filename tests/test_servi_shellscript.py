@@ -1,9 +1,8 @@
-from servi.tests.fixtures import *
-import pytest
 import os
 import subprocess as sp
-import servi.config as c
+
 from servi.command import process_and_run_command_line as servi_run
+
 
 def test_servi_shellscript(tmpdir):
     tempdir = str(tmpdir.mkdir('serviplate'))

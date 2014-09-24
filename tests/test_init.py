@@ -1,10 +1,5 @@
-import pytest
-
-from servi.manifest import Manifest
-from servi.command import process_and_run_command_line as servi_run
 from servi.servi_exceptions import *
-import servi.config as c
-from servi.tests.fixtures import *
+from tests.fixtures import *
 
 
 class TestInit():

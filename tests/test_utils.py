@@ -1,6 +1,5 @@
-from servi.config import find_master_dir, find_ancestor_with
-from servi.tests.fixtures import *
-from contextlib import contextmanager
+from servi.config import find_master_dir
+from tests.fixtures import *
 from servi.servi_exceptions import MasterNotFound
 from servi.command import process_and_run_command_line as servi_run
 

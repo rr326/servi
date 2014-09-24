@@ -1,4 +1,4 @@
-from servi.tests.fixtures import *
+from tests.fixtures import *
 from servi.utils import *
 from servi.manifest import Manifest
 from servi.template_mgr import TemplateManager
