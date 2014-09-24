@@ -7,7 +7,7 @@ from servi.servi_exceptions import MasterNotFound
 Global configuration for servi files
 Use as import config as c
 Note - this will also read in additional variables (and overrides) from
-SERVI_CONFIG_YML
+SERVIFILE
 
 Proper dir structure
 servi installation -
@@ -30,7 +30,7 @@ MASTER_DIR = None
 
 MANIFEST_FILE = "servi_data.json"
 VERSION_FILE = "TEMPLATE_VERSION.json"
-SERVI_CONFIG_YML = "Servifile.yml"
+SERVIFILE = "Servifile.yml"
 
 TEMPLATE = 'template'
 MASTER = 'master'
@@ -55,7 +55,7 @@ def set_master_dir(set_dir_to):
 
 def load_user_config():
     user_config = getconfig(
-        SERVI_CONFIG_YML, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
+        SERVIFILE, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
 
     for key, value in user_config.items():
         globals()[key] = value
@@ -63,34 +63,29 @@ def load_user_config():
 
 def find_master_dir(start_dir, fail_ok=False):
     """
-    Returns the master dir with the following signature at or above start_dir:
-    MASTER_DIR
-        \servi
-            \servi_templates
-    raises MasterNotFound if not found
-    (if failok, and not found, returns None)
+    finds Servifile.yml at or above start_dir
+    returns MasterNotFound or None (if fail_ok)
     """
-    servi_dir = find_ancestor_with(start_dir, 'servi')
-    if (not servi_dir or
-            not os.path.exists(
-                os.path.join(servi_dir, 'servi/servi_templates'))):
+    master_dir = find_ancestor_servifile(start_dir)
+    if not master_dir and not fail_ok:
+        raise MasterNotFound(os.getcwd())
+    return master_dir
 
-        if fail_ok:
-            return None
-        else:
-            raise MasterNotFound(os.getcwd())
-    return servi_dir
 
-def find_ancestor_with(starting_dir, dirname):
+def find_ancestor_servifile(starting_dir):
+    return find_ancestor_with(starting_dir, SERVIFILE)
+
+
+def find_ancestor_with(starting_dir, target):
     """
-    returns first ancestor of starting_dir that contains dirname
+    returns first ancestor of starting_dir that contains target (dir or file)
     (returns abspath())
     returns None if not found
     """
     cur_dir = os.path.abspath(starting_dir)
 
     while cur_dir != '/':
-        if os.path.exists(os.path.join(cur_dir, dirname)):
+        if os.path.exists(os.path.join(cur_dir, target)):
             return cur_dir
         cur_dir = os.path.abspath(os.path.normpath(os.path.join(cur_dir, '..')))
 
@@ -98,7 +93,7 @@ def find_ancestor_with(starting_dir, dirname):
 
 
 def servi_file_exists_in(path):
-    return os.path.exists(os.path.join(path, SERVI_CONFIG_YML))
+    return os.path.exists(os.path.join(path, SERVIFILE))
 
 """
 This is an ugly, parameterized version of pathfor, and a getconfig() which

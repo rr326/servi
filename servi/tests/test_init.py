@@ -7,7 +7,6 @@ import servi.config as c
 from servi.tests.fixtures import *
 
 
-@pytest.mark.wip
 class TestInit():
     def test_command_line_params(self, tmpdir):
         proj1 = tmpdir.mkdir('proj1')

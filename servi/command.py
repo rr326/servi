@@ -72,20 +72,22 @@ def process_and_run_command_line(command_line=None):
             print('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
                 c.TMPL_DIR_SITE))
 
-        if args.command:
-            try:
-                if args.command != 'init':
-                    # An uninitialized space is special
-                    set_master_dir()
-                    load_user_config()
-                print('Servi - Running: {0}\n'.format(args.command))
-                retval = args.command_func(args)
-            except (ForceError, ServiError) as e:
-                print(e)
-                raise
-        else:
+        if not args.command:
             print('\n***** Error ******\nNo command on command line.\n')
             servi_parser.print_help()
             raise ServiError('No command line')
+
+        if args.command != 'init':
+            master_dir = c.find_master_dir(os.getcwd())
+            set_master_dir(master_dir)
+            load_user_config()
+
+        try:
+            print('Servi - Running: {0}\n'.format(args.command))
+            retval = args.command_func(args)
+        except (ForceError, ServiError) as e:
+            print(e)
+            raise
+
 
         return retval

@@ -41,7 +41,7 @@ def mock_template_dir(monkeypatch):
     print('mock_template_dir - c.TMPL_DIR_SITE: ', c.TMPL_DIR_SITE)
 
 @pytest.fixture()
-def setup_empty(clean_master, mock_template_dir, ):
+def setup_empty(clean_master, mock_template_dir):
     return
 
 @pytest.fixture()

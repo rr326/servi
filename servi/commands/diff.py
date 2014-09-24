@@ -14,7 +14,7 @@ class DiffCommand(Command):
             'diff', help="Diff changes betweeen your server "
                          "config and servi's. "
                          "Note - set the DIFFTOOL parameter in {0}"
-                         .format(c.SERVI_CONFIG_YML))
+                         .format(c.SERVIFILE))
 
         parser_init.add_argument(
             '--difftool', action='store', help=
