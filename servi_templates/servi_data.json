@@ -1,8 +1,9 @@
 {
     "files": {
+        "Servifile.yml": "199a1307a44277f5672195c889ad8b74d4825a50",
         "Vagrantfile": "e88d83cea2e03f1a48cff23d7ba677e8c3c3a195",
         "ansible_config/ansible.cfg": "04d0166a363e0c2237005d01b89e09611255cffa",
-        "ansible_config/playbook.yml": "dd8984da63345c7a90fff13e3d30dec5d7a98b7e",
+        "ansible_config/playbook.yml": "74d6f1de16db9911379e92667c534095e5661bdd",
         "ansible_config/roles/baseUbuntu/files/requirements_py2.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
@@ -20,8 +21,7 @@
         "ansible_config/roles/projectSpecific/tasks/main.yml": "c9f28d70e02e3c6b6be917288813b7340acff22d",
         "ansible_config/roles/projectSpecific/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
-        "servi_config.yml": "e6332e2e4dcba96f9713106f64478e323cbaf14c",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.0.6"
+    "template_version": "0.0.8"
 }
