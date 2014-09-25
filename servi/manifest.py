@@ -53,20 +53,15 @@ class Manifest(object):
             self.manifest["template_version"])
 
     def save(self):
-        mod_manifest = deepcopy(self.manifest)
-        # don't include the manifest file in the saved version because
-        # it's hash will always be wrong! (you hash the existing,
-        #  then write it, and now the hash has changed)
-        if c.MANIFEST_FILE in mod_manifest["files"]:
-            del mod_manifest["files"][c.MANIFEST_FILE]
+        assert c.MANIFEST_FILE not in self.manifest["files"]
 
         with open(self.fname, 'w') as fp:
-            json.dump(mod_manifest, fp, indent=4, sort_keys=True)
+            json.dump(self.manifest, fp, indent=4, sort_keys=True)
 
     @staticmethod
     def equal_versions(m1, m2):
-        return (SemanticVersion(m1.manifest.template_version) ==
-                SemanticVersion(m2.manifest.template_version))
+        return (SemanticVersion(m1.manifest["template_version"]) ==
+                SemanticVersion(m2.manifest["template_version"]))
 
     @staticmethod
     def equal_files(m1, m2):
@@ -90,18 +85,6 @@ class Manifest(object):
 
         diff = DictDiffer(mod_m1, mod_m0)
         return diff.added(), diff.changed(), diff.removed()
-
-    def changed_files(self, orig, include_deleted):
-        """
-        compares self to orig.manifest
-        :returns  files changed (in/ex -cludes deleted)
-        """
-
-        _, changed, removed = Manifest.diff_files(self, orig)
-        retval = changed
-        if include_deleted:
-            retval |= removed
-        return retval
 
 
 #
@@ -141,7 +124,7 @@ class DictDiffer(object):
         return set(o for o in self.intersect if self.past_dict[o] !=
                    self.current_dict[o])
 
-    def unchanged(self):
-        return set(o for o in self.intersect if self.past_dict[o] ==
-                   self.current_dict[o])
+    # def unchanged(self):
+    #     return set(o for o in self.intersect if self.past_dict[o] ==
+    #                self.current_dict[o])
 

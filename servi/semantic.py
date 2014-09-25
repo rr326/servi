@@ -59,8 +59,6 @@ class SemanticVersion(object):
         return self.sv > other.sv
 
     def __str__(self):
-        if not self.sv:
-            return ''
         return '.'.join([str(v) for v in self.sv_ar])
 
     def bump_ver(self, ver_type):

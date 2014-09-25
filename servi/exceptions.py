@@ -26,14 +26,14 @@ class ServiError(Exception):
 
 
 class MasterNotFound(Exception):
-    def __init__(self, cwd):
-        self.cwd = cwd
+    def __init__(self):
+        pass
 
     def __str__(self):
         return (
             '\n***** ERROR *****\n'
             'Master directory not found at or above current directory.\n'
-            'Looking for: <master>/servi/servi_templates\n'
+            'Looking for: <master>/ServiFile.yml\n'
             'Above cwd: {0}\n'
             'Run "servi init <dirname>"\n'
-            '\n**Servi Aborting**'.format(self.cwd))
+            '\n**Servi Aborting**'.format(os.getcwd()))

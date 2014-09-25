@@ -1,4 +1,4 @@
-from servi.servi_exceptions import *
+from servi.exceptions import *
 from tests.fixtures import *
 
 

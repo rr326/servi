@@ -5,7 +5,7 @@ import shutil
 import yaml
 
 from servi.manifest import *
-from servi.servi_exceptions import *
+from servi.exceptions import *
 from servi.utils import qprint, file_exists, pathfor
 
 

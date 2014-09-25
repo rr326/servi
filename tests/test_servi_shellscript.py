@@ -2,7 +2,8 @@ import os
 import subprocess as sp
 
 from servi.command import process_and_run_command_line as servi_run
-
+from servi.exceptions import *
+import pytest
 
 def test_servi_shellscript(tmpdir):
     tempdir = str(tmpdir.mkdir('serviplate'))
@@ -33,3 +34,5 @@ def test_servi_shellscript(tmpdir):
         [shell_cmd, 'update', '--help'],
         cwd=tempdir)
 
+    with pytest.raises(ServiError):
+        servi_run(' ')

@@ -40,7 +40,7 @@ def normalize_path(path, source):
     assert source in [c.TEMPLATE, c.MASTER]
     prefix = c.TMPL_DIR_SITE if source is c.TEMPLATE else c.MASTER_DIR
     prefix += '/'
-    if not os.path.commonprefix([prefix, path]) == prefix:
-        raise Exception('Expected prefix ({0}) not found in path ({1})'
-                        .format(prefix, path))
+
+    assert os.path.commonprefix([prefix, path]) == prefix
+
     return path.split(sep=prefix, maxsplit=1)[1]

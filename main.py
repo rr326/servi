@@ -2,7 +2,7 @@ import sys
 import servi
 
 from servi.command import process_and_run_command_line
-from servi.servi_exceptions import ServiError, ForceError
+from servi.exceptions import ServiError, ForceError
 
 
 def main():

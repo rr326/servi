@@ -17,6 +17,10 @@ class ZZCommand(Command):
             '\nUse as a git hook if you are modifying templates.')
         parser_update.add_argument('--bump', choices=SEMANTIC_VERSIONS,
                                    help='Bump the version')
+        parser_update.add_argument(
+            '--set_ver', type=str,
+            help='Set template version to <string>')
+
         parser_update.set_defaults(command_func=self.run)
 
     def run(self, args):
@@ -33,6 +37,9 @@ class ZZCommand(Command):
 
         if args.bump:
             return bump(args.bump)
+
+        if args.set_ver:
+            return set_ver(args.set_ver)
 
 
 def update_manifest():
@@ -67,6 +74,19 @@ def bump(ver_type):
 
     print('Updated VERSION_FILE')
     pprint(data)
+    return True
 
+
+def set_ver(version_string):
+    sv = SemanticVersion(version_string)
+
+    data = {"template_version": str(sv)}
+
+    with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'w') as fp:
+        json.dump(data, fp, indent=4)
+
+    print('Updated VERSION_FILE to: {0}'.format(data))
+
+    return True
 
 command = ZZCommand()

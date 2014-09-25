@@ -1,21 +1,10 @@
 from servi.command import Command
-from servi.servi_exceptions import *
+from servi.exceptions import *
 from servi.utils import *
 
 from servi.manifest import *
 from servi.template_mgr import TemplateManager
 from servi.config import find_master_dir, set_master_dir, load_user_config, servi_file_exists_in
-
-def error_if_changed(force, changed_files, existing_version, new_version):
-    if not force and changed_files:
-        raise ForceError(
-            'The following files from the template were changed'
-            ' unexpectedly:\n  {0}'.format(changed_files))
-
-    if not force and existing_version > new_version:
-        raise ForceError('Existing template version ({0}) '
-                         '> new version ({1})'
-                         .format(existing_version, new_version))
 
 
 class InitCommand(Command):
@@ -77,10 +66,8 @@ class InitCommand(Command):
 
         changed_files = tmgr.changed_files
 
-        error_if_changed(
-            force=args.force, changed_files=changed_files,
-            existing_version=tmgr.m_template.template_version,
-            new_version=tmgr.m_master.template_version)
+        # TODO (?) - Removed 'error_if_changed' - add it back? \
+        #  (warn if any files changed)
 
         qprint('Master Directory: {0}'
                .format(os.path.abspath(c.MASTER_DIR)))

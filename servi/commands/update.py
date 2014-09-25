@@ -1,6 +1,6 @@
 from servi.command import Command
 from servi.manifest import *
-from servi.servi_exceptions import *
+from servi.exceptions import *
 from servi.template_mgr import TemplateManager
 from servi.utils import *
 
@@ -18,9 +18,6 @@ class UpdateCommand(Command):
         g.quiet = args.quiet
 
         tmgr = TemplateManager()
-        if not tmgr.m_master_saved:
-            raise ServiError('No saved manifest in master directory.\n'
-                             'Run "servi init" first.')
 
         changed_or_removed_files = (tmgr.mm_changed_files |
                                     tmgr.mm_removed_files)

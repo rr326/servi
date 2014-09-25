@@ -1,7 +1,7 @@
 import os
 import os.path
 import yaml
-from servi.servi_exceptions import MasterNotFound
+from servi.exceptions import MasterNotFound
 
 '''
 Global configuration for servi files
@@ -69,7 +69,7 @@ def find_master_dir(start_dir, fail_ok=False):
     master_dir = find_ancestor_servifile(start_dir)
     if not master_dir:
         if not fail_ok:
-            raise MasterNotFound(os.getcwd())
+            raise MasterNotFound()
         else:
             return None
     else:

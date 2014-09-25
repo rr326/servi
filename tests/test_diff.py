@@ -2,6 +2,7 @@ from tests.fixtures import *
 from servi.utils import *
 from servi.manifest import Manifest
 from servi.template_mgr import TemplateManager
+from servi.command import process_and_run_command_line as servi_run
 
 
 def test_diff(clean_master, mock_template_dir, servi_init):
@@ -46,4 +47,6 @@ def test_diff(clean_master, mock_template_dir, servi_init):
     assert tmgr.changed_but_ignored_files == {
         'apache_config/sites-available/THISSITE.conf',
         'ansible_config/playbook.yml'}
+
+    assert servi_run('diff')
 

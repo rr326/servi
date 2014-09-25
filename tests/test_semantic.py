@@ -3,10 +3,13 @@ import pytest
 from servi.semantic import *
 
 
+@pytest.mark.wip
 def test_semantic_version():
     assert SemanticVersion('1.1') > SemanticVersion('1.0')
+    assert SemanticVersion('1.0') >= SemanticVersion('1.0')
     assert SemanticVersion('1.0.0') == SemanticVersion('1.0')
     assert SemanticVersion('1.0.1') < SemanticVersion('1.0.2')
+    assert SemanticVersion('1.0.1') <= SemanticVersion('1.0.1')
     assert SemanticVersion('1').bump_ver(MAJOR) == SemanticVersion('2.0.0')
     assert SemanticVersion('1').bump_ver(MINOR) == SemanticVersion('1.1.0')
     assert SemanticVersion('1').bump_ver(PATCH) == SemanticVersion('1.0.1')
@@ -18,4 +21,7 @@ def test_semantic_version():
         SemanticVersion('hello')
     with pytest.raises(ValueError):
         SemanticVersion(10)
+
+    assert SemanticVersion.sv_string_to_ver(None) is None
+
 
