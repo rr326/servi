@@ -1,5 +1,4 @@
 from servi.command import Command
-from servi.manifest import *
 from servi.exceptions import *
 from servi.template_mgr import TemplateManager
 from servi.utils import *

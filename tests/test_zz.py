@@ -5,6 +5,7 @@ from servi.command import process_and_run_command_line as servi_run
 from servi.utils import file_exists
 from servi.semantic import SemanticVersion
 
+
 @pytest.mark.wip
 def test_zz_update_manifest(mock_template_dir):
     pass

@@ -4,7 +4,7 @@ from servi.utils import *
 
 from servi.manifest import *
 from servi.template_mgr import TemplateManager
-from servi.config import find_master_dir, set_master_dir, load_user_config, servi_file_exists_in
+from servi.config import set_master_dir, load_user_config, servi_file_exists_in
 
 
 class InitCommand(Command):
@@ -49,7 +49,7 @@ class InitCommand(Command):
                 if servi_file_exists_in(args.dir):
                     raise ForceError(
                         'ServiFile already exists in: {0}.\n'
-                            .format(os.path.abspath(args.dir)))
+                        .format(os.path.abspath(args.dir)))
 
         assert_doit()
         if not os.path.exists(args.dir):
@@ -63,9 +63,6 @@ class InitCommand(Command):
         os.chdir(c.MASTER_DIR)
 
         tmgr = TemplateManager()
-
-        changed_files = tmgr.changed_files
-
         # TODO (?) - Removed 'error_if_changed' - add it back? \
         #  (warn if any files changed)
 

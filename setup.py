@@ -1,7 +1,5 @@
 import ez_setup
 ez_setup.use_setuptools()
-import servi.config as c
-import os
 
 from setuptools import setup, Command, find_packages
 
@@ -16,8 +14,10 @@ class PyTest(Command):
     def finalize_options(self):
         pass
 
-    def run(self):
-        import sys, subprocess
+    @staticmethod
+    def run():
+        import sys
+        import subprocess
         errno = subprocess.call([sys.executable, 'runtests.py', 'tests'])
         raise SystemExit(errno)
 

@@ -91,7 +91,8 @@ def find_ancestor_with(starting_dir, target):
     while cur_dir != '/':
         if os.path.exists(os.path.join(cur_dir, target)):
             return cur_dir
-        cur_dir = os.path.abspath(os.path.normpath(os.path.join(cur_dir, '..')))
+        cur_dir = os.path.abspath(
+            os.path.normpath(os.path.join(cur_dir, '..')))
 
     return None
 
@@ -107,7 +108,6 @@ relies on it. I need it since the other pathfor uses config parameters
 Only use this in the config module.
 After that, use commands.utils.utils.pathfor()
 """
-
 
 
 def pathfor(fname, source, template, master, template_dir, master_dir):
