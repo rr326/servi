@@ -1,13 +1,14 @@
 from datetime import datetime
 import re
 import shutil
+import os
 
 import yaml
 
-from servi.manifest import *
-from servi.exceptions import *
+from servi.manifest import Manifest
+from servi.exceptions import ServiError, ForceError
 from servi.utils import qprint, file_exists, pathfor
-
+import servi.config as c
 
 BACKUP_PREFIX = '_BACKUP_'
 

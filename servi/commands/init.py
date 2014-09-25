@@ -1,8 +1,10 @@
+import os
+import servi.config as c
+import servi.globals as g
 from servi.command import Command
-from servi.exceptions import *
-from servi.utils import *
+from servi.exceptions import ForceError, ServiError
+from servi.utils import qprint
 
-from servi.manifest import *
 from servi.template_mgr import TemplateManager
 from servi.config import set_master_dir, load_user_config, servi_file_exists_in
 
@@ -56,7 +58,8 @@ class InitCommand(Command):
             os.mkdir(args.dir)
         else:
             if not os.path.isdir(args.dir):
-                raise ServiError("Provided directory isn't a directory: {0}"
+                raise ServiError(
+                    "Provided directory isn't a directory: {0}"
                     .format(args.dir))
 
         set_master_dir(set_dir_to=os.path.abspath(args.dir))

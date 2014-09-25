@@ -1,8 +1,11 @@
 from pprint import pprint
+import json
 
 from servi.command import Command
-from servi.manifest import *
+from servi.manifest import Manifest
 from servi.utils import pathfor
+import servi.config as c
+from servi.semantic import SemanticVersion, SEMANTIC_VERSIONS, PATCH
 
 
 class ZZCommand(Command):

@@ -1,8 +1,8 @@
 from glob import glob
 import argparse
 from importlib import import_module
-
-from servi.exceptions import *
+import os
+from servi.exceptions import ForceError, ServiError
 import servi.config as c
 
 from servi.config import set_master_dir, load_user_config

@@ -3,9 +3,11 @@ import shutil
 import re
 import tempfile
 import pytest
-from servi.utils import *
+import os
+from servi.utils import pathfor
 from servi.command import process_and_run_command_line as servi_run
 from servi.manifest import Manifest
+import servi.config as c
 
 
 """

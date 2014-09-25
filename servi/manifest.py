@@ -1,7 +1,7 @@
 import json
 import os
 
-from servi.semantic import *
+from servi.semantic import SemanticVersion
 from servi.utils import hash_of_file, templatepath_to_destpath, pathfor, \
     normalize_path
 import servi.config as c

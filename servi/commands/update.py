@@ -1,7 +1,9 @@
 from servi.command import Command
-from servi.exceptions import *
+from servi.exceptions import ServiError
 from servi.template_mgr import TemplateManager
-from servi.utils import *
+from servi.utils import qprint
+import servi.config as c
+import servi.globals as g
 
 
 class UpdateCommand(Command):

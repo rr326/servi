@@ -1,7 +1,7 @@
 import subprocess
+import os
 
 from servi.command import Command
-from servi.manifest import *
 import servi.config as c
 from servi.template_mgr import TemplateManager
 from servi.utils import pathfor
