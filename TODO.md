@@ -13,3 +13,4 @@
     * Cleanup error / warning messages. (new function?)
 
 * Look at Docker - would that have done all of this???
+* Unattended updates - https://help.ubuntu.com/community/AutomaticSecurityUpdates

@@ -1,9 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Configuration variables in servi_config.yml
+# Configuration variables in Servifile.yml
 require 'yaml'
-vars = YAML.load_file 'servi_config.yml'
+vars = YAML.load_file 'Servifile.yml'
 vars["IS_VAGRANT"] = true
 vars["REMOTE_DIR"] = "/var/www/" + vars["SITE_SUFFIX"]
 vars["APACHE_LOG_DIR"] = "/var/log/apache2/" + vars["SITE_SUFFIX"]
