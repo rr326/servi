@@ -24,6 +24,7 @@ Project
 SERVI_DIR = os.path.normpath(os.path.join(os.path.dirname(__file__), '..'))
 TMPL_DIR_SITE = \
     os.path.normpath(os.path.join(SERVI_DIR, 'servi_templates'))
+BOX_DIR = os.path.abspath(os.path.join(SERVI_DIR, 'servi_boxes'))
 
 # These must be initialized and then set here as c.MASTER_DIR =xxx
 MASTER_DIR = None

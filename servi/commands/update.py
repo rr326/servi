@@ -11,13 +11,10 @@ class UpdateCommand(Command):
 
         parser_update = sub_parsers.add_parser(
             'update', help='Update project with latest template')
-        parser_update.add_argument('-q', '--quiet', action='store_true')
 
         parser_update.set_defaults(command_func=self.run)
 
     def run(self, args):
-        g.quiet = args.quiet
-
         tmgr = TemplateManager()
 
         changed_or_removed_files = (tmgr.mm_changed_files |

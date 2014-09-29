@@ -19,7 +19,6 @@ class InitCommand(Command):
                  'This is usually the root dir of your project. '
                  '"." is a good choice.')
         parser_init.add_argument('-f', '--force', action='store_true')
-        parser_init.add_argument('-q', '--quiet', action='store_true')
         parser_init.set_defaults(command_func=self.run)
 
     def run(self, args):
@@ -40,9 +39,8 @@ class InitCommand(Command):
             do_init
 
         """
-        g.quiet = args.quiet
-        print('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
-        print('cwd: {0}'.format(os.getcwd()))
+        qprint('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
+        qprint('cwd: {0}'.format(os.getcwd()))
 
         def assert_doit():
             if args.force:

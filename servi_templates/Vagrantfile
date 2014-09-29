@@ -11,8 +11,17 @@ vars["APACHE_LOG_DIR"] = "/var/log/apache2/" + vars["SITE_SUFFIX"]
 VAGRANTFILE_API_VERSION = "2"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-    config.vm.box = "ubuntu/trusty64"
-    config.vm.box_url = "https://vagrantcloud.com/ubuntu/trusty64"
+    if ENV['servi_box'].to_s.empty?
+        config.vm.box = "ubuntu/trusty64"
+        config.vm.box_url = "https://vagrantcloud.com/ubuntu/trusty64"
+    else
+        # 'servi_box' environment variable is not empty
+        # This is set by 'servi usebox'.
+        print "**************************\n"
+        print "Using servi_box: "+ENV['servi_box']
+        print "\n**************************\n\n"
+        config.vm.box = ENV['servi_box']
+    end
 
     config.vm.hostname = vars["HOST_NAME"]
 

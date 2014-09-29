@@ -4,9 +4,9 @@ from importlib import import_module
 import os
 from servi.exceptions import ForceError, ServiError
 import servi.config as c
-
 from servi.config import set_master_dir, load_user_config
-
+from servi.utils import qprint
+import servi.globals as g
 
 class Command(object):
     def __init__(self):
@@ -50,6 +50,7 @@ def setup_parsers():
     # Only for testing
     servi_parser.add_argument('--template_dir', type=str,
                               help=argparse.SUPPRESS)
+    servi_parser.add_argument('-q', '--quiet', action='store_true')
 
     sub_parsers = servi_parser.add_subparsers(
         title='Commands', metavar='', dest='command')
@@ -67,6 +68,9 @@ def process_and_run_command_line(command_line=None):
         else:
             args = servi_parser.parse_args()
 
+        if args.quiet:
+            g.quiet = True
+
         if args.template_dir:
             c.TMPL_DIR_SITE = args.template_dir
             print('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
@@ -83,7 +87,7 @@ def process_and_run_command_line(command_line=None):
             load_user_config()
 
         try:
-            print('Servi - Running: {0}\n'.format(args.command))
+            qprint('Servi - Running: {0}\n'.format(args.command))
             retval = args.command_func(args)
         except (ForceError, ServiError) as e:
             print(e)
