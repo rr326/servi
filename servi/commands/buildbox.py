@@ -9,6 +9,7 @@ from servi.template_mgr import TemplateManager
 import re
 from servi.semantic import SemanticVersion
 import argparse
+from servi.manifest import get_template_version
 
 SKIPPED = 'SKIPPED'
 
@@ -48,7 +49,7 @@ class BuildboxCommand(Command):
         existing_boxes = get_all_boxes()
         if existing_boxes:
             for f in existing_boxes:
-                os.remove(os.path.abspath(os.path.join(c.BOX_DIR, f)))
+                os.remove(os.path.abspath(os.path.join(c.BOX_DIR, f[0])))
 
         orig_dir = os.getcwd()
         with TemporaryDirectory() as tmpdir:
@@ -86,7 +87,7 @@ command = BuildboxCommand()
 
 
 def get_boxname():
-    ver = TemplateManager().m_template.template_version
+    ver = SemanticVersion(get_template_version())
     box_name = 'servi_box_{0}_{1}_{2}.box' \
         .format(ver.sv_ar[0], ver.sv_ar[1], ver.sv_ar[2])
     box_path = os.path.abspath(os.path.join(c.BOX_DIR, box_name))
