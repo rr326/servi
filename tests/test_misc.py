@@ -4,7 +4,6 @@ from servi.manifest import Manifest
 import servi.config as c
 
 
-@pytest.mark.wip
 def test_manifest_equal(setup_init):
     m0 = Manifest(c.TEMPLATE)
     m1 = Manifest(c.TEMPLATE)
@@ -12,4 +11,4 @@ def test_manifest_equal(setup_init):
 
 
 def test_qprint(setup_empty):
-    assert servi_run('init -q .')
+    assert servi_run('-q init .')

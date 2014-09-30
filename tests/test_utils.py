@@ -2,6 +2,10 @@ from servi.config import find_master_dir
 from tests.fixtures import *
 from servi.exceptions import MasterNotFound
 from servi.command import process_and_run_command_line as servi_run
+from time import sleep
+from servi.utils import timeit
+import sys
+import io
 
 
 @pytest.fixture()
@@ -50,3 +54,18 @@ def test_find_master_dir(fake_master):
         find_master_dir('/')
 
     print(MasterNotFound())  # for pytest coverage
+
+
+@pytest.mark.wip
+def test_timeit(tmpdir):
+    old_stdout = sys.stdout
+    with io.StringIO() as string_buffer:
+        sys.stdout = string_buffer
+        with timeit():
+            sleep(1.25)
+        assert re.search('Total running time: [0-9]+\.[0-9]+',
+                         string_buffer.getvalue())
+
+    sys.stdout = old_stdout
+
+

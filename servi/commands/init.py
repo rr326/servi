@@ -12,14 +12,14 @@ from servi.config import set_master_dir, load_user_config, servi_file_exists_in
 class InitCommand(Command):
     def register_command_line(self, sub_parsers):
 
-        parser_init = sub_parsers.add_parser('init', help='Init project')
-        parser_init.add_argument(
+        parser = sub_parsers.add_parser('init', help='Init project')
+        parser.add_argument(
             'dir',
             help='Directory to initialize servi with. '
                  'This is usually the root dir of your project. '
                  '"." is a good choice.')
-        parser_init.add_argument('-f', '--force', action='store_true')
-        parser_init.set_defaults(command_func=self.run)
+        parser.add_argument('-f', '--force', action='store_true')
+        parser.set_defaults(command_func=self.run)
 
     def run(self, args):
         """

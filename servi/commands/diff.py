@@ -10,18 +10,18 @@ from servi.utils import pathfor
 class DiffCommand(Command):
     def register_command_line(self, sub_parsers):
 
-        parser_init = sub_parsers.add_parser(
+        parser = sub_parsers.add_parser(
             'diff', help="Diff changes betweeen your server "
                          "config and servi's. "
                          "Note - set the DIFFTOOL parameter in {0}"
                          .format(c.SERVIFILE))
 
-        parser_init.add_argument(
+        parser.add_argument(
             '--difftool', action='store', help=
             'Enter a difftool to use: "difftool master_file template_file" '
             '(surround in quotes)')
 
-        parser_init.set_defaults(command_func=self.run)
+        parser.set_defaults(command_func=self.run)
 
     def run(self, args):
         tmgr = TemplateManager()

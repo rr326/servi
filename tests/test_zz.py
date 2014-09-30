@@ -6,7 +6,6 @@ from servi.utils import file_exists
 from servi.semantic import SemanticVersion
 
 
-@pytest.mark.wip
 def test_zz_update_manifest(mock_template_dir):
     pass
     # Test changed manifest

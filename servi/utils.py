@@ -1,8 +1,9 @@
 import hashlib
 import os
 import servi.config as c
-
+from contextlib import contextmanager
 import servi.globals as g
+from datetime import datetime
 
 
 def qprint(*args, **kwargs):
@@ -43,3 +44,17 @@ def normalize_path(path, source):
     assert os.path.commonprefix([prefix, path]) == prefix
 
     return path.split(sep=prefix, maxsplit=1)[1]
+
+
+@contextmanager
+def reset_cwd():
+    origdir = os.getcwd()
+    yield
+    os.chdir(origdir)
+
+@contextmanager
+def timeit():
+    t0 = datetime.now()
+    yield
+    t1 = datetime.now()
+    print('Total running time: {0:.1f} min'.format((t1 - t0).seconds / 60))
