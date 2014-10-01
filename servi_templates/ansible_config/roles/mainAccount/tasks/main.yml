@@ -18,3 +18,15 @@
       owner="{{ MAIN_USERNAME }}"
     remote_user: "{{ MAIN_USERNAME }}"
 
+
+# Also setup vagrant user to use a similar config (so you can do vagrant ssh)
+
+-   name: "modify vagrant account"
+    user: name="vagrant"
+      createhome=yes shell=/usr/bin/zsh
+      group=webdev groups=adm,admin,sudo,webdev,www-data
+
+-   name: "copy .zshrc for user vagrant"
+    copy: src=.zshrc dest="/home/vagrant"
+      owner="vagrant"
+    remote_user: "vagrant"

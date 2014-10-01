@@ -3,7 +3,7 @@ import os
 
 from servi.command import Command, process_and_run_command_line as servi_run
 import servi.config as c
-from servi.utils import pathfor
+from servi.utils import pathfor, timeit
 from tempfile import TemporaryDirectory
 from servi.template_mgr import TemplateManager
 import re
@@ -65,10 +65,11 @@ class BuildboxCommand(Command):
             # servi uses python3 in a venv, and vagrant uses ansible
             # which might be installed globally
             if not args.mock:
-                subprocess.check_call('vagrant up', shell=True)
-                subprocess.check_call(
-                    'vagrant package --output {0}'.format(box_path),shell=True)
-                subprocess.check_call('vagrant destroy -f', shell=True)
+                with timeit():
+                    subprocess.check_call('vagrant up', shell=True)
+                    subprocess.check_call(
+                        'vagrant package --output {0}'.format(box_path),shell=True)
+                    subprocess.check_call('vagrant destroy -f', shell=True)
             else:
                 print('mocking vagrant package with base box: {0}'.format(
                       box_path))

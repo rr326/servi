@@ -3,7 +3,7 @@ import os
 
 from servi.command import Command, process_and_run_command_line as servi_run
 import servi.config as c
-from servi.utils import pathfor
+from servi.utils import pathfor, timeit
 from tempfile import TemporaryDirectory
 from servi.template_mgr import TemplateManager
 import re
@@ -55,7 +55,8 @@ class UseboxCommand(Command):
         os.chdir(c.MASTER_DIR)
 
         if not args.mock:
-            subprocess.check_call('vagrant up', env=env, shell=True)
+            with timeit():
+                subprocess.check_call('vagrant up', env=env, shell=True)
         else:
             print('mocking vagrant up with base box: {0}'
                   .format(env['servi_box']))
