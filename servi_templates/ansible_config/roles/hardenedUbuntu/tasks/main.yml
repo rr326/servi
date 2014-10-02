@@ -97,7 +97,7 @@
 #
 -   name: Install fail2ban
     apt:  pkg=fail2ban state=latest
--   copy: src=jail.conf dest=/etc/fail2ban/jail.conf backup=yes force=yes
+-   template: src=jail.conf.j2 dest=/etc/fail2ban/jail.conf backup=yes force=yes
 
 
 #

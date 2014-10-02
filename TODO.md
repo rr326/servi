@@ -1,6 +1,5 @@
 ## TODO
 * Ansible
-    * fail2ban and other errors to mail
     * ?? Monitoring
 * Servi
     * commands:
@@ -11,3 +10,5 @@
 
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)
+
+* Backups - is it making unnecessary backups?
