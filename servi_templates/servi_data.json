@@ -15,7 +15,7 @@
         "ansible_config/roles/hardenedUbuntu/files/jail.conf": "ee048914a7a48ae023ed4fe5905ef0b4c302cd92",
         "ansible_config/roles/hardenedUbuntu/tasks/main.yml": "2090b59727e05b0d35f0cb59396677aab8363ecb",
         "ansible_config/roles/mainAccount/files/.zshrc": "a72fa7f5e51f47819480887bb1639e2005c56762",
-        "ansible_config/roles/mainAccount/tasks/main.yml": "f094e5dd7a64c37137aa33492145be5c221e9d79",
+        "ansible_config/roles/mainAccount/tasks/main.yml": "5b1f0f14911a3456624f4a38c65ba7af894c3487",
         "ansible_config/roles/projectSpecific/files/requirements_py2.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/tasks/main.yml": "c9f28d70e02e3c6b6be917288813b7340acff22d",
@@ -23,5 +23,5 @@
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.10"
+    "template_version": "0.1.11"
 }

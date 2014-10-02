@@ -7,6 +7,10 @@
 #
 #
 
+SERVER_NAME: 'servi_server'  # Server name for apache.
+                             # Should be same for all your servis in the same
+                             # machine.
+
 HOST_NAME: "thishost" # Hostname for your server.
 
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts

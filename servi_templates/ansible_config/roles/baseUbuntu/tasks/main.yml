@@ -72,6 +72,19 @@
 
 
 #
+# Set Servername
+#
+-   template: src=servername.conf.j2 dest=/etc/apache2/conf-available/servername.conf
+-   command: a2enconf servername.conf
+
+
+#
+# Delete any broken apache config links
+# (Which can easily happen if, say, you rename THISSITE.conf )
+-   name: Delete any broken links in apache2/sites-enabled
+    command: find  -L /etc/apache2/sites-enabled -maxdepth 1 -type l -delete
+
+#
 # Restart apache
 #
 -   name: Restart Apache

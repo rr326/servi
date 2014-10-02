@@ -14,3 +14,6 @@
 
 * Look at Docker - would that have done all of this???
 * Unattended updates - https://help.ubuntu.com/community/AutomaticSecurityUpdates
+
+* Templates
+    * After you delete/rename THISSITE.conf, you can't restart apache since the sites-enabled isn't right
