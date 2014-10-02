@@ -1,0 +1,19 @@
+# Sources:
+# http://www.postfix.org/STANDARD_CONFIGURATION_README.html - nullmailer
+# http://yaui.me/postfix-gmail-smtp-server-relay-ubuntu/
+
+myhostname = {{ HOST_NAME }}
+
+relayhost = [smtp.gmail.com]:587
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_CApath = /etc/postfix/cacerts
+smtp_use_tls = yes
+
+myorigin = $mydomain
+inet_interfaces = loopback-only
+mydestination =
+inet_protocols = ipv4
+
+

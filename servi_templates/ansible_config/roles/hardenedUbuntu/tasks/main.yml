@@ -14,6 +14,7 @@
 -   command: ufw allow http
 -   command: ufw allow https 
 -   command: ufw allow from 127.0.0.1   # For vagrant, which might be on different ssh port
+-   command: ufw allow smtp
 -   command: ufw --force  enable
 
 #

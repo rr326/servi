@@ -22,6 +22,11 @@
       - zsh
       - unattended-upgrades
       - update-notifier-common
+      - postfix
+      - libsasl2-2
+      - ca-certificates
+      - libsasl2-modules
+      - mailutils
 
 -   name: Apt -  Autoremove unused packages
     shell: apt-get autoremove -y
@@ -175,4 +180,18 @@
       executable: pip3
       virtualenv: "{{ PY_VENV_DIR }}/py3"
       requirements: /tmp/requirements_py3.txt
+
+
+#
+# Configure Postfix as a send-only mailer
+# Sources:
+# http://www.postfix.org/STANDARD_CONFIGURATION_README.html - nullmailer
+# http://yaui.me/postfix-gmail-smtp-server-relay-ubuntu/
+#
+-   template: src=postfix_main.cf.j2 dest=/etc/postfix/main.cf mode=644
+-   template: src=sasl_passwd.j2 dest=/etc/postfix/sasl_passwd mode=644
+-   command: postmap /etc/postfix/sasl_passwd
+-   file: path=/etc/postfix/cacerts state=directory
+-   command: cp /etc/ssl/certs/Thawte_Premium_Server_CA.pem /etc/postfix/cacerts
+-   service: name=postfix state=restarted
 

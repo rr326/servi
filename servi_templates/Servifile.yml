@@ -11,7 +11,7 @@ SERVER_NAME: 'servi_server'  # Server name for apache.
                              # Should be same for all your servis in the same
                              # machine.
 
-HOST_NAME: "thishost" # Hostname for your server.
+HOST_NAME: "serviplate.xx.com" # Hostname for your server.
 
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
@@ -59,3 +59,11 @@ WEBDEV_GID : 900
 
 # Python virtual environment root
 PY_VENV_DIR : "/var/penv"
+
+#
+# Postfix configuration
+# This uses gmail as the defail relay
+#
+GMAIL_ACCOUNT: rrosen326@gmail.com
+# Ansible needs the left name to be different than the right!
+GMAIL_PW_VAR: "{{ lookup('env', 'GMAIL_PW') }}"
