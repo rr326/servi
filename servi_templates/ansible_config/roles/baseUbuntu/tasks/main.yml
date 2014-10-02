@@ -202,3 +202,9 @@
 -   command: cp /etc/ssl/certs/Thawte_Premium_Server_CA.pem /etc/postfix/cacerts
 -   service: name=postfix state=restarted
 
+#
+# Logrotate
+#
+-   name: Configure logrotate for apache
+    copy: src=logrotate_apache2 dest=/etc/logrotate.d/apache2
+

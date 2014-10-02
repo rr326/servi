@@ -67,3 +67,4 @@ PY_VENV_DIR : "/var/penv"
 GMAIL_ACCOUNT: rrosen326@gmail.com
 # Ansible needs the left name to be different than the right!
 GMAIL_PW_VAR: "{{ lookup('env', 'GMAIL_PW') }}"
+DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
