@@ -20,10 +20,19 @@
       - libapache2-mod-wsgi
       - libapache2-mod-macro
       - zsh
+      - unattended-upgrades
+      - update-notifier-common
 
-- debug: msg="**** FIX AUTOREMOVE - getting hung up somewhere? *****"
-#-   name: Apt -  Autoremove unused packages  # Not sure why these are here?
-#    shell: apt-get autoremove
+-   name: Apt -  Autoremove unused packages
+    shell: apt-get autoremove -y
+-   name: Apt - Autoclean cache
+    shell: apt-get autoclean -y
+
+#
+# Automatic Upgrades - https://help.ubuntu.com/community/AutomaticSecurityUpdates
+#
+-   copy: dest=/etc/apt/apt.conf.d/20auto-upgrades  src=20auto-upgrades
+-   copy: dest=/etc/apt/apt.conf.d/50unattended-upgrades  src=50unattended-upgrades
 
 #
 # Set up admin user & group
