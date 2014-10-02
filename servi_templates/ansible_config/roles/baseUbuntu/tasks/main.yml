@@ -99,6 +99,13 @@
     command: find  -L /etc/apache2/sites-enabled -maxdepth 1 -type l -delete
 
 #
+# Pagespeed
+#
+-   get_url: url=https://dl-ssl.google.com/dl/linux/direct/mod-pagespeed-stable_current_amd64.deb
+      dest=/tmp/mod-pagespeed-stable_current_amd64.deb force=no
+-   apt: deb=/tmp/mod-pagespeed-stable_current_amd64.deb
+
+#
 # Restart apache
 #
 -   name: Restart Apache
