@@ -27,6 +27,7 @@
       - ca-certificates
       - libsasl2-modules
       - mailutils
+      - monit
 
 -   name: Apt -  Autoremove unused packages
     shell: apt-get autoremove -y
@@ -207,4 +208,14 @@
 #
 -   name: Configure logrotate for apache
     copy: src=logrotate_apache2 dest=/etc/logrotate.d/apache2
+
+
+#
+# Monit system monitoring
+# Simple monitoring (with email alerts). Just alert if the system is starting to crumble
+#
+-  name: Configure monit
+   template: src=monitrc.j2 dest=/etc/monit/monitrc
+
+
 

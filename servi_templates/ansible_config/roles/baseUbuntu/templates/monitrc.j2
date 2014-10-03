@@ -1,0 +1,43 @@
+# See the original montirc file for many options
+# See the manual for complete infomation
+
+# Note - this monit configuration basically just checks it things go very awry and emails you if so.
+
+set daemon 120
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+set mailserver localhost    # postfix should be configured properly
+set eventqueue
+  basedir /var/lib/monit/events
+  slots 100
+
+set alert {{ DEFAULT_MAILTO_ADDRESS }} not on { instance, action }
+
+set httpd port 3737 and
+    use address 0.0.0.0
+    allow {{ MONIT_UN }}:{{ MONIT_PW }}
+
+check system $HOST
+    if loadavg (1min) > 4 then alert
+    if loadavg (5min) > 3 then alert
+    if memory usage > 75% then alert
+    if cpu usage (user) > 70% then alert
+    if cpu usage (system) > 30% then alert
+    if cpu usage (wait) > 20% then alert
+
+check filesystem rootfs with path /dev/sda1
+  if space usage > 75% for 3 cycles then alert
+
+check process apache with pidfile /var/run/apache2/apache2.pid
+    start program = "/etc/init.d/apache2 start" with timeout 60 seconds
+    stop program  = "/etc/init.d/apache2 stop"
+
+include /etc/monit/conf.d/*
+
+# To test your monit email, try this
+#check file alerttest with path /.nonexistent
+#    alert {{ DEFAULT_MAILTO_ADDRESS }} with reminder on 500 cycles
+
+# To test resource monitoring, install stress: http://people.seas.harvard.edu/~apw/stress/
+# Then run it with something like: stress --timeout 120s  --cpu 12 --io 8 --vm 4 --vm-bytes 128M

@@ -7,6 +7,7 @@
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
+        "ansible_config/roles/baseUbuntu/files/monitrc": "bb765bfe4e334f21f2a1d950718c5c80b1586bc4",
         "ansible_config/roles/baseUbuntu/files/requirements_py2.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
@@ -29,5 +30,5 @@
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.17"
+    "template_version": "0.1.18"
 }
