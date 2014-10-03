@@ -217,5 +217,9 @@
 -  name: Configure monit
    template: src=monitrc.j2 dest=/etc/monit/monitrc
 
-
+# Don't run monit on the vagrant box. No need to get email alerts about your VM!
+-  service: name=monit state=restarted
+   when: not IS_VAGRANT
+-  service: name=monit state=stopped
+   when: IS_VAGRANT
 

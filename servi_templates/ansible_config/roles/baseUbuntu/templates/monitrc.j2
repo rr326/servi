@@ -16,7 +16,7 @@ set alert {{ DEFAULT_MAILTO_ADDRESS }} not on { instance, action }
 
 set httpd port 3737 and
     use address 0.0.0.0
-    allow {{ MONIT_UN }}:{{ MONIT_PW }}
+    allow {{ MONIT_UN }}:{{ MONIT_PW_VAR }}
 
 check system $HOST
     if loadavg (1min) > 4 then alert

@@ -73,4 +73,4 @@ DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
 # MONIT
 #
 MONIT_UN: admin
-MONIT_PW: "{{ lookup('env', 'GMAIL_PW') }}"
+MONIT_PW_VAR: "{{ lookup('env', 'MONIT_PW') }}"
