@@ -4,6 +4,7 @@
     * commands:
         * lans, rans
     * Use logging instead of qprint
+    * use new python path module
 
 * Look at Docker - would that have done all of this???
 
