@@ -8,6 +8,9 @@ from servi.utils import pathfor
 
 
 class LansCommand(Command):
+    def __init__(self):
+        self.special = {"parse_known_args": True}
+
     def register_command_line(self, sub_parsers):
 
         parser = sub_parsers.add_parser(
@@ -28,8 +31,10 @@ class LansCommand(Command):
 
         parser.set_defaults(command_func=self.run)
 
-    def run(self, args):
+    def run(self, args, extra_args):
 
+        print('*'*100)
+        print('Lans running. \n\tArgs: {0}\n\textra_args: {1}'.format(args, extra_args))
         return True
 
 

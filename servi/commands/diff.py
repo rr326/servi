@@ -23,7 +23,7 @@ class DiffCommand(Command):
 
         parser.set_defaults(command_func=self.run)
 
-    def run(self, args):
+    def run(self, args, extra_args):
         tmgr = TemplateManager()
 
         changed = tmgr.changed_files

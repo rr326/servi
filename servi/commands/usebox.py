@@ -32,7 +32,7 @@ class UseboxCommand(Command):
 
         parser.set_defaults(command_func=self.run)
 
-    def run(self, args):
+    def run(self, args, extra_args):
         all_boxes = get_all_boxes()
         if len(all_boxes) is 0:
             raise ServiError('No saved boxes found. Run "servi buildbox".')

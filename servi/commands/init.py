@@ -10,8 +10,10 @@ from servi.config import set_master_dir, load_user_config, servi_file_exists_in
 
 
 class InitCommand(Command):
-    def register_command_line(self, sub_parsers):
+    def __init__(self):
+        self.special = {"skip_init": True}
 
+    def register_command_line(self, sub_parsers):
         parser = sub_parsers.add_parser('init', help='Init project')
         parser.add_argument(
             'dir',
@@ -21,7 +23,7 @@ class InitCommand(Command):
         parser.add_argument('-f', '--force', action='store_true')
         parser.set_defaults(command_func=self.run)
 
-    def run(self, args):
+    def run(self, args, extra_args):
         """
         servi init [-f] dir
 

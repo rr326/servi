@@ -14,7 +14,7 @@ class UpdateCommand(Command):
 
         parser_update.set_defaults(command_func=self.run)
 
-    def run(self, args):
+    def run(self, args, extra_args):
         tmgr = TemplateManager()
 
         changed_or_removed_files = (tmgr.mm_changed_files |
