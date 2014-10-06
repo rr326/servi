@@ -39,6 +39,11 @@
 #
 -   copy: dest=/etc/apt/apt.conf.d/20auto-upgrades  src=20auto-upgrades
 -   copy: dest=/etc/apt/apt.conf.d/50unattended-upgrades  src=50unattended-upgrades
+-   lineinfile: >
+      dest=/etc/apt/apt.conf.d/10periodic
+      state=present
+      line='APT::Periodic::Unattended-Upgrade "1";'
+
 
 #
 # Set up admin user & group
@@ -202,6 +207,15 @@
 -   file: path=/etc/postfix/cacerts state=directory
 -   command: cp /etc/ssl/certs/Thawte_Premium_Server_CA.pem /etc/postfix/cacerts
 -   service: name=postfix state=restarted
+
+#
+# Crontab MAILTO
+#
+-   name: "Crontab - set MAILTO = {{ DEFAULT_MAILTO_ADDRESS }} "
+    lineinfile: >
+      dest=/etc/crontab
+      state=present
+      line="MAILTO={{ DEFAULT_MAILTO_ADDRESS }}"
 
 #
 # Logrotate

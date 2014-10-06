@@ -1,6 +1,6 @@
 {
     "files": {
-        "Servifile.yml": "62b0a6fa3f6233ca940f035ab9491de52a81b103",
+        "Servifile.yml": "62326fb8ee71915fe87eb341571620c74a50d8c6",
         "Vagrantfile": "46149644b1b2f180687af0adddb619644c355c34",
         "ansible_config/ansible.cfg": "04d0166a363e0c2237005d01b89e09611255cffa",
         "ansible_config/playbook.yml": "66898ee67b0b110f0f9a6ce8580d00c790404115",
@@ -11,8 +11,8 @@
         "ansible_config/roles/baseUbuntu/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
         "ansible_config/roles/baseUbuntu/files/sudo_nopasswd": "8cab6f83164d5642fe8ceef3bee9c64284239dc2",
-        "ansible_config/roles/baseUbuntu/tasks/main.yml": "4d870301c8da6aa8f48f2e5a8a1c272afdf74f39",
-        "ansible_config/roles/baseUbuntu/templates/monitrc.j2": "bd9b89b049a0dc7051c9a5d8c4e7a43883dc0c1d",
+        "ansible_config/roles/baseUbuntu/tasks/main.yml": "7591261c4c04a14a0e650c22664ffb507de0239b",
+        "ansible_config/roles/baseUbuntu/templates/monitrc.j2": "5352811ff550ba15c96fb3a35204c97d877d9d88",
         "ansible_config/roles/baseUbuntu/templates/postfix_main.cf.j2": "40bc2d72bfb90572fe3dc2b11df6867bc855089e",
         "ansible_config/roles/baseUbuntu/templates/sasl_passwd.j2": "490f288770bb71e99f3b3f7bb7064ad2c0b64d02",
         "ansible_config/roles/baseUbuntu/templates/servername.conf.j2": "ce6dc004ce9d00600e83412e654123e87a0b116e",
@@ -30,5 +30,5 @@
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.19"
+    "template_version": "0.1.20"
 }
