@@ -15,7 +15,7 @@ class TestInit():
         assert servi_run('init .')
 
         # No directory stated
-        with pytest.raises(SystemExit):
+        with pytest.raises(ServiError):
             assert servi_run('init')
 
         # Given a file instead of directory should fail

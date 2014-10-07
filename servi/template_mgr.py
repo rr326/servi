@@ -2,13 +2,14 @@ from datetime import datetime
 import re
 import shutil
 import os
-
+from logging import debug, info, warning as warn, error
 import yaml
 
 from servi.manifest import Manifest
 from servi.exceptions import ServiError, ForceError
-from servi.utils import qprint, file_exists, pathfor
+from servi.utils import file_exists, pathfor
 import servi.config as c
+
 
 BACKUP_PREFIX = '_BACKUP_'
 
@@ -16,7 +17,7 @@ BACKUP_PREFIX = '_BACKUP_'
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
         if re.search('_tmp_', c.TMPL_DIR_SITE):
-            print('****** TMPL_DIR_SITE: {0}'.format(c.TMPL_DIR_SITE))
+            debug('****** TMPL_DIR_SITE: {0}'.format(c.TMPL_DIR_SITE))
             
         self.m_master = None
         self.m_master_saved = None
@@ -95,7 +96,7 @@ class TemplateManager(object):
         if not os.path.exists(subdir):
             os.makedirs(subdir)
 
-        qprint('backing up: {0}'.format(fname))
+        debug('backing up: {0}'.format(fname))
         shutil.move(pathfor(fname, c.MASTER), subdir)
 
     def copy_files(self, exclude_files):
@@ -119,7 +120,7 @@ class TemplateManager(object):
             _cur_role = self.role_of_fname(normalized_fname)
             if (_cur_role and self.master_playbook_exists
                     and _cur_role not in self.roles):
-                qprint('Skipping unused role file: {0}'
+                debug('Skipping unused role file: {0}'
                        .format(normalized_fname))
                 continue
 
@@ -136,9 +137,9 @@ class TemplateManager(object):
                 os.makedirs(destdir)
             shutil.copy2(template_fname, master_fname)
             if existing:
-                qprint('Updated: {0}'.format(master_fname))
+                debug('Updated: {0}'.format(master_fname))
             else:
-                qprint('Created: {0}'.format(master_fname))
+                debug('Created: {0}'.format(master_fname))
 
         # Recreate the master manifest
         m = Manifest(c.MASTER)

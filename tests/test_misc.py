@@ -8,7 +8,3 @@ def test_manifest_equal(setup_init):
     m0 = Manifest(c.TEMPLATE)
     m1 = Manifest(c.TEMPLATE)
     assert m0 == m1
-
-
-def test_qprint(setup_empty):
-    assert servi_run('-q init .')

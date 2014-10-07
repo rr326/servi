@@ -1,12 +1,8 @@
 ## TODO
-* Ansible
 * Servi
-    * commands:
-        * lans, rans
+    * rans
     * Use logging instead of qprint
-    * use new python path module
 
-* Look at Docker - would that have done all of this???
 
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)

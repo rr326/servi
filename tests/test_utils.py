@@ -56,15 +56,5 @@ def test_find_master_dir(fake_master):
     print(MasterNotFound())  # for pytest coverage
 
 
-def test_timeit(tmpdir):
-    old_stdout = sys.stdout
-    with io.StringIO() as string_buffer:
-        sys.stdout = string_buffer
-        with timeit():
-            sleep(1.25)
-        assert re.search('Total running time: [0-9]+\.[0-9]+',
-                         string_buffer.getvalue())
-
-    sys.stdout = old_stdout
 
 

@@ -1,5 +1,6 @@
 import subprocess
 import os
+from logging import debug, info, warning as warn, error
 
 from servi.command import Command, process_and_run_command_line as servi_run
 import servi.config as c
@@ -58,7 +59,7 @@ class UseboxCommand(Command):
             with timeit():
                 subprocess.check_call('vagrant up', env=env, shell=True)
         else:
-            print('mocking vagrant up with base box: {0}'
+            info('mocking vagrant up with base box: {0}'
                   .format(env['servi_box']))
 
         return True

@@ -1,9 +1,9 @@
 import os
+from logging import debug, info, warning as warn, error
+
 import servi.config as c
-import servi.globals as g
 from servi.command import Command
 from servi.exceptions import ForceError, ServiError
-from servi.utils import qprint
 
 from servi.template_mgr import TemplateManager
 from servi.config import set_master_dir, load_user_config, servi_file_exists_in
@@ -41,8 +41,8 @@ class InitCommand(Command):
             do_init
 
         """
-        qprint('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
-        qprint('cwd: {0}'.format(os.getcwd()))
+        debug('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
+        debug('cwd: {0}'.format(os.getcwd()))
 
         def assert_doit():
             if args.force:
@@ -69,7 +69,7 @@ class InitCommand(Command):
         # TODO (?) - Removed 'error_if_changed' - add it back? \
         #  (warn if any files changed)
 
-        qprint('Master Directory: {0}'
+        info('Master Directory: {0}'
                .format(os.path.abspath(c.MASTER_DIR)))
 
         tmgr.init_master()

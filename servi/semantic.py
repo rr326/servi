@@ -32,7 +32,6 @@ class SemanticVersion(object):
         except ValueError:
             raise ValueError('Bad semantic version string: |{0}|'
                              .format(sv_string))
-        # print('sv_string_to_ver: {0} --> {1}'.format(sv_string, sv_val))
         sv_ar = [a1+a2 for a1, a2 in
                  zip_longest(sv_ar, [0, 0, 0], fillvalue=0)]
         return sv_val, sv_ar

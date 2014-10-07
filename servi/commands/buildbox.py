@@ -10,6 +10,7 @@ import re
 from servi.semantic import SemanticVersion
 import argparse
 from servi.manifest import get_template_version
+from logging import debug, info, warning as warn, error
 
 SKIPPED = 'SKIPPED'
 
@@ -41,9 +42,9 @@ class BuildboxCommand(Command):
         box_name, box_path = get_boxname()
 
         if os.path.exists(box_path):
-            print('servi_box for current template already exists: {0}'
+            warn('servi_box for current template already exists: {0}'
                   .format(box_path))
-            print('Exiting')
+            warn('Exiting')
             return SKIPPED
 
         if not os.path.exists(c.BOX_DIR):
@@ -57,13 +58,13 @@ class BuildboxCommand(Command):
 
         orig_dir = os.getcwd()
         with TemporaryDirectory() as tmpdir:
-            print('DEBUG buildbox: tmppath: {0}\n'.format(tmpdir))
-            print('This will do a "vagrant up" with the current servi '
+            debug('DEBUG buildbox: tmppath: {0}\n'.format(tmpdir))
+            info('This will do a "vagrant up" with the current servi '
                   'template.\nIt could take a while...\n\n')
 
             # Important - everthing is relative to tmpdir as cwd
             os.chdir(tmpdir)
-            servi_run('-q init .')
+            servi_run('-v0 init .')
 
             # Note - do all vagrant calls with the shell, since
             # servi uses python3 in a venv, and vagrant uses ansible
@@ -75,13 +76,13 @@ class BuildboxCommand(Command):
                         'vagrant package --output {0}'.format(box_path),shell=True)
                     subprocess.check_call('vagrant destroy -f', shell=True)
             else:
-                print('mocking vagrant package with base box: {0}'.format(
+                info('mocking vagrant package with base box: {0}'.format(
                       box_path))
                 with open(box_path, 'w') as fp:
                     fp.write('mocked base box')
 
-            print('servi box created in: {0}'.format(box_path))
-            print('To use, run "servi usebox"\n'
+            info('servi box created in: {0}'.format(box_path))
+            info('To use, run "servi usebox"\n'
                   'or run: "vagrant init {0}"'.format(box_path))
 
         os.chdir(orig_dir)

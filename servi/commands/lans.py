@@ -1,5 +1,6 @@
 import subprocess
 import os
+from logging import debug, info, warning as warn, error
 
 from servi.command import Command
 import servi.config as c
@@ -63,10 +64,6 @@ class LansCommand(Command):
         parser.set_defaults(command_func=self.run)
 
     def run(self, args, extra_args):
-        print('*'*100)
-        print('Lans running. \n\tArgs: {0}\n\textra_args: {1}'.format(args, extra_args))
-        print('ansible extra vars:\n{0}'.format(get_ansible_extra_vars(True)))
-
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
 
         extra_vars = get_ansible_extra_vars(True)
@@ -77,7 +74,7 @@ class LansCommand(Command):
             '../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory',
             ] + proj_only + vars_to_cmd_list(extra_vars) + extra_args
 
-        print('cmd_line: {0}\n\tcwd:{1}'.format(cmd_line,
+        info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'.format(cmd_line,
               os.path.join(c.MASTER_DIR, 'ansible_config')))
         retval = subprocess.call(
             cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))

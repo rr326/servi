@@ -1,5 +1,6 @@
 import subprocess
 import os
+from logging import debug, info, warning as warn, error
 
 from servi.command import Command
 import servi.config as c
@@ -30,35 +31,31 @@ class DiffCommand(Command):
         removed = tmgr.removed_files
         ignored = tmgr.changed_but_ignored_files
 
-        print('Diff of servi template and existing MASTER dir.')
-        print('===============================================')
-        print('Template Directory: {0}'.format(
+        info('Diff of servi template and existing MASTER dir.')
+        info('===============================================')
+        info('Template Directory: {0}'.format(
             os.path.abspath(c.TMPL_DIR_SITE)))
-        print('Master Directory:   {0}'.format(os.path.abspath(c.MASTER_DIR)))
-        print()
-        print('Changed files:')
-        print('===============')
+        info('Master Directory:   {0}\n'.format(os.path.abspath(c.MASTER_DIR)))
+        info('Changed files:')
+        info('===============')
         if not changed:
-            print('(no changed files)')
+            info('(no changed files)')
         else:
             for file in sorted(list(changed)):
-                print('\t{0} {1}'.format(
+                info('\t{0} {1}'.format(
                     file, '[on "ignore" list]' if file in ignored else ''))
-        print()
-        print('Removed (Template files not found in Master):')
-        print('=============================================')
+        info('\nRemoved (Template files not found in Master):')
+        info('=============================================')
         if not removed:
-            print('(no removed template files)')
+            info('(no removed template files)')
         else:
             for file in sorted(list(removed)):
-                print('\t{0} {1}'.format(
+                info('\t{0} {1}'.format(
                     file, '[on "ignore" list]' if file in ignored else ''))
-        print()
-        print('Added (to master and not in template):')
-        print('======================================')
-        print('\t(NOT SHOWN)')
-        print()
-        print('Showing git diff MASTER TEMPLATE\n')
+        info('\nAdded (to master and not in template):')
+        info('======================================')
+        info('\t(NOT SHOWN)')
+        info('\nShowing git diff MASTER TEMPLATE\n')
         for file in changed:
             subprocess.call(
                 '{command} {path1} {path2}'.format(

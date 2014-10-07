@@ -2,15 +2,8 @@ import hashlib
 import os
 import servi.config as c
 from contextlib import contextmanager
-import servi.globals as g
 from datetime import datetime
-
-
-def qprint(*args, **kwargs):
-    # quiet print - relies on 'import globals as g'
-    if g.quiet:
-        return
-    print(*args, **kwargs)
+from logging import debug, info, warning, error
 
 
 def file_exists(path):
@@ -57,4 +50,4 @@ def timeit():
     t0 = datetime.now()
     yield
     t1 = datetime.now()
-    print('Total running time: {0:.1f} min'.format((t1 - t0).seconds / 60))
+    info('Total running time: {0:.1f} min'.format((t1 - t0).seconds / 60))

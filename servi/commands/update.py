@@ -1,9 +1,8 @@
+from logging import debug, info, warning as warn, error
 from servi.command import Command
 from servi.exceptions import ServiError
 from servi.template_mgr import TemplateManager
-from servi.utils import qprint
 import servi.config as c
-import servi.globals as g
 
 
 class UpdateCommand(Command):
@@ -32,23 +31,23 @@ class UpdateCommand(Command):
                 .format(changed_or_removed_files - changed_but_ignored_files))
 
         if changed_but_ignored_files:
-            print('\nWarning\n'
-                  'The following files from the template were changed but\n'
-                  'are on your SERVI_IGNORE_FILES list and will not be '
-                  'updated:\n'
-                  '{0}\n'.format(sorted(changed_but_ignored_files)))
+            warn('\nWarning\n'
+                 'The following files from the template were changed but\n'
+                 'are on your SERVI_IGNORE_FILES list and will not be '
+                 'updated:\n'
+                 '{0}\n'.format(sorted(changed_but_ignored_files)))
 
         if tmgr.modified_possible_roles:
-            print('\nWarning\n'
-                  'The following lines in your ansible_confg/playbook.yml '
-                  'looked like roles that are commented out.\n'
-                  'The Template and Master versions differ.\n'
-                  '** Because they are commented, they are ignored.**\n'
-                  '{0}\n'.format(sorted(tmgr.modified_possible_roles)))
+            warn('\nWarning\n'
+                 'The following lines in your ansible_confg/playbook.yml '
+                 'looked like roles that are commented out.\n'
+                 'The Template and Master versions differ.\n'
+                 '** Because they are commented, they are ignored.**\n'
+                 '{0}\n'.format(sorted(tmgr.modified_possible_roles)))
 
-        qprint('Updating repository with Servi template version: {0}'
+        info('Updating repository with Servi template version: {0}'
                .format(tmgr.m_template.template_version))
-        qprint('Master (destination directory): {0}'.format(c.MASTER_DIR))
+        info('Master (destination directory): {0}'.format(c.MASTER_DIR))
 
         tmgr.update_master()
 

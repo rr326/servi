@@ -1,5 +1,6 @@
 from pprint import pprint
 import json
+from logging import debug, info, warning as warn, error
 
 from servi.command import Command
 from servi.manifest import Manifest
@@ -56,12 +57,12 @@ def update_manifest():
 
     m_template_fresh = Manifest(c.TEMPLATE)
     if Manifest.equal_files(m_old_manifest, m_template_fresh):
-        print('Update Manifest: Skipping (Template directory has not changed)')
+        info('Update Manifest: Skipping (Template directory has not changed)')
         return False
     else:
         m_template_fresh.save()
         bump(PATCH)
-        print('Update Manifest: New manifest of the current template '
+        info('Update Manifest: New manifest of the current template '
               'directory saved to: {0}'.format(m_template_fresh.fname))
         return True
 
@@ -78,7 +79,7 @@ def bump(ver_type):
     with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'w') as fp:
         json.dump(data, fp, indent=4)
 
-    print('Updated VERSION_FILE')
+    info('Updated VERSION_FILE')
     pprint(data)
     return True
 
@@ -91,7 +92,7 @@ def set_ver(version_string):
     with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'w') as fp:
         json.dump(data, fp, indent=4)
 
-    print('Updated VERSION_FILE to: {0}'.format(data))
+    info('Updated VERSION_FILE to: {0}'.format(data))
 
     return True
 

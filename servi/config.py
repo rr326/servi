@@ -2,6 +2,7 @@ import os
 import os.path
 import yaml
 from servi.exceptions import MasterNotFound
+import logging
 
 '''
 Global configuration for servi files
@@ -40,6 +41,8 @@ MISSING_HASH = 'FILE NOT FOUND'
 # The following must be set in Servifile.yml
 SERVI_IGNORE_FILES = []
 DIFFTOOL = 'git diff'
+
+LOG_LEVEL = logging.INFO
 
 
 def set_master_dir(set_dir_to):
