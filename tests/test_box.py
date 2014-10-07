@@ -16,7 +16,6 @@ def clean_boxes():
         os.remove(os.path.join(c.BOX_DIR, f))
 
 
-@pytest.mark.wip
 def test_get_all_boxes(clean_master, mock_template_dir, servi_init,
                        clean_boxes):
 
@@ -44,7 +43,6 @@ def test_get_all_boxes(clean_master, mock_template_dir, servi_init,
     assert get_all_boxes() == []
 
 
-@pytest.mark.wip
 def test_build_box(clean_master, mock_template_dir, servi_init, clean_boxes):
     assert servi_run('buildbox --mock')
 
@@ -52,7 +50,6 @@ def test_build_box(clean_master, mock_template_dir, servi_init, clean_boxes):
     assert servi_run('buildbox --mock') == buildbox.SKIPPED
 
 
-@pytest.mark.wip
 def test_use_box(clean_master, mock_template_dir, servi_init, clean_boxes):
     with pytest.raises(ServiError):
         assert servi_run('usebox --mock')

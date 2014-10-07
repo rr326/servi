@@ -213,7 +213,11 @@ class RoleManager(object):
             raise ServiError(
                 '"roles" not found in {0}'
                 .format(pathfor('ansible_config/playbook.yml', c.MASTER)))
-        roles = set(playbook['roles'])
+
+        # Note - a role can also have form of {'role':xx, tags:[yy]}
+        roles = {role for role in playbook['roles'] if type(role) is str}
+        roles |= {role['role']
+                  for role in playbook['roles'] if type(role) is dict}
 
         # also find 'possible' roles - any template role that is commented out
         possible_roles = set()

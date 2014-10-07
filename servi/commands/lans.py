@@ -67,15 +67,18 @@ class LansCommand(Command):
         print('Lans running. \n\tArgs: {0}\n\textra_args: {1}'.format(args, extra_args))
         print('ansible extra vars:\n{0}'.format(get_ansible_extra_vars(True)))
 
+        proj_only = ['-t', 'projectSpecific'] if args.project_only else []
+
         extra_vars = get_ansible_extra_vars(True)
 
         # Relative to ansible_config
         cmd_line = [
-            'ansible-playbook', '-C', 'playbook.yml', '-i',
+            'ansible-playbook', 'playbook.yml', '-i',
             '../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory',
-            ] + vars_to_cmd_list(extra_vars) + extra_args
+            ] + proj_only + vars_to_cmd_list(extra_vars) + extra_args
 
-        print('cmd_line: {0}'.format(cmd_line))
+        print('cmd_line: {0}\n\tcwd:{1}'.format(cmd_line,
+              os.path.join(c.MASTER_DIR, 'ansible_config')))
         retval = subprocess.call(
             cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
         return not retval

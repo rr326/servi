@@ -56,7 +56,6 @@ def test_find_master_dir(fake_master):
     print(MasterNotFound())  # for pytest coverage
 
 
-@pytest.mark.wip
 def test_timeit(tmpdir):
     old_stdout = sys.stdout
     with io.StringIO() as string_buffer:

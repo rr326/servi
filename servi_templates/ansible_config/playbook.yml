@@ -9,7 +9,7 @@
         - mainAccount
         - hardenedUbuntu
         - hardenedApache
-        - projectSpecific
+        - {role: projectSpecific, tags:[projectSpecific]}
 
 
 
