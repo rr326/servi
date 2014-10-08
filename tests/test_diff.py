@@ -39,12 +39,12 @@ def test_diff(clean_master, mock_template_dir, servi_init):
     assert removed == {'apache_config/sites-available/THISSITE.conf'}
 
     tmgr = TemplateManager()
-    assert tmgr.added_files == set()
-    assert tmgr.changed_files == {'Vagrantfile', 'ansible_config/playbook.yml'}
+    assert tmgr.t_added == set()
+    assert tmgr.t_changed == {'Vagrantfile', 'ansible_config/playbook.yml'}
     # Also UnusedRole stuff
-    assert tmgr.removed_files >= \
+    assert tmgr.t_removed >= \
         {'apache_config/sites-available/THISSITE.conf'}
-    assert tmgr.changed_but_ignored_files == {
+    assert tmgr.t_mod_but_ignored == {
         'apache_config/sites-available/THISSITE.conf',
         'ansible_config/playbook.yml'}
 

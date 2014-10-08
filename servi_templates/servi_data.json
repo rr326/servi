@@ -3,7 +3,7 @@
         "Servifile.yml": "62326fb8ee71915fe87eb341571620c74a50d8c6",
         "Vagrantfile": "46149644b1b2f180687af0adddb619644c355c34",
         "ansible_config/ansible.cfg": "04d0166a363e0c2237005d01b89e09611255cffa",
-        "ansible_config/playbook.yml": "45292601c890c33c9826e97ea4a104aea4f60e27",
+        "ansible_config/playbook.yml": "9c25fed79e729ee2a9571f46050e184557cea72b",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
@@ -30,5 +30,5 @@
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.22"
+    "template_version": "0.1.23"
 }

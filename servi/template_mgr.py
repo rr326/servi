@@ -20,14 +20,18 @@ class TemplateManager(object):
         self.m_master_saved = None
         self.m_template = None
         self.master_playbook_exists = ForceError
-        self.added_files = set()
-        self.changed_files = set()
-        self.removed_files = set()
-        self.changed_but_ignored_files = set()
-        self.mm_added_files = set()
-        self.mm_changed_files = set()
-        self.mm_removed_files = set()
-        self.mm_changed_but_ignored_files = set()
+        # t_* - template changed (since master_saved <> tmpl)
+        self.t_added = set()
+        self.t_changed = set()
+        self.t_removed = set()
+        self.t_mod = set()
+        self.t_mod_but_ignored = set()
+        # m_* - master changed (since master <> master_saved)
+        self.m_added = set()
+        self.m_changed = set()
+        self.m_removed = set()
+        self.m_mod = set()
+        self.m_mod_but_ignored = set()
         self.roles = set()
         self.possible_roles = set()
         self.modified_possible_roles = set()
@@ -50,24 +54,26 @@ class TemplateManager(object):
             pathfor('ansible_config/playbook.yml', c.MASTER))
 
         # These compare master to template
-        self.added_files, self.changed_files, self.removed_files = \
+        self.t_added, self.t_changed, self.t_removed = \
             Manifest.diff_files(self.m_master, self.m_template)
-        self.changed_but_ignored_files = self._ignored_files(
-            self.changed_files | self.removed_files)
+        self.t_mod = self.t_changed | self.t_removed
+        self.t_mod_but_ignored = self.ignored_files(self.t_mod)
 
         # These compare current master to the saved master manifest
         if self.m_master_saved:
-            self.mm_added_files, self.mm_changed_files, \
-                self.mm_removed_files = \
+            self.m_added, self.m_changed, \
+                self.m_removed = \
                 Manifest.diff_files(self.m_master, self.m_master_saved)
-            self.mm_changed_but_ignored_files = self._ignored_files(
-                self.mm_changed_files | self.mm_removed_files)
+            self.m_mod = self.m_changed | self.m_removed
+            self.m_mod_but_ignored = self.ignored_files(
+                self.m_mod)
         else:
-            self.mm_added_files, self.mm_changed_files, \
-                self.mm_removed_files, self.mm_changed_but_ignored_files = \
-                set(), set(), set(), set()
+            self.m_added, self.m_changed, \
+                self.m_removed, self.m_mod, \
+                self.m_mod_but_ignored =  \
+                set(), set(), set(), set(), set()
 
-        rm = RoleManager(self.changed_files, self.raw_template_playbook)
+        rm = RoleManager(self.t_changed, self.raw_template_playbook)
         self.roles = rm.roles
         self.possible_roles = rm.possible_roles
         self.modified_possible_roles = rm.modified_possible_roles
@@ -77,7 +83,7 @@ class TemplateManager(object):
         self.copy_files(exclude_files=[])
 
     def update_master(self):
-        self.copy_files(exclude_files=self.changed_but_ignored_files)
+        self.copy_files(exclude_files=self.t_mod_but_ignored)
 
     @staticmethod
     def rename_master_file(fname, timestamp):
@@ -146,7 +152,7 @@ class TemplateManager(object):
         return True
 
     @staticmethod
-    def _ignored_files(files):
+    def ignored_files(files):
         """
         Sees if any of files are in the ignore regex set by Servifile.yml
         (initialized in config.py)

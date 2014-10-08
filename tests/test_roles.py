@@ -37,7 +37,7 @@ def test_role_handling(setup_init):
     tmgr = TemplateManager(raw_template_playbook=ROLETEST_PLAYBOOK)
     assert tmgr.possible_roles == {'baseUbuntu', 'mainAccount'}
     assert tmgr.modified_possible_roles == {'baseUbuntu', 'mainAccount'}
-    assert 'ansible_config/playbook.yml' in tmgr.changed_but_ignored_files
+    assert 'ansible_config/playbook.yml' in tmgr.t_mod_but_ignored
 
 
     # TODO - make sure a new role file is also caught

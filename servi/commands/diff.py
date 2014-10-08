@@ -27,9 +27,9 @@ class DiffCommand(Command):
     def run(self, args, extra_args):
         tmgr = TemplateManager()
 
-        changed = tmgr.changed_files
-        removed = tmgr.removed_files
-        ignored = tmgr.changed_but_ignored_files
+        changed = tmgr.t_changed
+        removed = tmgr.t_removed
+        ignored = tmgr.t_mod_but_ignored
 
         info('Diff of servi template and existing MASTER dir.')
         info('===============================================')
@@ -55,13 +55,13 @@ class DiffCommand(Command):
         info('\nAdded (to master and not in template):')
         info('======================================')
         info('\t(NOT SHOWN)')
-        info('\nShowing git diff MASTER TEMPLATE\n')
+        info('\nShowing git diff TEMPLATE MASTER \n')
         for file in changed:
             subprocess.call(
-                '{command} {path1} {path2}'.format(
+                '{command} {templ} {master}'.format(
                 command=args.difftool if args.difftool else c.DIFFTOOL,
-                path1=os.path.abspath(pathfor(file, c.MASTER)),
-                path2=os.path.abspath(pathfor(file, c.TEMPLATE))
+                master=os.path.abspath(pathfor(file, c.MASTER)),
+                templ=os.path.abspath(pathfor(file, c.TEMPLATE))
                 ), shell=True)
         return True
 
