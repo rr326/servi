@@ -24,4 +24,4 @@ def test_lans(clean_master, mock_template_dir, servi_init,
     assert servi_run('lans --syntax-check')
 
     # Might need to remove since tests won't all have vagrant up
-    assert servi_run('lans -p -C')
+    #assert servi_run('lans -p -C')

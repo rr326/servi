@@ -148,8 +148,9 @@ def process_and_run_command_line(command_line=None):
 
         try:
             info('Servi - Running: {0}\n'.format(args.command))
-            debug('Master Directory: {0}'
-                .format(os.path.abspath(c.MASTER_DIR)))
+            if c.MASTER_DIR:
+                debug('Master Directory: {0}'
+                    .format(os.path.abspath(c.MASTER_DIR)))
             debug('Template Directory: {0}'
                 .format(os.path.abspath(c.TMPL_DIR_SITE)))
 
