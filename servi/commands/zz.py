@@ -57,12 +57,12 @@ def update_manifest():
 
     m_template_fresh = Manifest(c.TEMPLATE)
     if Manifest.equal_files(m_old_manifest, m_template_fresh):
-        info('Update Manifest: Skipping (Template directory has not changed)')
+        debug('Update Manifest: Skipping (Template directory has not changed)')
         return False
     else:
         m_template_fresh.save()
         bump(PATCH)
-        info('Update Manifest: New manifest of the current template '
+        debug('Update Manifest: New manifest of the current template '
               'directory saved to: {0}'.format(m_template_fresh.fname))
         return True
 

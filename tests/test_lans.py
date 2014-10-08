@@ -18,8 +18,6 @@ def mock_ansible_inventory():
         fp.write("default ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222")
 
 
-
-@pytest.mark.wip
 def test_lans(clean_master, mock_template_dir, servi_init,
               mock_ansible_inventory):
     # -C check (~ 3 seconds), --syntax_check (~5s)

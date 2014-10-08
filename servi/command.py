@@ -65,7 +65,6 @@ class ArgumentParserMod(argparse.ArgumentParser):
         raise ServiError(errmsg)
 
 
-
 def setup_parsers():
     servi_parser = ArgumentParserMod(
         description='Servi Main Commands',
@@ -74,13 +73,14 @@ def setup_parsers():
     # Only for testing
     servi_parser.add_argument('--template_dir', type=str,
                               help=argparse.SUPPRESS)
+
     servi_parser.add_argument(
         '-v', '--verbose', type=int, choices=range(0, 5),
         help='4: debug, 3: info, 2: warn, 1: error, 0: silent',
-        default=int(c.LOG_LEVEL/10))
+        default= 5 - int(c.LOG_LEVEL/10))
 
     sub_parsers = servi_parser.add_subparsers(
-        title='Commands', metavar='', dest='command')
+        title='Commands', metavar='', dest='command', prog='servi')
 
     return servi_parser, sub_parsers
 
@@ -148,6 +148,11 @@ def process_and_run_command_line(command_line=None):
 
         try:
             info('Servi - Running: {0}\n'.format(args.command))
+            debug('Master Directory: {0}'
+                .format(os.path.abspath(c.MASTER_DIR)))
+            debug('Template Directory: {0}'
+                .format(os.path.abspath(c.TMPL_DIR_SITE)))
+
             retval = args.command_func(args, extra_args)
         except (ForceError, ServiError) as e:
             error(e)

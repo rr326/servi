@@ -15,7 +15,7 @@ def main():
     try:
         process_and_run_command_line()
     except (ServiError, ForceError) as e:
-        sys.stderr.write(str(e))
+        logging.error(str(e))
         return False
 
     sys.exit(0)

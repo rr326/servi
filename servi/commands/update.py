@@ -5,6 +5,19 @@ from servi.template_mgr import TemplateManager
 import servi.config as c
 
 
+"""
+Logic:
+    * Error if
+        * Master is changed and template is changed (and not ignored)
+    * Warning if
+        * Ignored file and master and template both changed
+          (eg: template Servifile has new content)
+        * Possible role changed
+          (eg: role in playbook.yml is commented out but still there and
+           is changed)
+"""
+
+
 class UpdateCommand(Command):
     def register_command_line(self, sub_parsers):
 
@@ -47,7 +60,6 @@ class UpdateCommand(Command):
 
         info('Updating repository with Servi template version: {0}'
                .format(tmgr.m_template.template_version))
-        info('Master (destination directory): {0}'.format(c.MASTER_DIR))
 
         tmgr.update_master()
 

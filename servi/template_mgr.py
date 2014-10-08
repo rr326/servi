@@ -16,9 +16,6 @@ BACKUP_PREFIX = '_BACKUP_'
 
 class TemplateManager(object):
     def __init__(self, raw_template_playbook=None):
-        if re.search('_tmp_', c.TMPL_DIR_SITE):
-            debug('****** TMPL_DIR_SITE: {0}'.format(c.TMPL_DIR_SITE))
-            
         self.m_master = None
         self.m_master_saved = None
         self.m_template = None
@@ -96,7 +93,7 @@ class TemplateManager(object):
         if not os.path.exists(subdir):
             os.makedirs(subdir)
 
-        debug('backing up: {0}'.format(fname))
+        debug('Backed up: {0}'.format(fname))
         shutil.move(pathfor(fname, c.MASTER), subdir)
 
     def copy_files(self, exclude_files):

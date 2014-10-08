@@ -58,7 +58,7 @@ class BuildboxCommand(Command):
 
         orig_dir = os.getcwd()
         with TemporaryDirectory() as tmpdir:
-            debug('DEBUG buildbox: tmppath: {0}\n'.format(tmpdir))
+            debug('buildbox tmppath: {0}\n'.format(tmpdir))
             info('This will do a "vagrant up" with the current servi '
                   'template.\nIt could take a while...\n\n')
 

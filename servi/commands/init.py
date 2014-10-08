@@ -41,9 +41,6 @@ class InitCommand(Command):
             do_init
 
         """
-        debug('args.dir: {0} {1} '.format(args.dir, os.path.abspath(args.dir)))
-        debug('cwd: {0}'.format(os.getcwd()))
-
         def assert_doit():
             if args.force:
                 return True
@@ -66,12 +63,6 @@ class InitCommand(Command):
         os.chdir(c.MASTER_DIR)
 
         tmgr = TemplateManager()
-        # TODO (?) - Removed 'error_if_changed' - add it back? \
-        #  (warn if any files changed)
-
-        info('Master Directory: {0}'
-               .format(os.path.abspath(c.MASTER_DIR)))
-
         tmgr.init_master()
         load_user_config()
         return True
