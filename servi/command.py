@@ -156,7 +156,6 @@ def process_and_run_command_line(command_line=None):
 
             retval = args.command_func(args, extra_args)
         except (ForceError, ServiError) as e:
-            error(e)
             raise
 
 

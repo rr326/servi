@@ -25,8 +25,10 @@
     user: name="vagrant"
       createhome=yes shell=/usr/bin/zsh
       group=webdev groups=adm,admin,sudo,webdev,www-data
+    when: IS_VAGRANT
 
 -   name: "copy .zshrc for user vagrant"
     copy: src=.zshrc dest="/home/vagrant"
       owner="vagrant"
-    remote_user: "vagrant"
+    remote_user: vagrant
+    when: IS_VAGRANT

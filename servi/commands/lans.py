@@ -20,12 +20,18 @@ It's ugly and error prone but I can't find an elegant way to do it
 
 
 def get_ansible_extra_vars(is_local):
-    return {
-        "IS_VAGRANT": True,
-        "SYS_TYPE": "virtual_machine",
+    retval = {
         "REMOTE_DIR": "/var/www/"+c.SITE_SUFFIX,
         "APACHE_LOG_DIR": "/var/log/apache2/" + c.SITE_SUFFIX
     }
+    if is_local:
+        retval["IS_VAGRANT"] = True
+        retval["SYS_TYPE"] = "virtual_machine",
+    else:
+        retval["IS_VAGRANT"] = False
+        retval["SYS_TYPE"] = "cloud",
+
+    return retval
 
 
 def vars_to_cmd_list(extra_vars):
@@ -66,7 +72,7 @@ class LansCommand(Command):
     def run(self, args, extra_args):
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
 
-        extra_vars = get_ansible_extra_vars(True)
+        extra_vars = get_ansible_extra_vars(is_local=True)
 
         # Relative to ansible_config
         cmd_line = [
@@ -74,8 +80,9 @@ class LansCommand(Command):
             '../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory',
             ] + proj_only + vars_to_cmd_list(extra_vars) + extra_args
 
-        info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'.format(cmd_line,
-              os.path.join(c.MASTER_DIR, 'ansible_config')))
+        info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
+             .format(' '.join(cmd_line),
+                os.path.join(c.MASTER_DIR, 'ansible_config')))
         retval = subprocess.call(
             cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
         return not retval

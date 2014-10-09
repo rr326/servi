@@ -74,3 +74,16 @@ DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
 #
 MONIT_UN: admin
 MONIT_PW_VAR: "{{ lookup('env', 'MONIT_PW') }}"
+
+#
+# Remote hosts (for servi rans and servi pushto)
+#
+REMOTE_HOSTS:
+  - {
+  alias: prod,
+  host: prod.k2company.com
+  }
+  - {
+  alias: stage,
+  host: stage.k2company.com
+  }

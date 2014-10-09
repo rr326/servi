@@ -1,11 +1,46 @@
+#TODO
+***** IMPORTANT ******
+
+* rans requires an update to ansible.cfg
+    * For vagrant
+        [defaults]
+        private_key_file = /Users/rrosen/.vagrant.d/insecure_private_key
+        remote_user = vagrant
+        pipelining = True
+
+    * For Remote
+        [defaults]
+        private_key_file = /Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub
+        remote_user = rrosen326
+        pipelining = True
+
+
+
+
+
+
+
+
+
+
+
 ## TODO
 * Servi
-    * rans
-    * Use logging instead of qprint
+    * servi rans
+    * servi pushtod
+    * Add stats for init and update
+    * change default log level
+    * Global config?
+        * Servername
+        * default log level
+    * Get -f/-v to work on either side of command
+    * Test servi usebox
+        * See errors below
 
 
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)
+    * New trusty install uses a2enconf conf-available...
 
 * Backups - is it making unnecessary backups?
 
@@ -23,6 +58,31 @@
     * When initialized, it sends an apache warning (should be off on Vagrant)
     * Getting chron error (see below) - Is this current or old?
 
+# Instructions
+(not verified)
+
+    mkdir serviplate
+    cd serviplate
+    servi init .
+    echo 'Edit Servifile.yml'
+    subl Servifile.yml
+    echo 'Edit /etc/hosts'
+    subl /etc/hosts
+    echo 'Copy sample apache config then edit'
+    cp apache_config/sites-available/THISSITE.conf apache_config/sites-available/serviplate.conf
+    subl apache_config/sites-available/serviplate.conf
+    echo 'build box (not necessary, but good for future servi installs)'
+    servi buildbox
+    echo 'now use box (which will also do a vagrant provision)'
+    servi usebox
+    echo 'You are up! Now check out your new site: http://<whateverurlyouputin /etc/hosts>'
+    echo 'now modify ansible_config/roles/projectSpecific/* to set up your server for your specific project'
+    echo 'ROSS>> Also add everything to git'
+
+    Also talk about setting up the intial box (eg: Dig ocean)
+        * SSH (root)
+        * Create orig user (and set up ssh)
+        * Sudoers
 
 # Monit error
     ---------- Forwarded message ----------
@@ -110,3 +170,105 @@
     autoclean (not run)
     aged: ctime <30 and mtime <30 and ctime>2 and mtime>2
     end remove by archive size: size=124164 < 512000
+
+# Servi usebox errors
+
+    --> servi -v4 usebox                                                                                                                                                    [master]
+    Servi - Running: usebox
+
+    Master Directory: /Users/rrosen/dev/berkeley
+    Template Directory: /Users/rrosen/dev/servi/servi_templates
+
+    ***** ERROR *****
+    Existing saved servi_box has a version less than existing template version.
+    Either run "servi buildbox" or run "servi usebox --force."
+    Template version: 0.1.24
+    servi_box: servi_box_0_0_0.box
+    Use -f / --force to override.
+
+    **Servi Aborting**
+
+    ***** ERROR *****
+    Existing saved servi_box has a version less than existing template version.
+    Either run "servi buildbox" or run "servi usebox --force."
+    Template version: 0.1.24
+    servi_box: servi_box_0_0_0.box
+    Use -f / --force to override.
+
+    **Servi Aborting**
+    .-(~/dev/berkeley)--------------------------------------------------------------------------------------------------------------------------------------------(rrosen@RossMacbook)-
+    `--> servi update                                                                                                                                                        [master]
+    Servi - Running: update
+
+    Master Directory: /Users/rrosen/dev/berkeley
+    Template Directory: /Users/rrosen/dev/servi/servi_templates
+
+    Warning
+    The following files from the template were changed but
+    are on your SERVI_IGNORE_FILES list and will not be updated:
+    ['Servifile.yml', 'ansible_config/roles/projectSpecific/tasks/main.yml']
+
+    Updating repository with Servi template version: 0.1.24
+    .-(~/dev/berkeley)--------------------------------------------------------------------------------------------------------------------------------------------(rrosen@RossMacbook)-
+    `--> servi -f usebox                                                                                                                                                     [master]
+
+    ***** ERROR *****
+    servi: error: unrecognized arguments: -f
+
+    usage: servi [global options] COMMAND [command options]
+
+    Servi Main Commands
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -v {0,1,2,3,4}, --verbose {0,1,2,3,4}
+                            4: debug, 3: info, 2: warn, 1: error, 0: silent
+
+    Commands:
+
+        buildbox            Build a vagrant base box based on the current
+                            template.
+        diff                Diff changes betweeen your server config and servi's.
+                            Note - set the DIFFTOOL parameter in Servifile.yml
+        init                Init project
+        lans                Local ANSible - Run ansbile on your local (vagrant)
+                            setup.
+        update              Update project with latest template
+        usebox              Use a vagrant base box that you already created with
+                            'servi buildbox'.
+        zz                  Developer functions for maintaining servi. (you
+                            shouldn't need this)
+
+
+    **Servi Aborting**
+    .-(~/dev/berkeley)--------------------------------------------------------------------------------------------------------------------------------------------(rrosen@RossMacbook)-
+    `--> servi usebox                                                                                                                                                        [master]
+    Servi - Running: usebox
+
+    Master Directory: /Users/rrosen/dev/berkeley
+    Template Directory: /Users/rrosen/dev/servi/servi_templates
+
+    ***** ERROR *****
+    Existing saved servi_box has a version less than existing template version.
+    Either run "servi buildbox" or run "servi usebox --force."
+    Template version: 0.1.24
+    servi_box: servi_box_0_0_0.box
+    Use -f / --force to override.
+
+    **Servi Aborting**
+
+    ***** ERROR *****
+    Existing saved servi_box has a version less than existing template version.
+    Either run "servi buildbox" or run "servi usebox --force."
+    Template version: 0.1.24
+    servi_box: servi_box_0_0_0.box
+    Use -f / --force to override.
+
+    **Servi Aborting**
+    .-(~/dev/berkeley)--------------------------------------------------------------------------------------------------------------------------------------------(rrosen@RossMacbook)-
+    `--> servi usebox -f                                                                                                                                                     [master]
+    Servi - Running: usebox
+
+    Master Directory: /Users/rrosen/dev/berkeley
+    Template Directory: /Users/rrosen/dev/servi/servi_templates
+    **************************

@@ -1,8 +1,9 @@
 import os
 import os.path
 import yaml
-from servi.exceptions import MasterNotFound
+from servi.exceptions import MasterNotFound, ServiError
 import logging
+from jinja2 import Environment, DictLoader
 
 '''
 Global configuration for servi files
@@ -42,7 +43,32 @@ MISSING_HASH = 'FILE NOT FOUND'
 SERVI_IGNORE_FILES = []
 DIFFTOOL = 'git diff'
 
-LOG_LEVEL = logging.INFO
+LOG_LEVEL = logging.DEBUG
+
+
+#############################################################################
+#############################################################################
+#############################################################################
+LOOKUP_FAILED_MESSAGE = 'Environment variable not found'
+
+
+def lookup(ltype, arg1):
+    if type(ltype) is not str or ltype.strip().lower() != 'env':
+        raise ServiError('Found "lookup" function that servi does not'
+                         'understand ({0}). Currently servi only processes'
+                         'lookup("env", variable") - which mimics a portion'
+                         'of ansibles lookup function.')
+    retval = os.environ.get(arg1)
+    if retval is None:
+        retval = LOOKUP_FAILED_MESSAGE
+    return retval
+
+
+def setup_jinja(env=None, template_text=None):
+    if env is None:
+        env = Environment(loader=DictLoader({SERVIFILE: template_text}))
+    env.globals['lookup'] = lookup
+    return env
 
 
 def set_master_dir(set_dir_to):
@@ -58,11 +84,23 @@ def set_master_dir(set_dir_to):
 
 
 def load_user_config():
+    """
+    Reads and processes Servifile.yml, adding all variables to this modules
+    globals()
+
+    Step 1: Read Servifile
+    Step 2: Render the file as a Jinja2 template
+                (with custom function: lookup('env', envvar) )
+    Step 3: Load as a yaml doc
+    Step 4: Add to this module's globals()
+    """
     user_config = getconfig(
         SERVIFILE, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
 
     for key, value in user_config.items():
         globals()[key] = value
+
+    return True
 
 
 def find_master_dir(start_dir, fail_ok=False):
@@ -126,24 +164,16 @@ def pathfor(fname, source, template, master, template_dir, master_dir):
 
 
 def getconfig(fname, template, master, template_dir, master_dir):
-    # if master_dir:
-    #     try:
-    #         with open(pathfor(fname, master, template, master,
-    #                   template_dir, master_dir)) as f:
-    #             data = yaml.load(f)
-    #             return data
-    #     except FileNotFoundError:
-    #         # ok - retry with template
-    #         pass
-    #
-    # # master_dir is None or FileNotFoundError
-    # with open(pathfor(fname, template, template, master,
-    #         template_dir, master_dir)) as f:
-    #     data = yaml.load(f)
-    #
-    # return data
-    # TODO - clean up getconfig
     with open(pathfor(fname, master, template, master, template_dir,
               master_dir)) as f:
-                data = yaml.load(f)
-                return data
+                servi_raw = f.read()
+
+    return process_config(servi_raw)
+
+
+def process_config(raw_text):
+    env = setup_jinja(env=None, template_text=raw_text)
+    tmpl = env.get_template(SERVIFILE)
+    rendered = tmpl.render()
+    data = yaml.load(rendered)
+    return data
