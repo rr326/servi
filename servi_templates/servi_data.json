@@ -1,8 +1,8 @@
 {
     "files": {
-        "Servifile.yml": "62326fb8ee71915fe87eb341571620c74a50d8c6",
+        "Servifile.yml": "abd931f1cda3227be588f716013cd94454b854f5",
         "Vagrantfile": "46149644b1b2f180687af0adddb619644c355c34",
-        "ansible_config/ansible.cfg": "04d0166a363e0c2237005d01b89e09611255cffa",
+        "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
         "ansible_config/playbook.yml": "9c25fed79e729ee2a9571f46050e184557cea72b",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
@@ -22,7 +22,7 @@
         "ansible_config/roles/hardenedUbuntu/tasks/main.yml": "5daa9391666f3e5e00d4ca6288ad5e0897e54c40",
         "ansible_config/roles/hardenedUbuntu/templates/jail.conf.j2": "29cad7226c9f865eb3ea168f000ab0fd59c48bcd",
         "ansible_config/roles/mainAccount/files/.zshrc": "a72fa7f5e51f47819480887bb1639e2005c56762",
-        "ansible_config/roles/mainAccount/tasks/main.yml": "5b1f0f14911a3456624f4a38c65ba7af894c3487",
+        "ansible_config/roles/mainAccount/tasks/main.yml": "e74c922e6bad6b151657412b4b5fddd1519b6c3c",
         "ansible_config/roles/projectSpecific/files/requirements_py2.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/tasks/main.yml": "c9f28d70e02e3c6b6be917288813b7340acff22d",
@@ -30,5 +30,5 @@
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.23"
+    "template_version": "0.1.24"
 }

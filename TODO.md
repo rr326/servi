@@ -83,6 +83,8 @@
         * SSH (root)
         * Create orig user (and set up ssh)
         * Sudoers
+        * brew install rsync, rsync --version
+        * export PATH=$PATH (use new rsync)
 
 # Monit error
     ---------- Forwarded message ----------

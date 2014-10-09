@@ -80,6 +80,13 @@
       owner=webdev group=webdev recurse=yes mode=775
 
 #
+# Make sure /var/www has proper ownership
+#
+-   name: Set /var/www to be owned by webdev
+    file: dest=/var/www state=directory group=webdev owner=webdev mode=770
+    when: IS_VAGRANT != True
+
+#
 # Set apache modules & sites
 #
 -   command: a2enmod expires  wsgi rewrite macro
@@ -233,7 +240,7 @@
 
 # Don't run monit on the vagrant box. No need to get email alerts about your VM!
 -  service: name=monit state=restarted
-   when: not IS_VAGRANT
+   when: IS_VAGRANT != True
 -  service: name=monit state=stopped
-   when: IS_VAGRANT
+   when: IS_VAGRANT == True
 

@@ -39,11 +39,11 @@
 #
 -   debug: msg="Doing Non-Vagrant tasks"
 -   file: dest=/var/www/{{ SITE_SUFFIX }} state=directory group=webdev owner=webdev mode=770 state=directory
-    when: not IS_VAGRANT
+    when: IS_VAGRANT != True
 -   name: Copy apache configuration to sites-available
     copy: src="../../../../apache_config/sites-available/{{ SITE_SUFFIX }}.conf"
         group=webdev owner=webdev mode=770 force=no
-    when: not IS_VAGRANT
+    when: IS_VAGRANT != True
 
 #
 # Do for Vagrant & non-Vagrant
