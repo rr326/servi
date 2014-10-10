@@ -9,6 +9,7 @@ import servi.config as c
 from servi.config import set_master_dir, load_user_config
 from logging import debug, info, warning as warn, error
 import logging
+from contextlib import contextmanager
 
 
 class Command(object):
@@ -77,7 +78,7 @@ def setup_parsers():
     servi_parser.add_argument(
         '-v', '--verbose', type=int, choices=range(0, 5),
         help='4: debug, 3: info, 2: warn, 1: error, 0: silent',
-        default= 5 - int(c.LOG_LEVEL/10))
+        default=log_level_to_arg(c.DEFAULT_LOG_LEVEL))
 
     sub_parsers = servi_parser.add_subparsers(
         title='Commands', metavar='', dest='command', prog='servi')
@@ -113,6 +114,23 @@ def parse_args(commands, servi_parser, command_line):
             return args, []
 
 
+@contextmanager
+def use_log_level(log_level):
+    logger = logging.getLogger()
+    orig_level = logger.getEffectiveLevel()
+    logger.setLevel(log_level)
+    yield
+    logger.setLevel(orig_level)
+
+
+def arg_to_log_level(arglevel):
+    return (5 - arglevel)*10
+
+
+def log_level_to_arg(level):
+    return 5 - int(level/10)
+
+
 def process_and_run_command_line(command_line=None):
         servi_parser, sub_parsers = setup_parsers()
 
@@ -120,43 +138,39 @@ def process_and_run_command_line(command_line=None):
 
         args, extra_args = parse_args(commands, servi_parser, command_line)
 
+        log_level = arg_to_log_level(args.verbose)
+        with use_log_level(log_level):
+            if args.template_dir:
+                c.TMPL_DIR_SITE = args.template_dir
+                warn('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
+                    c.TMPL_DIR_SITE))
 
-        # Set log level
-        c.LOG_LEVEL = (5 - args.verbose)*10
-        logger = logging.getLogger()
-        logger.setLevel(c.LOG_LEVEL)
+            if not args.command:
+                error('\n***** Error ******\nNo command on command line.\n')
+                servi_parser.print_help()
+                raise ServiError('No command line')
 
-        if args.template_dir:
-            c.TMPL_DIR_SITE = args.template_dir
-            warn('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
-                c.TMPL_DIR_SITE))
+            if args.command not in commands:
+                raise ServiError('Unknown command: {0}'.format(args.command))
 
-        if not args.command:
-            error('\n***** Error ******\nNo command on command line.\n')
-            servi_parser.print_help()
-            raise ServiError('No command line')
+            special = getattr(commands[args.command], "special", {})
 
-        if args.command not in commands:
-            raise ServiError('Unknown command: {0}'.format(args.command))
+            if not special.get("skip_init", False):
+                master_dir = c.find_master_dir(os.getcwd())
+                set_master_dir(master_dir)
+                load_user_config()
 
-        special = getattr(commands[args.command], "special", {})
+            try:
+                info('Servi - Running: {0}\n'.format(args.command))
+                if c.MASTER_DIR:
+                    debug('Master Directory: {0}'
+                        .format(os.path.abspath(c.MASTER_DIR)))
+                debug('Template Directory: {0}'
+                    .format(os.path.abspath(c.TMPL_DIR_SITE)))
 
-        if not special.get("skip_init", False):
-            master_dir = c.find_master_dir(os.getcwd())
-            set_master_dir(master_dir)
-            load_user_config()
-
-        try:
-            info('Servi - Running: {0}\n'.format(args.command))
-            if c.MASTER_DIR:
-                debug('Master Directory: {0}'
-                    .format(os.path.abspath(c.MASTER_DIR)))
-            debug('Template Directory: {0}'
-                .format(os.path.abspath(c.TMPL_DIR_SITE)))
-
-            retval = args.command_func(args, extra_args)
-        except (ForceError, ServiError) as e:
-            raise
+                retval = args.command_func(args, extra_args)
+            except (ForceError, ServiError) as e:
+                raise
 
 
         return retval

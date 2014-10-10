@@ -58,7 +58,7 @@ WEBDEV_UID : 1100
 WEBDEV_GID : 900
 
 # Python virtual environment root
-PY_VENV_DIR : "/var/penv"
+PY_VENV_DIR : "/usr/share/penv"
 
 #
 # Postfix configuration

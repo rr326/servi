@@ -11,7 +11,7 @@
         "ansible_config/roles/baseUbuntu/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
         "ansible_config/roles/baseUbuntu/files/sudo_nopasswd": "8cab6f83164d5642fe8ceef3bee9c64284239dc2",
-        "ansible_config/roles/baseUbuntu/tasks/main.yml": "ac7c65f52a59eadbfbe187fc6d8c60e5a51451d4",
+        "ansible_config/roles/baseUbuntu/tasks/main.yml": "0f5fdc2f1e3060b82929ccd23b4ccdc0c83ff6ea",
         "ansible_config/roles/baseUbuntu/templates/monitrc.j2": "5352811ff550ba15c96fb3a35204c97d877d9d88",
         "ansible_config/roles/baseUbuntu/templates/postfix_main.cf.j2": "40bc2d72bfb90572fe3dc2b11df6867bc855089e",
         "ansible_config/roles/baseUbuntu/templates/sasl_passwd.j2": "490f288770bb71e99f3b3f7bb7064ad2c0b64d02",
@@ -22,13 +22,13 @@
         "ansible_config/roles/hardenedUbuntu/tasks/main.yml": "5daa9391666f3e5e00d4ca6288ad5e0897e54c40",
         "ansible_config/roles/hardenedUbuntu/templates/jail.conf.j2": "29cad7226c9f865eb3ea168f000ab0fd59c48bcd",
         "ansible_config/roles/mainAccount/files/.zshrc": "a72fa7f5e51f47819480887bb1639e2005c56762",
-        "ansible_config/roles/mainAccount/tasks/main.yml": "e74c922e6bad6b151657412b4b5fddd1519b6c3c",
+        "ansible_config/roles/mainAccount/tasks/main.yml": "a04d7437306fdc25eeee7065c270ea626bbdf45a",
         "ansible_config/roles/projectSpecific/files/requirements_py2.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
-        "ansible_config/roles/projectSpecific/tasks/main.yml": "c9f28d70e02e3c6b6be917288813b7340acff22d",
+        "ansible_config/roles/projectSpecific/tasks/main.yml": "d210474e31538b73f8848a4cfd9cdb45f0f07950",
         "ansible_config/roles/projectSpecific/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
         "apache_config/sites-available/THISSITE.conf": "c7024608100739d63ff7fe3317af5b27163978d8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.24"
+    "template_version": "0.1.25"
 }

@@ -47,4 +47,4 @@ alias ll='ls -l'
 alias graceful='sudo apachectl graceful'
 
 # Activate virtual env
-. /var/penv/py3
+. /usr/share/penv/py3

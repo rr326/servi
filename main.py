@@ -1,7 +1,7 @@
 import sys
 from servi.command import process_and_run_command_line
 from servi.exceptions import ServiError, ForceError
-from servi.config import LOG_LEVEL as DEFAULT_LOG_LEVEL
+from servi.config import DEFAULT_LOG_LEVEL as DEFAULT_LOG_LEVEL
 import logging
 
 

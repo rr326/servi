@@ -11,6 +11,8 @@ from servi.semantic import SemanticVersion
 import argparse
 from servi.manifest import get_template_version
 from logging import debug, info, warning as warn, error
+import logging
+
 
 SKIPPED = 'SKIPPED'
 
@@ -64,6 +66,7 @@ class BuildboxCommand(Command):
 
             # Important - everthing is relative to tmpdir as cwd
             os.chdir(tmpdir)
+
             servi_run('-v0 init .')
 
             # Note - do all vagrant calls with the shell, since

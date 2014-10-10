@@ -25,6 +25,8 @@
 
 
 ## TODO
+* monit - annoying!  Clean up.
+
 * Servi
     * servi rans
     * servi pushtod
@@ -37,6 +39,7 @@
     * Test servi usebox
         * See errors below
 
+    * Future - maybe have a parent config for globals (like Main username, servername, etc)
 
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)

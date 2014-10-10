@@ -43,7 +43,7 @@ MISSING_HASH = 'FILE NOT FOUND'
 SERVI_IGNORE_FILES = []
 DIFFTOOL = 'git diff'
 
-LOG_LEVEL = logging.DEBUG
+DEFAULT_LOG_LEVEL = logging.DEBUG
 
 
 #############################################################################
