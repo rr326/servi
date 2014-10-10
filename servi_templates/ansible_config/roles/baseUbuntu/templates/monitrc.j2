@@ -3,7 +3,7 @@
 
 # Note - this monit configuration basically just checks it things go very awry and emails you if so.
 
-set daemon 120
+set daemon 300 with start delay 300  # poll every 5 min and wait 5 min after start for initialization
 set logfile /var/log/monit.log
 set idfile /var/lib/monit/id
 set statefile /var/lib/monit/state
@@ -26,7 +26,7 @@ check system $HOST
     if cpu usage (system) > 30% then alert
     if cpu usage (wait) > 20% then alert
 
-check filesystem rootfs with path /dev/vda1
+check filesystem rootfs with path {{ MAIN_FILESYSTEM }}
   if space usage > 75% for 3 cycles then alert
 
 include /etc/monit/conf.d/*

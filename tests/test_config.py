@@ -41,7 +41,7 @@ def test_lookup_fn():
 
 TEST_Servifile = """
 ---
-SERVER_NAME: 'servi_server'
+HOST_NAME: 'servi_server'
 # comment
 SERVI_IGNORE_FILES:
   - "string1"
@@ -56,7 +56,7 @@ def test_process_config(setup_init):
 
     print('loaded data: \n')
     pprint(data)
-    assert data['SERVER_NAME'] == 'servi_server'
+    assert data['HOST_NAME'] == 'servi_server'
     assert data['SERVI_IGNORE_FILES'] == ['string1', 'string2']
     assert data['MAIN_RSA_KEY_FILE'] == '12345'
 

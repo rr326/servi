@@ -5,7 +5,7 @@ from logging import debug, info, warning as warn, error
 from servi.command import Command
 import servi.config as c
 from servi.template_mgr import TemplateManager
-from servi.utils import pathfor
+from servi.utils import pathfor, timeit
 
 
 """
@@ -83,8 +83,9 @@ class LansCommand(Command):
         info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
              .format(' '.join(cmd_line),
                 os.path.join(c.MASTER_DIR, 'ansible_config')))
-        retval = subprocess.call(
-            cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
+        with timeit():
+            retval = subprocess.call(
+                cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
         return not retval
 
 

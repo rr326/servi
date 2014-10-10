@@ -7,11 +7,8 @@
 #
 #
 
-SERVER_NAME: 'servi_server'  # Server name for apache.
-                             # Should be same for all your servis in the same
-                             # machine.
-
 HOST_NAME: "serviplate.xx.com" # Hostname for your server.
+                               # Should be same for all servis on that server
 
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
@@ -74,6 +71,7 @@ DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
 #
 MONIT_UN: admin
 MONIT_PW_VAR: "{{ lookup('env', 'MONIT_PW') }}"
+MAIN_FILESYSTEM: /dev/vda1
 
 #
 # Remote hosts (for servi rans and servi pushto)

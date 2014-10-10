@@ -1,21 +1,19 @@
 #TODO
-***** IMPORTANT ******
 
-* rans requires an update to ansible.cfg
-    * For vagrant
-        [defaults]
-        private_key_file = /Users/rrosen/.vagrant.d/insecure_private_key
-        remote_user = vagrant
-        pipelining = True
-
-    * For Remote
-        [defaults]
-        private_key_file = /Users/rrosen/Dropbox/RossPrivate/AllSecurityCredentials/rrosen326_rsa.pub
-        remote_user = rrosen326
-        pipelining = True
-
-
-
+# Instructions for a new server
+ssh -i ~/.ssh/rrosen326_rsa -l root
+useradd -m -G sudo rrosen326
+visdo
+    (Change this line to add 'NOPASSWD')
+    %sudo   ALL=(ALL:ALL) NOPASSWD:ALL
+cd /home/rrosen326
+mkdir .ssh
+cd .ssh
+nano authorized_keys
+    Copy your public key here
+Test it:
+ssh -i ~/.ssh/rrosen326_rsa -l rrosen326
+sudo ls /  # No password should be asked
 
 
 
@@ -25,25 +23,15 @@
 
 
 ## TODO
-* monit - annoying!  Clean up.
 
 * Servi
-    * servi rans
-    * servi pushtod
     * Add stats for init and update
-    * change default log level
-    * Global config?
-        * Servername
-        * default log level
     * Get -f/-v to work on either side of command
-    * Test servi usebox
-        * See errors below
-
     * Future - maybe have a parent config for globals (like Main username, servername, etc)
-
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)
-    * New trusty install uses a2enconf conf-available...
+
+
 
 * Backups - is it making unnecessary backups?
 
@@ -78,6 +66,7 @@
     servi buildbox
     echo 'now use box (which will also do a vagrant provision)'
     servi usebox
+    servi pushto <host>
     echo 'You are up! Now check out your new site: http://<whateverurlyouputin /etc/hosts>'
     echo 'now modify ansible_config/roles/projectSpecific/* to set up your server for your specific project'
     echo 'ROSS>> Also add everything to git'

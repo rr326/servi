@@ -6,7 +6,7 @@ import tempfile
 from servi.command import Command
 import servi.config as c
 from servi.template_mgr import TemplateManager
-from servi.utils import pathfor
+from servi.utils import pathfor, timeit
 from servi.exceptions import ServiError
 from servi.commands.lans import get_ansible_extra_vars, vars_to_cmd_list
 from pprint import pformat
@@ -78,8 +78,9 @@ class RansCommand(Command):
             info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
                  .format(' '.join(cmd_line),
                         os.path.join(c.MASTER_DIR, 'ansible_config')))
-            retval = subprocess.call(
-                cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
+            with timeit():
+                retval = subprocess.call(
+                    cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
 
         return not retval
 

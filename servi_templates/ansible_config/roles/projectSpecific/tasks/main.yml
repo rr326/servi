@@ -37,12 +37,15 @@
 #
 # Non-Vagrant-only
 #
--   debug: msg="Doing Non-Vagrant tasks"
--   file: dest=/var/www/{{ SITE_SUFFIX }} state=directory group=webdev owner=webdev mode=770 state=directory
+-   debug: msg="Doing Non-Vagrant tasks."
+
+-   file: dest=/var/www/{{ SITE_SUFFIX }} state=directory group=webdev owner=webdev mode=770
     when: IS_VAGRANT != True
+
 -   name: Copy apache configuration to sites-available
     copy: src="../../../../apache_config/sites-available/{{ SITE_SUFFIX }}.conf"
-        group=webdev owner=webdev mode=770 force=no
+          dest="/etc/apache2/sites-available/{{ SITE_SUFFIX }}.conf"
+          group=webdev owner=webdev mode=770 force=no
     when: IS_VAGRANT != True
 
 #
