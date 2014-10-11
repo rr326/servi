@@ -10,14 +10,14 @@ def test_zz_update_manifest(mock_template_dir):
     pass
     # Test changed manifest
     modify_file(pathfor('ansible_config/playbook.yml', c.TEMPLATE))
-    assert servi_run('zz --update_manifest')
+    assert not servi_run('zz --update_manifest')
 
     # Now test skipping
-    assert not servi_run('zz --update_manifest')
+    assert servi_run('zz --update_manifest')
 
     # Test no manifest
     os.remove(pathfor(c.MANIFEST_FILE, c.TEMPLATE))
-    assert servi_run('zz --update_manifest')
+    assert not servi_run('zz --update_manifest')
     assert file_exists(pathfor(c.MANIFEST_FILE, c.TEMPLATE))
 
     # While we're at it, let's test that it's a good manifest, and that

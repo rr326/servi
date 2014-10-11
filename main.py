@@ -34,12 +34,12 @@ def setup_logging():
 def main():
     setup_logging()
     try:
-        process_and_run_command_line()
+        retval = process_and_run_command_line()
     except (ServiError, ForceError) as e:
         logging.error(str(e))
         return False
 
-    sys.exit(0)
+    sys.exit(retval)
 
 if __name__ == "__main__":
     main()

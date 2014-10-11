@@ -50,6 +50,9 @@ class ZZCommand(Command):
 
 
 def update_manifest():
+    """
+    returns False/fail if updated. (so you can use as an error code)
+    """
     try:
         m_old_manifest = Manifest(c.TEMPLATE, load=True)
     except FileNotFoundError:
@@ -58,13 +61,13 @@ def update_manifest():
     m_template_fresh = Manifest(c.TEMPLATE)
     if Manifest.equal_files(m_old_manifest, m_template_fresh):
         debug('Update Manifest: Skipping (Template directory has not changed)')
-        return False
+        return True
     else:
         m_template_fresh.save()
         bump(PATCH)
         debug('Update Manifest: New manifest of the current template '
               'directory saved to: {0}'.format(m_template_fresh.fname))
-        return True
+        return False
 
 
 def bump(ver_type):
