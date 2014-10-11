@@ -9,7 +9,7 @@ def test_servi_shellscript(tmpdir):
     os.chdir(tempdir)
     os.makedirs(os.path.join(tempdir, 'path1/path1.1/path1.1.1'))
     print('cwd: {0}'.format(os.getcwd()))
-    assert servi_run('init .')
+    assert servi_run('init --skip_servifile_globals .')
 
     shell_cmd = 'servi'
 

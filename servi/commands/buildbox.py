@@ -67,13 +67,12 @@ class BuildboxCommand(Command):
             # Important - everthing is relative to tmpdir as cwd
             os.chdir(tmpdir)
 
-            servi_run('-v0 init .')
-
             # Note - do all vagrant calls with the shell, since
             # servi uses python3 in a venv, and vagrant uses ansible
             # which might be installed globally
             if not args.mock:
                 with timeit():
+                    servi_run('-v0 init .')
                     subprocess.check_call('vagrant up', shell=True)
                     subprocess.check_call(
                         'vagrant package --output {0}'.format(box_path),shell=True)
@@ -81,6 +80,11 @@ class BuildboxCommand(Command):
             else:
                 info('mocking vagrant package with base box: {0}'.format(
                       box_path))
+
+                # If mock (testing) force new servifile
+                # it's ok - it should be a mocked servifile anyway
+                servi_run('-v0 init -f .')
+
                 with open(box_path, 'w') as fp:
                     fp.write('mocked base box')
 

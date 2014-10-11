@@ -6,7 +6,8 @@ from servi.command import Command
 from servi.exceptions import ForceError, ServiError
 
 from servi.template_mgr import TemplateManager
-from servi.config import set_master_dir, load_user_config, servi_file_exists_in
+from servi.config import set_master_dir, load_user_config, \
+    servi_file_exists_in, global_servi_file_exists
 
 
 class InitCommand(Command):
@@ -21,6 +22,7 @@ class InitCommand(Command):
                  'This is usually the root dir of your project. '
                  '"." is a good choice.')
         parser.add_argument('-f', '--force', action='store_true')
+        parser.add_argument('-s', '--skip_servifile_globals', action='store_true')
         parser.set_defaults(command_func=self.run)
 
     def run(self, args, extra_args):
@@ -47,8 +49,13 @@ class InitCommand(Command):
             else:
                 if servi_file_exists_in(args.dir):
                     raise ForceError(
-                        'ServiFile already exists in: {0}.\n'
+                        'Servifile already exists in: {0}.\n'
                         .format(os.path.abspath(args.dir)))
+                if (not args.skip_servifile_globals and
+                    global_servi_file_exists()):
+                    raise ForceError(
+                        'Servifile_globals already exists in: {0}.\n'
+                            .format(c.SERVIFILE_GLOBAL_FULL))
 
         assert_doit()
         if not os.path.exists(args.dir):
@@ -63,7 +70,8 @@ class InitCommand(Command):
         os.chdir(c.MASTER_DIR)
 
         tmgr = TemplateManager()
-        tmgr.init_master()
+        tmgr.init_master(exclude_files=[c.SERVIFILE_GLOBAL]
+                         if args.skip_servifile_globals else [])
         load_user_config()
         return True
 

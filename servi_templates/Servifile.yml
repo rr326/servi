@@ -7,20 +7,12 @@
 #
 #
 
-HOST_NAME: "serviplate.xx.com" # Hostname for your server.
-                               # Should be same for all servis on that server
 
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
 SITE_SUFFIX: "thissite" # will be used for /var/www/thissite and
                         # /var/log/apache2/thissite
 
-# This is your rsa key for ssh. You should store it in an envornment
-# variable in your shell.
-MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
-
-# Main user account name and user id for ssh
-MAIN_USERNAME : rrosen326
 
 #
 # These are files you are going to change in Master and don't want to
@@ -29,59 +21,14 @@ MAIN_USERNAME : rrosen326
 SERVI_IGNORE_FILES:
   - "^TEMPLATE_VERSION.json"
   - "^Servifile.yml"
+  - "^Servifile_globals.yml"
   - "^ansible_config/playbook.yml"
   - "^ansible_config/roles/projectSpecific/.*"
   - "^apache_config/sites-available/THISSITE.conf"
 
 
 #
-# Tool for diffing. It will be called as follows:
-# $ DIFFTOOL <fullpath to MASTER file> <fullpath to TEMPLATE file>
+# **Note**
+# Global servi parameters are stored in ~/Servifile_globals.yml
+# You can override any of those paramters here.
 #
-
-DIFFTOOL: "git --no-pager diff"  # use simple git
-# DIFFTOOL: "/Applications/PyCharm.app/Contents/MacOS/pycharm diff" # use pycharm
-
-
-
-#
-#
-# Parameters you probably don't want to override (but can)
-#
-#
-# webdev - the servi template uses a 'webdev' group. But it needs a
-# UID & GID to bootstrap it. These are the defaults
-WEBDEV_UID : 1100
-WEBDEV_GID : 900
-
-# Python virtual environment root
-PY_VENV_DIR : "/usr/share/penv"
-
-#
-# Postfix configuration
-# This uses gmail as the defail relay
-#
-GMAIL_ACCOUNT: rrosen326@gmail.com
-# Ansible needs the left name to be different than the right!
-GMAIL_PW_VAR: "{{ lookup('env', 'GMAIL_PW') }}"
-DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
-
-#
-# MONIT
-#
-MONIT_UN: admin
-MONIT_PW_VAR: "{{ lookup('env', 'MONIT_PW') }}"
-MAIN_FILESYSTEM: /dev/vda1
-
-#
-# Remote hosts (for servi rans and servi pushto)
-#
-REMOTE_HOSTS:
-  - {
-  alias: prod,
-  host: prod.k2company.com
-  }
-  - {
-  alias: stage,
-  host: stage.k2company.com
-  }

@@ -3,6 +3,7 @@ from tests.fixtures import *
 
 
 class TestInit():
+    @pytest.mark.wip
     def test_command_line_params(self, tmpdir):
         proj1 = tmpdir.mkdir('proj1')
         assert servi_run('init {0}'.format(proj1))
@@ -12,7 +13,9 @@ class TestInit():
 
         proj2 = tmpdir.mkdir('proj2')
         proj2.chdir()
-        assert servi_run('init .')
+        with pytest.raises(ForceError):
+            assert servi_run('init .')
+        assert servi_run('init --skip_servifile_globals .')
 
         # No directory stated
         with pytest.raises(ServiError):
@@ -21,7 +24,7 @@ class TestInit():
         # Given a file instead of directory should fail
         fname = proj2.ensure('testfile.txt')
         with pytest.raises(ServiError):
-            assert servi_run('init {0}'.format(fname))
+            assert servi_run('init --skip_servifile_globals {0}'.format(fname))
 
     def test_clean(self, clean_master):
         # init on a clean directory should work
@@ -80,3 +83,10 @@ class TestInit():
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert changed == {'apache_config/sites-available/THISSITE.conf'}
+
+    @pytest.mark.wip
+    def test_dirty_servifile_globals(self, dirty_servifile_globals):
+        print('expanduser: {0}'.format(os.path.expanduser('~')))
+        with pytest.raises(ForceError):
+            assert servi_run('init .')
+        assert servi_run('init -f .')

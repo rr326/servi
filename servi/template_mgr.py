@@ -79,8 +79,8 @@ class TemplateManager(object):
         self.modified_possible_roles = rm.modified_possible_roles
         self.role_of_fname = rm.role_of_fname
 
-    def init_master(self):
-        self.copy_files(exclude_files=[])
+    def init_master(self, exclude_files=[]):
+        self.copy_files(exclude_files=exclude_files)
 
     def update_master(self):
         self.copy_files(exclude_files=self.t_mod_but_ignored)
@@ -103,33 +103,37 @@ class TemplateManager(object):
         shutil.move(pathfor(fname, c.MASTER), subdir)
 
     def copy_files(self, exclude_files):
-        for normalized_fname, template_hash in \
+        for fname, template_hash in \
                 self.m_template.manifest["files"].items():
 
-            template_fname = pathfor(normalized_fname, c.TEMPLATE)
-            master_fname = pathfor(normalized_fname, c.MASTER)
+            template_fname = pathfor(fname, c.TEMPLATE)
+            master_fname = pathfor(fname, c.MASTER)
 
             # Exclude unchanged files
-            if (self.m_master.manifest["files"][normalized_fname] ==
+            if (self.m_master.manifest["files"][fname] ==
                     template_hash):
                 continue
 
             # Exclude ignored files
-            if normalized_fname in exclude_files:
+            if fname in exclude_files:
                 continue
 
             # Possibly exclude roles
             # noinspection PyCallingNonCallable
-            _cur_role = self.role_of_fname(normalized_fname)
+            _cur_role = self.role_of_fname(fname)
             if (_cur_role and self.master_playbook_exists
                     and _cur_role not in self.roles):
                 debug('Skipping unused role file: {0}'
-                       .format(normalized_fname))
+                       .format(fname))
                 continue
+
+            # Handle SERVIFILE_GLOBALS differently
+            if fname == c.SERVIFILE_GLOBAL:
+                master_fname = c.SERVIFILE_GLOBAL_FULL
 
             # Always backup (never overwrite) master
             if file_exists(master_fname):
-                self.rename_master_file(normalized_fname, self.timestamp)
+                self.rename_master_file(fname, self.timestamp)
                 existing = True
             else:
                 existing = False

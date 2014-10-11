@@ -13,7 +13,6 @@ def config_fixture():
     os.environ['SERVI_TEST'] = '12345'
 
 
-@pytest.mark.wip
 def test_lookup_fn():
     # Test the jinja2 lookup function
 
@@ -50,7 +49,6 @@ MAIN_RSA_KEY_FILE: "{{ lookup('env', 'SERVI_TEST') }}"
 
 """
 
-@pytest.mark.wip
 def test_process_config(setup_init):
     data = c.process_config(TEST_Servifile)
 

@@ -1,6 +1,7 @@
 {
     "files": {
-        "Servifile.yml": "95a16fec74c24c36c3d2ef5b07153562c0a1453c",
+        "Servifile.yml": "a76105cba7ca171c7ffcfbafd902bd510d232fd8",
+        "Servifile_globals.yml": "af0740071f9741c6812764c1f49329078af86287",
         "Vagrantfile": "46149644b1b2f180687af0adddb619644c355c34",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
         "ansible_config/playbook.yml": "9c25fed79e729ee2a9571f46050e184557cea72b",
@@ -30,5 +31,5 @@
         "apache_config/sites-available/THISSITE.conf": "b4194e0578916b18cc33eb93d0e42753f360d7a8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.27"
+    "template_version": "0.1.28"
 }

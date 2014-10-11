@@ -4,6 +4,7 @@ import yaml
 from servi.exceptions import MasterNotFound, ServiError
 import logging
 from jinja2 import Environment, DictLoader
+from logging import debug, info, warning as warn, error
 
 '''
 Global configuration for servi files
@@ -34,6 +35,8 @@ MASTER_DIR = None
 MANIFEST_FILE = "servi_data.json"
 VERSION_FILE = "TEMPLATE_VERSION.json"
 SERVIFILE = "Servifile.yml"
+SERVIFILE_GLOBAL = "Servifile_globals.yml"
+SERVIFILE_GLOBAL_FULL = os.path.expanduser(os.path.join('~', SERVIFILE_GLOBAL))
 
 TEMPLATE = 'template'
 MASTER = 'master'
@@ -88,19 +91,32 @@ def load_user_config():
     Reads and processes Servifile.yml, adding all variables to this modules
     globals()
 
-    Step 1: Read Servifile
-    Step 2: Render the file as a Jinja2 template
-                (with custom function: lookup('env', envvar) )
-    Step 3: Load as a yaml doc
-    Step 4: Add to this module's globals()
+    For Servifile_Globals, Servifile:
+        Step 1: Render the file as a Jinja2 template
+                    (with custom function: lookup('env', envvar) )
+        Step 2: Load as a yaml doc
+        Step 3: Add to this module's globals()
     """
+
+    # Global config
+    global_config = {}
+    if not os.path.exists(SERVIFILE_GLOBAL_FULL):
+        warn('No global servifile found in {0}'.format(SERVIFILE_GLOBAL_FULL))
+    else:
+        with open(SERVIFILE_GLOBAL_FULL) as f:
+            servi_raw = f.read()
+            global_config = process_config(servi_raw)
+
     user_config = getconfig(
         SERVIFILE, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
+
+    for key, value in global_config.items():
+        globals()[key] = value
 
     for key, value in user_config.items():
         globals()[key] = value
 
-    return True
+    return global_config, user_config
 
 
 def find_master_dir(start_dir, fail_ok=False):
@@ -141,6 +157,9 @@ def find_ancestor_with(starting_dir, target):
 
 def servi_file_exists_in(path):
     return os.path.exists(os.path.join(path, SERVIFILE))
+
+def global_servi_file_exists():
+    return os.path.exists(SERVIFILE_GLOBAL_FULL)
 
 """
 This is an ugly, parameterized version of pathfor, and a getconfig() which

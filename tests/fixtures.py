@@ -19,8 +19,24 @@ Scenarios
     * Master_only: eg: myscript.sh
     * Template_but_ignored: eg: THISSFILE.conf, ansible_config/playbook.yml
     * [skipping] Ignored_Entirely: servi_data.json, VERSION_FILE.json
+
+* Servifile_globals
+    * None
+    * Unchanged in ~
+    * Changed in ~
 """
 
+@pytest.fixture(autouse=True)
+def mock_homedir(monkeypatch, tmpdir):
+    homedir=tmpdir.mkdir('mockhome')
+    def hardcode_homedir(path):
+        return str(homedir)
+    monkeypatch.setattr(os.path, 'expanduser', hardcode_homedir)
+    monkeypatch.setattr(c, 'SERVIFILE_GLOBAL_FULL',
+                        os.path.join(str(homedir), c.SERVIFILE_GLOBAL))
+
+def test_mock_homedir():
+    assert os.path.basename(os.path.expanduser('~')) == 'mockhome'
 
 @pytest.fixture()
 def clean_master(monkeypatch, tmpdir):
@@ -182,3 +198,7 @@ def template_but_ignored(setup_init):
     return {"m0": setup_init["m0"]}
 
 
+@pytest.fixture()
+def dirty_servifile_globals(setup_init):
+    modify_file(c.SERVIFILE_GLOBAL_FULL)
+    return {"m0": setup_init["m0"]}

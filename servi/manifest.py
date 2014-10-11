@@ -35,15 +35,19 @@ class Manifest(object):
                 if file == c.VERSION_FILE or file == c.MANIFEST_FILE:
                     continue
 
-                template_file = os.path.join(dirpath, file)
-                if self.source is c.MASTER:
-                    hashv = hash_of_file(
-                        templatepath_to_destpath(template_file))
+                if file == c.SERVIFILE_GLOBAL and self.source is c.MASTER:
+                    self.manifest["files"][file] = \
+                        hash_of_file(c.SERVIFILE_GLOBAL_FULL)
                 else:
-                    hashv = hash_of_file(template_file)
+                    template_file = os.path.join(dirpath, file)
+                    if self.source is c.MASTER:
+                        hashv = hash_of_file(
+                            templatepath_to_destpath(template_file))
+                    else:
+                        hashv = hash_of_file(template_file)
 
-                fname = normalize_path(template_file, c.TEMPLATE)
-                self.manifest["files"][fname] = hashv
+                    fname = normalize_path(template_file, c.TEMPLATE)
+                    self.manifest["files"][fname] = hashv
 
     def _load(self):
         with open(self.fname, 'r') as fp:

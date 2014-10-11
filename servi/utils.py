@@ -25,8 +25,11 @@ def templatepath_to_destpath(template_path):
 
 
 def pathfor(fname, source):
-    return c.pathfor(fname, source, c.TEMPLATE, c.MASTER, c.TMPL_DIR_SITE,
-                     c.MASTER_DIR)
+    if source is c.MASTER and fname == c.SERVIFILE_GLOBAL:
+        return c.SERVIFILE_GLOBAL_FULL
+    else:
+        return c.pathfor(fname, source, c.TEMPLATE, c.MASTER, c.TMPL_DIR_SITE,
+                         c.MASTER_DIR)
 
 
 def normalize_path(path, source):
