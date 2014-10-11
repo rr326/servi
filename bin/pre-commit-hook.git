@@ -6,4 +6,4 @@
 
 echo 'git pre-commit hook: ===>  python3 servi zz --update_manifest'
 servi -v0 zz --update_manifest && echo '\n*************\nManifest updated. Please re-run git commit' && exit 1
-echo 'finishing'
+exit 0
