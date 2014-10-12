@@ -31,5 +31,5 @@
         "apache_config/sites-available/THISSITE.conf": "b4194e0578916b18cc33eb93d0e42753f360d7a8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.29"
+    "template_version": "0.1.35"
 }

@@ -50,7 +50,6 @@ class TestUpdate():
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert  added | changed | removed == set()
 
-    @pytest.mark.wip
     def test_dirty_servifile_globals(self, dirty_servifile_globals):
         m0 = dirty_servifile_globals["m0"]
         assert servi_run('update')

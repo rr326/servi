@@ -1,6 +1,6 @@
 import sys
 from servi.command import process_and_run_command_line
-from servi.exceptions import ServiError, ForceError
+from servi.exceptions import ServiError, ForceError, MasterNotFound
 from servi.config import DEFAULT_LOG_LEVEL as DEFAULT_LOG_LEVEL
 import logging
 
@@ -35,11 +35,11 @@ def main():
     setup_logging()
     try:
         retval = process_and_run_command_line()
-    except (ServiError, ForceError) as e:
+    except (ServiError, ForceError, MasterNotFound) as e:
         logging.error(str(e))
-        return False
+        retval = False
 
-    sys.exit(retval)
+    sys.exit(1 if not retval else 0)  # Linux error codes are reversed!
 
 if __name__ == "__main__":
     main()

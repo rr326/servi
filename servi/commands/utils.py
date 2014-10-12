@@ -1,7 +1,9 @@
 from pprint import pprint
 import json
 import os
+import shutil
 from logging import debug, info, warning as warn, error
+import subprocess
 
 from servi.command import Command
 from servi.manifest import Manifest
@@ -15,7 +17,8 @@ from pprint import pformat
 class UtilsCommand(Command):
     def __init__(self):
         self.special = {"skip_init": True}
-        self.arglist=[]
+        self.arglist = []
+        self.parser = None
 
     def register_command_line(self, sub_parsers):
 
@@ -26,9 +29,11 @@ class UtilsCommand(Command):
                         '"servi -v0 utils --show_servifile_globals"')
 
         parser.add_argument(
-            '-u', '--update_manifest',  action='store_true',
-            help='update manifest to template director.'
-            '\nUse as a git hook if you are modifying templates.')
+            '-m', '--ensure_latest_manifest',  action='store_true',
+            help='Ensures the latest manifest is you your master directory. '
+            'If not, it copies it there and exits '
+            'with an error 1. Good for a pre-commit hook.  '
+            'Eg: "servi -v0 utils ensure_latest_manifest"')
         parser.add_argument('--bump', choices=SEMANTIC_VERSIONS,
                                    help='Bump the version')
         parser.add_argument(
@@ -40,12 +45,19 @@ class UtilsCommand(Command):
             'Render the servifile templates, filling in all values')
 
         parser.add_argument(
-            '-g', '--show_servifile_globals', action='store_true', help=
-            'Print the contents of Servifile_globals.yml. '
-            'This is good to add to a pre-commit hook.')
+            '-e', '--ensure_latest_globals_in_git', action='store_true', help=
+            'Ensures that a current copy of ~/Servifile_globals.yml is stored '
+            'in the root of your repo. If not, it copies it there and exits '
+            'with an error 1. Good for a pre-commit hook.  '
+            'Eg: "servi -v0 utils ensure_latest_globals_in_git"')
+
+        parser.add_argument(
+            '--servi_dir', action='store_true', help=
+            'Prints the directory of Servifile.yml ')
 
         parser.set_defaults(command_func=self.run)
 
+        self.parser = parser
         self.arglist = [arg.dest for arg in parser._optionals._actions
                         if arg.dest != 'help' ]
 
@@ -56,8 +68,8 @@ class UtilsCommand(Command):
                              'args: {0}'.format(vars(args)))
 
 
-        if args.update_manifest:
-            return update_manifest()
+        if args.ensure_latest_manifest:
+            return ensure_latest_manifest()
 
         if args.bump:
             return bump(args.bump)
@@ -68,11 +80,17 @@ class UtilsCommand(Command):
         if args.render_servifiles:
             return render()
 
-        if args.show_servifile_globals:
-            return show_servifile_globals()
+        if args.ensure_latest_globals_in_git:
+            return ensure_latest_globals_in_git()
+
+        if args.servi_dir:
+            return show_servidir()
+
+        self.parser.print_help()
+        return False
 
 
-def update_manifest():
+def ensure_latest_manifest():
     """
     returns False/fail if updated. (so you can use as an error code)
     """
@@ -83,12 +101,12 @@ def update_manifest():
 
     m_template_fresh = Manifest(c.TEMPLATE)
     if Manifest.equal_files(m_old_manifest, m_template_fresh):
-        debug('Update Manifest: Skipping (Template directory has not changed)')
+        info('Update Manifest: Skipping (Template directory has not changed)')
         return True
     else:
         m_template_fresh.save()
         bump(PATCH)
-        debug('Update Manifest: New manifest of the current template '
+        info('Update Manifest: New manifest of the current template '
               'directory saved to: {0}'.format(m_template_fresh.fname))
         return False
 
@@ -105,8 +123,7 @@ def bump(ver_type):
     with open(pathfor(c.VERSION_FILE, c.TEMPLATE), 'w') as fp:
         json.dump(data, fp, indent=4)
 
-    info('Updated VERSION_FILE')
-    pprint(data)
+    info('Updated VERSION_FILE: {0}'.format(data))
     return True
 
 
@@ -133,14 +150,43 @@ def render():
 
     return True
 
-def show_servifile_globals():
+
+def ensure_latest_globals_in_git():
+    # If no Servfile_globals, return
     if not os.path.exists(c.SERVIFILE_GLOBAL_FULL):
-        print('{0} not found.'.format(c.SERVIFILE_GLOBAL_FULL))
-        return False
-    else:
-        with open(c.SERVIFILE_GLOBAL_FULL) as fp:
-            text = fp.read()
-        print(text)
+        info('{0} not found.'.format(c.SERVIFILE_GLOBAL_FULL))
+        return True
+
+    with open(c.SERVIFILE_GLOBAL_FULL) as fp:
+        new_text = fp.read()
+
+    # Get git root
+    try:
+        root = subprocess.check_output(
+            'git rev-parse --show-toplevel', shell=True).decode()
+        if root[-1] == '\n':
+            root = root[:len(root)-1]
+
+        cur_text = ''
+        dest_path = os.path.join(root, c.SERVIFILE_GLOBAL)
+        if os.path.exists(dest_path):
+            with open(dest_path) as fp:
+                cur_text = fp.read()
+
+        if cur_text == new_text:
+            info('Servifile_globals.yml unchanged')
+            return True
+        else:
+            shutil.copy2(src=c.SERVIFILE_GLOBAL_FULL, dst=dest_path)
+            info('Servifile_globals.yml changed - copying to {0}'
+                 .format(dest_path))
+            return False
+    except subprocess.CalledProcessError:
+        # Not in a git dir.
+        raise ServiError('Not currently in a git directory.')
+
+def show_servidir():
+    print(c.find_master_dir(os.getcwd()))
 
 
 command = UtilsCommand()

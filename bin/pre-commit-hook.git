@@ -1,9 +1,30 @@
 #!/bin/sh
 #
 
-# This just runs 'update_manifest' whenver you commit.
-# Note - update_manifest will only update if the template has changed.
 
-echo 'git pre-commit hook: Update servi manifest'
-servi -v0 utils --update_manifest && echo '\n*************\nManifest updated. Please re-run git commit' && exit 1
+repo_changed=0
+
+# Update manifest if necessary
+servi -v0 utils --ensure_latest_manifest
+if [ $? -ne 0 ]; then
+    echo '* Manifest updated *'
+    repo_changed=1
+fi
+
+
+# Update local version of Servifile_globals.yml if necessary
+servi -v0 utils --ensure_latest_globals_in_git
+if [ $? -ne 0 ]; then
+    echo '* Servifile globals updated *'
+    repo_changed=1
+fi
+
+
+# If any command changed the repo, fail and manually rerun
+if [ ${repo_changed} -ne 0 ]; then
+    echo '\nGit pre-commit hook changed your repo'
+    echo '>>>>Please re-run git commit <<<<'
+    exit 1
+fi
+
 exit 0

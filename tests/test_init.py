@@ -3,7 +3,6 @@ from tests.fixtures import *
 
 
 class TestInit():
-    @pytest.mark.wip
     def test_command_line_params(self, tmpdir):
         proj1 = tmpdir.mkdir('proj1')
         assert servi_run('init {0}'.format(proj1))
