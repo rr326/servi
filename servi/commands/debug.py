@@ -34,13 +34,13 @@ class DebugCommand(Command):
 
     def run(self, args, extra_args):
 
-        global_config, user_config = c.load_user_config()
-        combined = deepcopy(global_config)
-        combined.update(user_config)
 
-        info('\nGlobal config: \n{0}'.format(pformat(global_config, indent=4)))
-        info('\nUser config: \n{0}\n'.format(pformat(user_config, indent=4)))
-        info('\nCombined config: \n{0}\n'.format(pformat(combined, indent=4)))
+        if args.render_servifiles:
+            return self.render()
+
+        if args.show_servifile_globals:
+            self.show_servifile_globals()
+
         return True
 
 

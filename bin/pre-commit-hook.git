@@ -4,6 +4,6 @@
 # This just runs 'update_manifest' whenver you commit.
 # Note - update_manifest will only update if the template has changed.
 
-echo 'git pre-commit hook: ===>  python3 servi zz --update_manifest'
-servi -v0 zz --update_manifest && echo '\n*************\nManifest updated. Please re-run git commit' && exit 1
+echo 'git pre-commit hook: Update servi manifest'
+servi -v0 utils --update_manifest && echo '\n*************\nManifest updated. Please re-run git commit' && exit 1
 exit 0
