@@ -55,6 +55,10 @@ class UtilsCommand(Command):
             '--servi_dir', action='store_true', help=
             'Prints the directory of Servifile.yml ')
 
+        parser.add_argument(
+            '--in_servi_dir', action='store_true', help=
+            'Exits with 0 if in servi code dir.')
+
         parser.set_defaults(command_func=self.run)
 
         self.parser = parser
@@ -85,6 +89,9 @@ class UtilsCommand(Command):
 
         if args.servi_dir:
             return show_servidir()
+
+        if args.in_servi_dir:
+            return in_servi_code_dir()
 
         self.parser.print_help()
         return False
@@ -187,6 +194,15 @@ def ensure_latest_globals_in_git():
 
 def show_servidir():
     print(c.find_master_dir(os.getcwd()))
+
+
+def in_servi_code_dir():
+    # returns True if cwd is within the servi code directory hierarchy
+    servi_root = os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '../..'))
+    common = os.path.commonprefix([servi_root, os.getcwd()])
+    debug('in_servi_code_dir == {0}'.format(common == servi_root))
+    return common == servi_root
 
 
 command = UtilsCommand()

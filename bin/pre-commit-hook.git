@@ -2,6 +2,12 @@
 #
 
 
+servi -v0 utils --in_servi_dir
+if [ $? -ne 0 ]; then
+    # This should only be run in the servi code directory
+    exit 0
+fi
+
 repo_changed=0
 
 # Update manifest if necessary

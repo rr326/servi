@@ -1,12 +1,12 @@
 from tests.fixtures import *
-from servi.utils import *
 import servi.manifest as man
 from servi.command import process_and_run_command_line as servi_run
-from servi.utils import file_exists
+from servi.utils import file_exists, reset_cwd
 from servi.semantic import SemanticVersion
 from servi.exceptions import ServiError
 import subprocess
 from filecmp import cmp
+from servi.commands.utils import in_servi_code_dir
 
 
 @pytest.mark.wip
@@ -76,4 +76,22 @@ def test_ensure_latest_globals_in_git(setup_empty, tmpdir):
                str(servidir.join(c.SERVIFILE_GLOBAL)), shallow=False)
 
     assert servi_run('utils --ensure_latest_globals_in_git ')
+
+
+@pytest.mark.wip
+def test_in_servi_code_dir(tmpdir):
+    import py.path
+
+    projdir = tmpdir.mkdir('myproject')
+    thisdir = py.path.local(os.path.dirname(__file__))
+    servidir = thisdir.join('..')
+    with reset_cwd():
+        servidir.chdir()
+        assert in_servi_code_dir()
+        subdir = servidir.mkdir('subdir')
+        subdir.chdir()
+        assert in_servi_code_dir()
+        projdir.chdir()
+        assert not in_servi_code_dir()
+
 

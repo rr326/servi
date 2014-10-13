@@ -29,7 +29,6 @@ sudo ls /  # No password should be asked
 * Servi
     * Add stats for init and update
     * Get -f/-v to work on either side of command
-    * Future - maybe have a parent config for globals (like Main username, servername, etc)
 * Templates
     * Remove static ips? (and use that tool that does *.dev?)
 * Vagrant - append VAGRANT to hostname
