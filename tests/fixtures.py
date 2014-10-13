@@ -8,6 +8,7 @@ from servi.utils import pathfor
 from servi.command import process_and_run_command_line as servi_run
 from servi.manifest import Manifest
 import servi.config as c
+import servi.commands.utils as cmd_utils
 
 
 """
@@ -60,6 +61,14 @@ def mock_template_dir(monkeypatch):
     shutil.copytree(c.TMPL_DIR_SITE, temp_dir)
     monkeypatch.setattr(c, 'TMPL_DIR_SITE', temp_dir)
     print('mock_template_dir - c.TMPL_DIR_SITE: ', c.TMPL_DIR_SITE)
+
+
+@pytest.fixture()
+def mock_in_servi_dir(monkeypatch):
+    def mocked_in_servi_dir():
+        print('** Mocking in_servi_dir() - returning True **')
+        return True
+    monkeypatch.setattr(cmd_utils, 'in_servi_code_dir', mocked_in_servi_dir)
 
 
 @pytest.fixture()

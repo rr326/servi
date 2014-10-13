@@ -10,7 +10,7 @@ from servi.commands.utils import in_servi_code_dir
 
 
 @pytest.mark.wip
-def test_cmd_utils(mock_template_dir):
+def test_cmd_utils(mock_template_dir, mock_in_servi_dir):
     # Test changed manifest
     modify_file(pathfor('ansible_config/playbook.yml', c.TEMPLATE))
     assert not servi_run('utils --ensure_latest_manifest')

@@ -59,6 +59,13 @@ class UtilsCommand(Command):
             '--in_servi_dir', action='store_true', help=
             'Exits with 0 if in servi code dir.')
 
+        parser.add_argument(
+            '-l', '--link_githook', action='store_true', help=
+            "Add (link) servi's pre-commit hook to your git repository. "
+            "In the servi source tree, this will update the template "
+            "manifest and version if needed. In a tree that uses servi, "
+            "this will copy your Servifile_globals.yml to your repo")
+
         parser.set_defaults(command_func=self.run)
 
         self.parser = parser
@@ -93,6 +100,9 @@ class UtilsCommand(Command):
         if args.in_servi_dir:
             return in_servi_code_dir()
 
+        if args.link_githook:
+            return link_githook()
+
         self.parser.print_help()
         return False
 
@@ -101,6 +111,9 @@ def ensure_latest_manifest():
     """
     returns False/fail if updated. (so you can use as an error code)
     """
+    if not in_servi_code_dir():
+        return True
+
     try:
         m_old_manifest = Manifest(c.TEMPLATE, load=True)
     except FileNotFoundError:
@@ -159,6 +172,10 @@ def render():
 
 
 def ensure_latest_globals_in_git():
+    # Don't copy if in the source tree
+    if in_servi_code_dir():
+        return True
+
     # If no Servfile_globals, return
     if not os.path.exists(c.SERVIFILE_GLOBAL_FULL):
         info('{0} not found.'.format(c.SERVIFILE_GLOBAL_FULL))
@@ -203,6 +220,10 @@ def in_servi_code_dir():
     common = os.path.commonprefix([servi_root, os.getcwd()])
     debug('in_servi_code_dir == {0}'.format(common == servi_root))
     return common == servi_root
+
+
+def link_githook():
+    pass
 
 
 command = UtilsCommand()
