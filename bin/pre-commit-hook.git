@@ -6,7 +6,7 @@ repo_changed=0
 # Update manifest if necessary
 servi -v0 utils --ensure_latest_manifest
 if [ $? -ne 0 ]; then
-    echo '* Manifest updated *'
+    echo '* Servi template manifest updated *'
     repo_changed=1
 fi
 
@@ -14,7 +14,7 @@ fi
 # Update local version of Servifile_globals.yml if necessary
 servi -v0 utils --ensure_latest_globals_in_git
 if [ $? -ne 0 ]; then
-    echo '* Servifile globals updated *'
+    echo '* Local copy of Servifile_globals.yml updated *'
     repo_changed=1
 fi
 

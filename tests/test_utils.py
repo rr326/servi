@@ -54,3 +54,4 @@ def test_find_master_dir(fake_master):
         find_master_dir('/')
 
     print(MasterNotFound())  # for pytest coverage
+

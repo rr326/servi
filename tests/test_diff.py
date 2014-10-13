@@ -5,8 +5,8 @@ from servi.template_mgr import TemplateManager
 from servi.command import process_and_run_command_line as servi_run
 
 
-def test_diff(clean_master, mock_template_dir, servi_init):
-    m0 = Manifest(c.TEMPLATE)
+def test_diff(setup_init):
+    m0 = setup_init["m0"]
 
     # Unused Role
     shutil.copytree(pathfor('ansible_config/roles/baseUbuntu', c.TEMPLATE),

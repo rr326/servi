@@ -83,7 +83,6 @@ class TestInit():
         added, changed, removed = Manifest.diff_files(m1, m0)
         assert changed == {'apache_config/sites-available/THISSITE.conf'}
 
-    @pytest.mark.wip
     def test_dirty_servifile_globals(self, dirty_servifile_globals):
         print('expanduser: {0}'.format(os.path.expanduser('~')))
         with pytest.raises(ForceError):

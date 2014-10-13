@@ -8,25 +8,19 @@
 #
 # Remote hosts
 #
-REMOTE_HOSTS:
-  - {
-  alias: prod,  # An easy name for you to refer to this
-  host: prod.k2company.com,  # For ssh
-  host_name: prod5.k2company.com,  # For linux 'hostname'
-  server_name: prod.k2company.com  # For apache "ServerName'
-  }
-  - {
-  alias: stage,
-  host: stage.k2company.com,
-  host_name: prod5.k2company.com,
-  server_name: stage.k2company.com
-  }
-  - { # This one is required. Do not delete
-  alias: vagrant,
-  host: vagrant,
-  host_name: vagrant,
-  server_name: vagrant
-  }
+HOSTS:
+  prod:
+    - host: prod.k2company.com,  # For ssh
+    - host_name: prod5.k2company.com,  # For linux 'hostname'
+    - server_name: prod.k2company.com  # For apache "ServerName'
+  stage:
+    - host: stage.k2company.com,
+    - host_name: prod5.k2company.com,
+    - server_name: stage.k2company.com
+  vagrant:  # Default - you can override in a project's servifile
+    - host: vagrant,
+    - host_name: vagrant,
+    - server_name: vagrant
 
 
 # This is your rsa key for ssh. You should store it in an envornment

@@ -159,10 +159,12 @@ def set_ver(version_string):
 
     return True
 
+
 def render():
-    global_config, user_config = c.load_user_config()
-    combined = deepcopy(global_config)
-    combined.update(user_config)
+    master_dir = c.find_master_dir(os.getcwd())
+    c.set_master_dir(master_dir)
+
+    global_config, user_config, combined = c.load_user_config()
 
     print('\nGlobal config: \n{0}'.format(pformat(global_config, indent=4)))
     print('\nUser config: \n{0}\n'.format(pformat(user_config, indent=4)))

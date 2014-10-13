@@ -2,6 +2,7 @@ import pytest
 from tests.fixtures import *
 from servi.manifest import Manifest
 import servi.config as c
+from servi.config import deep_update
 from servi.command import process_and_run_command_line as servi_run
 import os
 from servi.exceptions import ServiError
@@ -64,3 +65,17 @@ def test_process_config(setup_init):
     pprint(data)
     assert c.load_user_config()
 
+
+@pytest.mark.wip
+def test_deep_update():
+    assert deep_update({"a": {"a1": 1}} , {"a": {"a2": 2}}) == \
+        {"a": {"a1": 1, "a2":2 }}
+
+    assert deep_update({"a": {"a1": 1}}, {"b": {"b1": 1}}) == \
+           {"a": {"a1": 1}, "b": {"b1": 1}}
+
+    assert deep_update({}, {"b": {"b1": 1}}) == \
+           {"b": {"b1": 1}}
+
+    assert deep_update({"a": {"a1": 1}}, {}) == \
+           {"a": {"a1": 1}}

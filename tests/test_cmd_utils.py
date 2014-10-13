@@ -9,7 +9,6 @@ from filecmp import cmp
 from servi.commands.utils import in_servi_code_dir
 
 
-@pytest.mark.wip
 def test_cmd_utils(mock_template_dir, mock_in_servi_dir):
     # Test changed manifest
     modify_file(pathfor('ansible_config/playbook.yml', c.TEMPLATE))
@@ -38,7 +37,6 @@ def test_cmd_utils(mock_template_dir, mock_in_servi_dir):
     assert m.template_version == SemanticVersion('1.0.1')
 
 
-@pytest.mark.wip
 def test_ensure_latest_globals_in_git(setup_empty, tmpdir):
     """
     Scenarios:
@@ -78,7 +76,6 @@ def test_ensure_latest_globals_in_git(setup_empty, tmpdir):
     assert servi_run('utils --ensure_latest_globals_in_git ')
 
 
-@pytest.mark.wip
 def test_in_servi_code_dir(tmpdir):
     import py.path
 
@@ -95,7 +92,6 @@ def test_in_servi_code_dir(tmpdir):
         assert not in_servi_code_dir()
 
 
-@pytest.mark.wip
 def test_link_githook(setup_init):
     with pytest.raises(ServiError):  # Not in git dir
         servi_run('utils --link_githook')

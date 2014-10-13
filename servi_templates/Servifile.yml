@@ -1,13 +1,6 @@
 # These configuration parameters affect Vagrant, ansible, and servi
 ---
 
-#
-#
-# Parameters you may want to modify
-#
-#
-
-
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
 SITE_SUFFIX: "thissite" # will be used for /var/www/thissite and
@@ -26,6 +19,12 @@ SERVI_IGNORE_FILES:
   - "^ansible_config/roles/projectSpecific/.*"
   - "^apache_config/sites-available/THISSITE.conf"
 
+
+HOSTS:
+  vagrant:
+    - host: vagrant-thissite,
+    - host_name: vagrant-thissite,
+    - server_name: vagrant-thissite
 
 #
 # **Note**

@@ -46,8 +46,8 @@ class PushtoCommand(Command):
         parser.add_argument(
             'host_alias',
             help='alias of host.'
-                 'This is the "alias" part of the REMOTE_HOSTS field in'
-                 'Servifile.yml ')
+                 'This is the key part of the HOSTS field in'
+                 'Servifile_globals.yml or Servifile.yml ')
 
         parser.set_defaults(command_func=self.run)
 
@@ -70,11 +70,11 @@ class PushtoCommand(Command):
         return retval
 
     def run(self, args, extra_args):
-        hostdict = {rec.get('alias') : rec for rec in c.REMOTE_HOSTS }
+        hostdict = c.HOSTS
         if args.host_alias not in hostdict:
             raise ServiError('Given host alias ({0}) not found in '
-                             'Servifile.yml REMOTE_HOSTS: \n{1}'
-                .format(args.host_alias, pformat(c.REMOTE_HOSTS)))
+                             'Servifile.yml HOSTS: \n{1}'
+                .format(args.host_alias, pformat(c.HOSTS)))
 
         if args.dir:
             src_dir = args.dir

@@ -5,6 +5,7 @@ from servi.exceptions import MasterNotFound, ServiError
 import logging
 from jinja2 import Environment, DictLoader
 from logging import debug, info, warning as warn, error
+import collections
 
 '''
 Global configuration for servi files
@@ -96,6 +97,11 @@ def load_user_config():
                     (with custom function: lookup('env', envvar) )
         Step 2: Load as a yaml doc
         Step 3: Add to this module's globals()
+
+    Note - Servifile.yml can essentially update or override Servifile_globals
+      but it CAN NOT delete a key from Servifile_globals
+      ie: combined >= servifile_globals
+
     """
 
     # Global config
@@ -107,16 +113,18 @@ def load_user_config():
             servi_raw = f.read()
             global_config = process_config(servi_raw)
 
-    user_config = getconfig(
-        SERVIFILE, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
+    if MASTER_DIR:
+        user_config = getconfig(
+            SERVIFILE, TEMPLATE, MASTER, TMPL_DIR_SITE, MASTER_DIR)
+    else:
+        warn('Getting config but MASTER_DIR is empty.')
+        user_config = {}
 
-    for key, value in global_config.items():
-        globals()[key] = value
+    combined_config = deep_update(global_config, user_config)
+    for k,v in combined_config.items():
+        globals()[k] = v
 
-    for key, value in user_config.items():
-        globals()[key] = value
-
-    return global_config, user_config
+    return global_config, user_config, combined_config
 
 
 def find_master_dir(start_dir, fail_ok=False):
@@ -158,6 +166,7 @@ def find_ancestor_with(starting_dir, target):
 def servi_file_exists_in(path):
     return os.path.exists(os.path.join(path, SERVIFILE))
 
+
 def global_servi_file_exists():
     return os.path.exists(SERVIFILE_GLOBAL_FULL)
 
@@ -183,8 +192,8 @@ def pathfor(fname, source, template, master, template_dir, master_dir):
 
 
 def getconfig(fname, template, master, template_dir, master_dir):
-    with open(pathfor(fname, master, template, master, template_dir,
-              master_dir)) as f:
+    with open(pathfor(fname, master,
+              template, master, template_dir, master_dir)) as f:
                 servi_raw = f.read()
 
     return process_config(servi_raw)
@@ -196,3 +205,17 @@ def process_config(raw_text):
     rendered = tmpl.render()
     data = yaml.load(rendered)
     return data
+
+
+def deep_update(orig_dict, new_dict):
+    # Given a new dict, update the orig dict deeply
+    # eg: {a: {a1: 1}} , {a: {a2: 2}} --> {a: {a1: 1, a2:2 }}
+    # Note - this means new_dict  >= orig_dict
+    # http://stackoverflow.com/a/3233356/1400991
+    for key, val in new_dict.items():
+        if isinstance(val, collections.Mapping):
+            tmp = deep_update(orig_dict.get(key, { }), val)
+            orig_dict[key] = tmp
+        else:
+            orig_dict[key] = new_dict[key]
+    return orig_dict

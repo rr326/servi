@@ -4,7 +4,7 @@ import servi.config as c
 from contextlib import contextmanager
 from datetime import datetime
 from logging import debug, info, warning, error
-
+import collections
 
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
@@ -54,3 +54,4 @@ def timeit():
     yield
     t1 = datetime.now()
     info('Total running time: {0:.1f} min'.format((t1 - t0).seconds / 60))
+
