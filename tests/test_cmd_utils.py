@@ -88,7 +88,7 @@ def test_in_servi_code_dir(tmpdir):
     with reset_cwd():
         servidir.chdir()
         assert in_servi_code_dir()
-        subdir = servidir.mkdir('subdir')
+        subdir = servidir.join('tests')
         subdir.chdir()
         assert in_servi_code_dir()
         projdir.chdir()
