@@ -95,3 +95,14 @@ def test_in_servi_code_dir(tmpdir):
         assert not in_servi_code_dir()
 
 
+@pytest.mark.wip
+def test_link_githook(setup_init):
+    with pytest.raises(ServiError):  # Not in git dir
+        servi_run('utils --link_githook')
+
+    subprocess.call('git init .', shell=True)
+    assert servi_run('utils --link_githook')
+
+    with pytest.raises(ServiError):  # Already exists
+        servi_run('utils --link_githook')
+

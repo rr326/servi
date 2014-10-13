@@ -213,17 +213,50 @@ def show_servidir():
     print(c.find_master_dir(os.getcwd()))
 
 
+def servi_code_root():
+    return os.path.abspath(
+        os.path.join(os.path.dirname(__file__), '../..'))
+
+
 def in_servi_code_dir():
     # returns True if cwd is within the servi code directory hierarchy
-    servi_root = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), '../..'))
+    servi_root = servi_code_root()
     common = os.path.commonprefix([servi_root, os.getcwd()])
     debug('in_servi_code_dir == {0}'.format(common == servi_root))
     return common == servi_root
 
 
 def link_githook():
-    pass
+    servihook = os.path.join(servi_code_root(), 'bin/pre-commit-hook.git')
+
+    try:
+        gitroot = subprocess.check_output(
+            'git rev-parse --show-toplevel 2>/dev/null', shell=True).decode()
+        if gitroot[-1] == '\n':
+            gitroot = gitroot[:len(gitroot) - 1]
+    except subprocess.CalledProcessError:
+        # Not in a git dir.
+        raise ServiError('Not currently in a git directory.\n'
+                         'Only call --link-githook in your servi source tree '
+                         'or a tree that uses servi, and that uses git for '
+                         'source control. \n'
+                         'You can manually add the servi pre-commit hook '
+                         'script located here: {0}'.format( servihook))
+
+    githook = os.path.abspath(os.path.join(gitroot, '.git/hooks/pre-commit'))
+    if os.path.exists(githook):
+        raise ServiError('Pre-commit hook file already exists: {0}\n'
+                         'Please manually call servi\'s pre-commit hook '
+                         'script from your existing hook.\n'
+                         'Script location: {1}'.format(githook, servihook))
+
+    os.symlink(servihook, githook)
+    info('linked {0} to {1}'.format(githook, servihook))
+    return True
+
+
+
+
 
 
 command = UtilsCommand()
