@@ -24,7 +24,7 @@ class RansCommand(Command):
             description="Remote ANSible - "
                         "Run ansbile on your remote system."
                         "This is a convenience function that sets "
-                        "up the ansible command with the proper inventory "
+                        "up the ansible command with the proper vagrant_inventory "
                         "file, and ssh user and password, saving you a lot "
                         "of typing. Any arguments not listed below will be "
                         "passed directly 'ansible-playbook'."
@@ -56,20 +56,20 @@ class RansCommand(Command):
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
         extra_vars = get_ansible_extra_vars(is_local=False)
 
-        # I use a temporary inventory file (as opposed to a static one like
+        # I use a temporary vagrant_inventory file (as opposed to a static one like
         # vagrant uses) because that way the Servifile is the one source of
         # truth, and any changes don't require an intermediat step
         with tempfile.NamedTemporaryFile(mode='w+') as fp:
-            fp.write('# Servi-created (temporary) inventory file\n')
+            fp.write('# Servi-created (temporary) vagrant_inventory file\n')
             fp.write('{alias} ansible_ssh_host={host}\n'.format(alias=alias, host=host))
             fp.file.flush()
             with open(fp.name, 'r') as tmp:
-                debug('Temporary inventory file used for ansible-playbook\n'
+                debug('Temporary vagrant_inventory file used for ansible-playbook\n'
                       '{0}'.format(tmp.read()))
 
             # Relative to ansible_config
             cmd_line = ['ansible-playbook', 'playbook.yml',
-                        '--inventory-file', fp.name,
+                        '--vagrant_inventory-file', fp.name,
                         '--user', c.MAIN_USERNAME,
                         '--private-key', c.MAIN_RSA_KEY_FILE,
                        ] + proj_only \
@@ -95,5 +95,5 @@ command = RansCommand()
     * Need to get it to read ansible.cfg (maybe just change current directory)
     * Following works:
 
-ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
+ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
 """

@@ -1,9 +1,11 @@
 ---
 -   hosts: all
     vars_files:
-      - ../Servifile.yml
+      - [~/Servifile_globals.yml, ../Servifile.yml]  # This will import Servifile_globals if it exists and if not, just Servifile
+      - ../Servifile.yml    # This may import Servifile AGAIN, but I need a known file above.
     sudo: yes
     tasks:
+      - debug: var=vars
     roles:
         - baseUbuntu
         - mainAccount

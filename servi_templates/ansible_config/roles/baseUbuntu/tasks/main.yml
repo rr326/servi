@@ -74,7 +74,7 @@
 #
 -   file: dest=/var/log/apache2
       owner=www-data group=www-data recurse=yes mode=775
--   file: dest={{ APACHE_LOG_DIR }}
+-   file: dest=/var/log/apache2/{{ SITE_SUFFIX }}
       owner=www-data group=www-data mode=775 state=directory
 -   file: dest=/etc/apache2 state=directory
       owner=webdev group=webdev recurse=yes mode=775

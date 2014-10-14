@@ -57,7 +57,7 @@ class LansCommand(Command):
             description="Local ANSible - "
                         "Run ansbile on your local (vagrant) setup."
                         "This is a convenience function that sets "
-                        "up the ansible command with the proper inventory "
+                        "up the ansible command with the proper vagrant_inventory "
                         "file, and ssh user and password, saving you a lot "
                         "of typing. Any arguments not listed below will be "
                         "passed directly 'ansible-playbook'."
@@ -77,7 +77,7 @@ class LansCommand(Command):
         # Relative to ansible_config
         cmd_line = [
             'ansible-playbook', 'playbook.yml', '-i',
-            '../.vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory',
+            '../.vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory',
             ] + proj_only + vars_to_cmd_list(extra_vars) + extra_args
 
         info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
@@ -98,5 +98,5 @@ command = LansCommand()
     * Need to get it to read ansible.cfg (maybe just change current directory)
     * Following works:
 
-ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
+ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
 """

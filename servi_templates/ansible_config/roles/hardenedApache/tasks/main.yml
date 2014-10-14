@@ -37,7 +37,7 @@
 # Many of the tweaks are in it
 #
 -   name: Use my securified apache2.conf
-    copy: dest=/etc/apache2/apache2.conf src=apache2.conf backup=yes force=yes
+    template: dest=/etc/apache2/apache2.conf src=apache2.conf backup=yes force=yes
 
 #
 # Restart apache

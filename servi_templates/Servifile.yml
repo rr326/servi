@@ -1,20 +1,13 @@
 # These configuration parameters affect Vagrant, ansible, and servi
 ---
 
-# This is a jinja2 variable that will be used below.
-{% set site_suffix = "thissite" %}  # Change this!
+
+STATIC_IP : "192.168.10.100"
+LOCAL_DIR : "src"
+SITE_SUFFIX: thissite
 
 
 
-STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
-LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
-SITE_SUFFIX: {{ site_suffix }}
-
-
-#
-# These are files you are going to change in Master and don't want to
-# get updates from Template
-#
 SERVI_IGNORE_FILES:
   - "^TEMPLATE_VERSION.json"
   - "^Servifile.yml"
@@ -24,21 +17,4 @@ SERVI_IGNORE_FILES:
   - "^apache_config/sites-available/THISSITE.conf"
 
 
-HOSTS:
-  vagrant:
-    - host: "vagrant-{{site_suffix}}"
-    - host_name: "vagrant-{{site_suffix}}"
-    - server_name: "vagrant-{{site_suffix}}"
 
-
-
-REMOTE_DIR:  "/var/www/{{ site_suffix }}"
-APACHE_LOG_DIR: "/var/log/apache2/{{ site_suffix }}"
-
-
-
-#
-# **Note**
-# Global servi parameters are stored in ~/Servifile_globals.yml
-# You can override any of those paramters here.
-#

@@ -1,21 +1,9 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Have servi give all config params
-json_config = `servi -v0 utils --combined_rendered_servifile`
-vars = JSON.parse(json_config)
-require('pp')
-puts PP.pp(vars)
-abort('TESTING')
-
-# Override / add
-vars["IS_VAGRANT"] = true
-
 require 'yaml'
 vars = YAML.load_file 'Servifile.yml'
 vars["IS_VAGRANT"] = true
-vars["REMOTE_DIR"] = "/var/www/" + vars["SITE_SUFFIX"]
-vars["APACHE_LOG_DIR"] = "/var/log/apache2/" + vars["SITE_SUFFIX"]
 
 VAGRANTFILE_API_VERSION = "2"
 
@@ -46,17 +34,16 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # File sharing - point to my development folder
     config.vm.synced_folder "apache_config/sites-available", "/etc/apache2/sites-available", create: true,
         owner: vars["WEBDEV_UID"], group: vars["WEBDEV_GID"], mount_options: ["dmode=775","fmode=664"]
-    config.vm.synced_folder vars["LOCAL_DIR"], vars["REMOTE_DIR"], create: true,
+    config.vm.synced_folder vars["LOCAL_DIR"], "/var/www/#{vars['SITE_SUFFIX']}", create: true,
         owner: vars["WEBDEV_UID"], group: vars["WEBDEV_GID"], mount_options: ["dmode=775","fmode=664"]
 
     # Run ansible with ansible_config/playbook.yml
     config.vm.provision "ansible" do |ansible|
+        ansible.inventory_path = "ansible_config/vagrant_inventory"
+
         ansible.extra_vars = {
             IS_VAGRANT: true,
             SYS_TYPE: "virtual_machine",
-            REMOTE_DIR: vars["REMOTE_DIR"],
-            APACHE_LOG_DIR: vars["APACHE_LOG_DIR"]
-
         }
         ansible.playbook = "ansible_config/playbook.yml"
         # ansible.verbose = "vvvv"

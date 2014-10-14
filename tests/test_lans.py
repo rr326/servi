@@ -9,7 +9,7 @@ import os
 @pytest.fixture
 def mock_ansible_inventory():
     inv_path = os.path.join(
-        c.MASTER_DIR, '.vagrant/provisioners/ansible/inventory')
+        c.MASTER_DIR, '.vagrant/provisioners/ansible/vagrant_inventory')
     inv_file = os.path.join(inv_path, 'vagrant_ansible_inventory')
 
     os.makedirs(inv_path)
