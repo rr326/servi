@@ -1,7 +1,16 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-# Configuration variables in Servifile.yml
+# Have servi give all config params
+json_config = `servi -v0 utils --combined_rendered_servifile`
+vars = JSON.parse(json_config)
+require('pp')
+puts PP.pp(vars)
+abort('TESTING')
+
+# Override / add
+vars["IS_VAGRANT"] = true
+
 require 'yaml'
 vars = YAML.load_file 'Servifile.yml'
 vars["IS_VAGRANT"] = true

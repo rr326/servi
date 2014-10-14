@@ -4,6 +4,7 @@ import os
 import shutil
 from logging import debug, info, warning as warn, error
 import subprocess
+import json
 
 from servi.command import Command
 from servi.manifest import Manifest
@@ -43,6 +44,11 @@ class UtilsCommand(Command):
         parser.add_argument(
             '-r', '--render_servifiles', action='store_true', help=
             'Render the servifile templates, filling in all values')
+
+        parser.add_argument(
+            '--combined_rendered_servifile', action='store_true', help=
+            'Similar to --render_servifiles but only outputs the combined'
+            'configuration and nothing else (as JSON).')
 
         parser.add_argument(
             '-e', '--ensure_latest_globals_in_git', action='store_true', help=
@@ -90,6 +96,9 @@ class UtilsCommand(Command):
 
         if args.render_servifiles:
             return render()
+
+        if args.combined_rendered_servifile:
+            return combined_rendered_servifile()
 
         if args.ensure_latest_globals_in_git:
             return ensure_latest_globals_in_git()
@@ -169,6 +178,18 @@ def render():
     print('\nGlobal config: \n{0}'.format(pformat(global_config, indent=4)))
     print('\nUser config: \n{0}\n'.format(pformat(user_config, indent=4)))
     print('\nCombined config: \n{0}\n'.format(pformat(combined, indent=4)))
+
+    return True
+
+
+def combined_rendered_servifile():
+    # use as:  servi -v0 utils --combined_rendered_servifile
+    master_dir = c.find_master_dir(os.getcwd())
+    c.set_master_dir(master_dir)
+
+    _, _, combined = c.load_user_config()
+
+    print(json.dumps(combined, indent=4))
 
     return True
 

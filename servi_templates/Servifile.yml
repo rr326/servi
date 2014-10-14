@@ -1,10 +1,14 @@
 # These configuration parameters affect Vagrant, ansible, and servi
 ---
 
+# This is a jinja2 variable that will be used below.
+{% set site_suffix = "thissite" %}  # Change this!
+
+
+
 STATIC_IP : "192.168.10.14"  # Note - add this to /etc/hosts
 LOCAL_DIR : "src" # Root code dir. Will be a Vagrant shared directory
-SITE_SUFFIX: "thissite" # will be used for /var/www/thissite and
-                        # /var/log/apache2/thissite
+SITE_SUFFIX: {{ site_suffix }}
 
 
 #
@@ -22,9 +26,16 @@ SERVI_IGNORE_FILES:
 
 HOSTS:
   vagrant:
-    - host: vagrant-thissite,
-    - host_name: vagrant-thissite,
-    - server_name: vagrant-thissite
+    - host: "vagrant-{{site_suffix}}"
+    - host_name: "vagrant-{{site_suffix}}"
+    - server_name: "vagrant-{{site_suffix}}"
+
+
+
+REMOTE_DIR:  "/var/www/{{ site_suffix }}"
+APACHE_LOG_DIR: "/var/log/apache2/{{ site_suffix }}"
+
+
 
 #
 # **Note**
