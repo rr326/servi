@@ -8,27 +8,6 @@ import sys
 import io
 
 
-@pytest.fixture()
-def fake_master(tmpdir):
-    """
-    parent
-        /master
-            /servi
-                \servi_templates
-    """
-    nonmaster = tmpdir.mkdir('nonmaster')
-    master = tmpdir.mkdir('master')
-    master.chdir()
-    servi_run('init .')
-
-    # os.makedirs('master/path1/path1.1/path1.1.1')
-    # os.makedirs('nonmaster/path1/path1.1/path1.1.1')
-    master.ensure_dir('master/path1/path1.1/path1.1.1')
-    nonmaster.ensure_dir('nonmaster/path1/path1.1/path1.1.1')
-    return os.path.abspath(str(master)), \
-        os.path.abspath(str(nonmaster))
-
-
 def test_find_master_dir(fake_master):
     """
     parent

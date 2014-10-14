@@ -211,3 +211,24 @@ def template_but_ignored(setup_init):
 def dirty_servifile_globals(setup_init):
     modify_file(c.SERVIFILE_GLOBAL_FULL)
     return {"m0": setup_init["m0"]}
+
+
+@pytest.fixture()
+def fake_master(tmpdir):
+    """
+    parent
+        /master
+            /servi
+                \servi_templates
+    """
+    nonmaster = tmpdir.mkdir('nonmaster')
+    master = tmpdir.mkdir('master')
+    master.chdir()
+    servi_run('init .')
+
+    # os.makedirs('master/path1/path1.1/path1.1.1')
+    # os.makedirs('nonmaster/path1/path1.1/path1.1.1')
+    master.ensure_dir('master/path1/path1.1/path1.1.1')
+    nonmaster.ensure_dir('nonmaster/path1/path1.1/path1.1.1')
+    return os.path.abspath(str(master)), \
+        os.path.abspath(str(nonmaster))

@@ -82,9 +82,9 @@ def do_ansible(args):
     else:
         return False
 
-    json.dump(retval, sys.stdout, indent=4)
-    print()  # newline
-    return True
+    text = json.dumps(retval, indent=4)+'\n'
+    print(text)  # newline
+    return text
 
 
 def do_debug():
@@ -143,25 +143,3 @@ def do_debug():
               '\t(try the python output format)\n')
 
     return r
-
-TEST_REC = \
-"""
-HOSTS:
-  prod:
-    - hosts:
-      - prod.k2company.com
-    - vars:
-        HOST_NAME: prod5.k2company.com,
-        SERVER_NAME: prod.k2company.com
-  stage:
-    hosts: stage.k2company.com
-    vars:
-        - HOST_NAME: prod5.k2company.com,
-        - SERVER_NAME: stage.k2company.com
-  other:
-    hosts:
-      - stage.k2company.com
-    VARS:
-        HOST_NAME: prod5.k2company.com,
-        SERVER_NAME: stage.k2company.com
-"""

@@ -66,7 +66,6 @@ def test_process_config(setup_init):
     assert c.load_user_config()
 
 
-@pytest.mark.wip
 def test_deep_update():
     assert deep_update({"a": {"a1": 1}} , {"a": {"a2": 2}}) == \
         {"a": {"a1": 1, "a2":2 }}
