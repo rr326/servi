@@ -33,14 +33,6 @@ DIFFTOOL: "git --no-pager diff"  # use simple git
 
 
 #
-#
-# Parameters you probably don't want to override (but can)
-#
-
-# Python virtual environment root
-PY_VENV_DIR : "/usr/share/penv"
-
-#
 # MONIT
 #
 MONIT_UN: admin
@@ -49,7 +41,38 @@ MAIN_FILESYSTEM: /dev/vda1
 
 
 #
+#
+# Parameters you probably don't want to override (but can)
+#
+
+# Python virtual environment root
+PY_VENV_DIR : "/usr/share/penv"
+
+
+#
 # webdev - the servi template uses a 'webdev' group. But it needs a
 # UID & GID to bootstrap it. These are the defaults
 WEBDEV_UID : 1100
 WEBDEV_GID : 900
+
+
+# Note - this is used to create a dynamic inventory,
+# per: http://docs.ansible.com/developing_inventory.html
+# It's format is VERY SPECIFIC!
+# To test, try: servi -v0 inventory --list
+# And then try: servi -inventory --debug
+# 'hosts' should be arrays
+# The whole doc, an individual host, and vars should all be hashes
+HOSTS:
+  prod:
+    hosts:
+      - prod.k2company.com
+    vars:
+        HOST_NAME: prod5.k2company.com,
+        SERVER_NAME: prod.k2company.com
+  stage:
+    hosts:
+      - stage.k2company.com
+    vars:
+        HOST_NAME: prod5.k2company.com,
+        SERVER_NAME: stage.k2company.com

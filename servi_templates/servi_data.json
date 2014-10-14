@@ -1,10 +1,10 @@
 {
     "files": {
         "Servifile.yml": "d9abdff55151733b0c2c43d892610f9353272d1f",
-        "Servifile_globals.yml": "e80d5b7415fa8cfae7051dc85c086af04ce355cf",
+        "Servifile_globals.yml": "7599903147178c57bd283a9ca1124a913b0fcaaa",
         "Vagrantfile": "3ab94a5ebed4fa3989056cf9b8ac968f0b07ea36",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
-        "ansible_config/playbook.yml": "952df6cfb25d3481f1f241d9e06ea3ab6e7a15ab",
+        "ansible_config/playbook.yml": "6f281a20194aa02702aaf47753f3036e3ad85267",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
@@ -28,9 +28,9 @@
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/tasks/main.yml": "d30c73defd7ee4b34236a54d2f6966d3fe8da1fc",
         "ansible_config/roles/projectSpecific/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-        "ansible_config/vagrant_inventory": "c0753f691df3d8e76a33c613dbd811f3d32f66f1",
+        "ansible_config/vagrant_inventory": "4f07e1a3d04430ee925e6fa98f273cc2762ba66d",
         "apache_config/sites-available/THISSITE.conf": "b4194e0578916b18cc33eb93d0e42753f360d7a8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.38"
+    "template_version": "0.1.39"
 }

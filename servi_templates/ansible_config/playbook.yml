@@ -1,11 +1,13 @@
 ---
 -   hosts: all
+    gather_facts: no
     vars_files:
       - [~/Servifile_globals.yml, ../Servifile.yml]  # This will import Servifile_globals if it exists and if not, just Servifile
       - ../Servifile.yml    # This may import Servifile AGAIN, but I need a known file above.
     sudo: yes
     tasks:
       - debug: var=vars
+      # Annoyingly, this will NOT print variables defined by the inventory file
     roles:
         - baseUbuntu
         - mainAccount
