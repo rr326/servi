@@ -28,6 +28,7 @@ setup(
     packages = find_packages(),
     include_package_data=True,
     # package_data={    }, # Not needed - should pick up ./templates from git
+    scripts = ['bin/servi_inventory'],
     exclude_package_data = {
         '' : ['.gitignore']
     },

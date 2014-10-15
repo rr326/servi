@@ -1,0 +1,3 @@
+#!/bin/sh
+# Ansible requires the dynamic inventory to be a simple file with no arguments
+servi -v1 inventory $@
