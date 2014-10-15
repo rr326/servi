@@ -50,6 +50,20 @@ HOSTS:
         SERVER_NAME: stage.k2company.com
 """
 
+SERVIFILE_LOCAL = \
+"""
+---
+HOSTS:
+  vagrant:
+      hosts:
+        - 127.0.0.1
+      vars:
+          HOST_NAME: vagrant-thissite
+          SERVER_NAME: vagrant-thissite
+          ansible_ssh_port: 2222
+          IS_VAGRANT: True
+"""
+
 def equal_jsons(text1, text2):
     try:
         o1 = json.loads(text1.strip('\n\s"'))
@@ -67,8 +81,15 @@ def test_inventory(mock_homedir, setup_init):
 
     with open(c.SERVIFILE_GLOBAL_FULL, 'w') as fp:
         fp.write(GOOD_REC)
+
+    with open(pathfor(c.SERVIFILE, c.MASTER), 'w') as fp:
+        fp.write(SERVIFILE_LOCAL)
+
     assert not servi_run('inventory')
     good_o = yaml.load(GOOD_REC)['HOSTS']
+    servifile_o = yaml.load(SERVIFILE_LOCAL)['HOSTS']
+    good_o = c.deep_update(good_o, servifile_o)
+
     good_j = json.dumps(good_o)
     assert equal_jsons(servi_run('inventory --list'), good_j)
     assert equal_jsons(servi_run('inventory --host prod'),
