@@ -8,7 +8,7 @@ import servi.config as c
 from servi.template_mgr import TemplateManager
 from servi.utils import pathfor, timeit
 from servi.exceptions import ServiError
-from servi.commands.lans import get_ansible_extra_vars, vars_to_cmd_list
+from servi.commands.lans import get_servi_inventory_path
 from pprint import pformat
 
 
@@ -52,35 +52,26 @@ class RansCommand(Command):
                              .format(args.host_alias, pformat(c.HOSTS)))
 
         alias = args.host_alias
-        host = hostdict[alias].get('host')
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
-        extra_vars = get_ansible_extra_vars(is_local=False)
+        IS_VAGRANT = \
+            c.HOSTS \
+            .get(args.host_alias, {}) \
+            .get("vars", {}) \
+            .get("IS_VAGRANT", False)
 
-        #TODO - Need to get all variables and pass through
-
-        # Get servi_inventory script full path
-
-        try:
-            servi_inventory = subprocess.check_output('which servi_inventory',
-                shell=True)
-        except subprocess.CalledProcessError:
-            raise ServiError("Couldn't find servi_inventory script on path.\n"
-                             "Try 'which servi_inventory'.")
-        servi_inventory = servi_inventory.decode('utf-8').strip()
-
-        # Relative to ansible_config
         cmd_line = ['ansible-playbook', 'playbook.yml',
-                    '--inventory-file', servi_inventory,
+                    '--inventory-file', get_servi_inventory_path(),
                     '--limit', alias,
                     '--user', c.MAIN_USERNAME,
                     '--private-key', c.MAIN_RSA_KEY_FILE,
-                   ] + proj_only \
-                     + vars_to_cmd_list(extra_vars) \
-                     + extra_args
+                    '-e', "IS_VAGRANT={0}".format(IS_VAGRANT),
+                    ] + proj_only \
+                      + extra_args
 
         info('Running REMOTE ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
              .format(' '.join(cmd_line),
                     os.path.join(c.MASTER_DIR, 'ansible_config')))
+
         with timeit():
             retval = subprocess.call(
                 cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))

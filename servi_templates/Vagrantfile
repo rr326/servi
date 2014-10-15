@@ -5,16 +5,12 @@ require('time')
 # Have servi give all config params
 json_config = `servi -v0 utils --combined_rendered_servifile`
 extra_vars = JSON.parse(json_config)
-require('pp')
-# print(PP.pp(extra_vars)) ; abort('TESTING')
+# require('pp') ; print(PP.pp(extra_vars)) ; abort('Debugging')
 
-# Override / add
 extra_vars["IS_VAGRANT"] = true
-
 host_vars = extra_vars["HOSTS"]["vagrant"]["vars"]
 
 VAGRANTFILE_API_VERSION = "2"
-
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     if ENV['servi_box'].to_s.empty?
         config.vm.box = "ubuntu/trusty64"
@@ -23,13 +19,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         # 'servi_box' environment variable is not empty
         # This is set by 'servi usebox'.
         print "**************************\n"
-        print "Using servi_box: "+ENV['servi_box']
-        print "\n**************************\n\n"
+        print "Using servi_box: "+ENV['servi_box']+"\n"
+        print "**************************\n\n"
         config.vm.box = ENV['servi_box']
     end
     
     config.vm.hostname = host_vars["HOST_NAME"]
-
     config.vm.network "private_network", ip: extra_vars["STATIC_IP"]
 
     config.vm.provider "virtualbox" do |v|
@@ -48,7 +43,5 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         ansible.inventory_path = `which servi_inventory`.strip
         ansible.limit = "vagrant"
         ansible.playbook = "ansible_config/playbook.yml"
-
-        #ansible.extra_vars = extra_vars  ## DON"T NEED - REMOVE
     end
 end

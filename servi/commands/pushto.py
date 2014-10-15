@@ -8,7 +8,6 @@ import servi.config as c
 from servi.template_mgr import TemplateManager
 from servi.utils import pathfor, reset_cwd
 from servi.exceptions import ServiError
-from servi.commands.lans import get_ansible_extra_vars, vars_to_cmd_list
 from pprint import pformat
 
 
@@ -83,7 +82,6 @@ class PushtoCommand(Command):
 
         alias = args.host_alias
         host = hostdict[alias]['hosts'][0]
-        hostvars = hostdict[alias]['vars']
 
         ssh_cmd = '"ssh -q -l {0} -i {1}"'.format(c.MAIN_USERNAME,
                                              c.MAIN_RSA_KEY_FILE)

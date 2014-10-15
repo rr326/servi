@@ -6,39 +6,20 @@ from servi.command import Command
 import servi.config as c
 from servi.template_mgr import TemplateManager
 from servi.utils import pathfor, timeit
+from servi.exceptions import ServiError
 
 
-"""
-IMPORTANT NOTE
+def get_servi_inventory_path():
+    try:
+        servi_inventory = \
+            subprocess.check_output('which servi_inventory', shell=True)
+    except subprocess.CalledProcessError:
+        raise ServiError("Couldn't find servi_inventory script on path.\n"
+                         "Try 'which servi_inventory'.")
+    servi_inventory = servi_inventory.decode('utf-8').strip()
 
-Running ansible requires some extra variables which I need to define in TWO
-places: Vagrantfile (eg: vars["IS_VAGRANT"] = true) and here.
+    return servi_inventory
 
-It's ugly and error prone but I can't find an elegant way to do it
-(that doesn't overly complicate the Vagrantfile).
-"""
-
-
-def get_ansible_extra_vars(is_local):
-    retval = {}
-    if is_local:
-        retval["IS_VAGRANT"] = True
-    else:
-        retval["IS_VAGRANT"] = False
-
-    return retval
-
-
-def vars_to_cmd_list(extra_vars):
-    retval = []
-
-    if type(extra_vars) is dict:
-        for key, val in extra_vars.items():
-            retval.append('-e {0}={1}'.format(key, val))
-    else:
-        for val in extra_vars:
-            retval.append('-e' + val)
-    return retval
 
 class LansCommand(Command):
     def __init__(self):
@@ -67,20 +48,23 @@ class LansCommand(Command):
     def run(self, args, extra_args):
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
 
-        extra_vars = get_ansible_extra_vars(is_local=True)
-
-        # Relative to ansible_config
-        cmd_line = [
-            'ansible-playbook', 'playbook.yml', '-i',
-            '../.vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory',
-            ] + proj_only + vars_to_cmd_list(extra_vars) + extra_args
+        cmd_line = ['ansible-playbook', 'playbook.yml',
+                    '--inventory-file', get_servi_inventory_path(),
+                    '--limit', 'vagrant',
+                    '--user', c.MAIN_USERNAME,
+                    '--private-key', c.MAIN_RSA_KEY_FILE,
+                    '-e', 'IS_VAGRANT=True',
+                    ] + proj_only \
+                      + extra_args
 
         info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
              .format(' '.join(cmd_line),
                 os.path.join(c.MASTER_DIR, 'ansible_config')))
+
         with timeit():
             retval = subprocess.call(
                 cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
+
         return not retval
 
 
