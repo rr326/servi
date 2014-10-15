@@ -68,13 +68,13 @@ HOSTS:
     hosts:
       - prod.k2company.com
     vars:
-        HOST_NAME: prod5.k2company.com,
+        HOST_NAME: prod5.k2company.com
         SERVER_NAME: prod.k2company.com
   stage:
     hosts:
       - stage.k2company.com
     vars:
-        HOST_NAME: prod5.k2company.com,
+        HOST_NAME: stage.k2company.com
         SERVER_NAME: stage.k2company.com
   vagrant:
     hosts:

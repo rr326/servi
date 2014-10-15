@@ -20,10 +20,7 @@ It's ugly and error prone but I can't find an elegant way to do it
 
 
 def get_ansible_extra_vars(is_local):
-    retval = {
-        "REMOTE_DIR": "/var/www/"+c.SITE_SUFFIX,
-        "APACHE_LOG_DIR": "/var/log/apache2/" + c.SITE_SUFFIX
-    }
+    retval = {}
     if is_local:
         retval["IS_VAGRANT"] = True
     else:

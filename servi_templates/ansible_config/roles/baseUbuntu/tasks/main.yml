@@ -1,6 +1,17 @@
 ---
 
--  name: Set hostname to {{ HOST_NAME }}
+# Testing stuff
+#- debug: var=vars
+#- debug: var=hostvars
+#- debug: msg="HOST_NAME = *{{ HOST_NAME }}*"
+#-  name: "Set hostname to {{ HOST_NAME }}"
+#   hostname: name="{{ HOST_NAME }}"
+#- debug: msg="HOST_NAME = *{{ HOST_NAME }}*"
+#- fail: msg="TESTING"
+
+
+-  debug: msg="HOST_NAME = *{{ HOST_NAME }}*"
+-  name: "Set hostname to {{ HOST_NAME }}"
    hostname: name="{{ HOST_NAME }}"
 
 #

@@ -82,7 +82,8 @@ class PushtoCommand(Command):
             src_dir = pathfor(c.LOCAL_DIR, c.MASTER)
 
         alias = args.host_alias
-        host = hostdict[alias].get('host')
+        host = hostdict[alias]['hosts'][0]
+        hostvars = hostdict[alias]['vars']
 
         ssh_cmd = '"ssh -q -l {0} -i {1}"'.format(c.MAIN_USERNAME,
                                              c.MAIN_RSA_KEY_FILE)

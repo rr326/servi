@@ -56,32 +56,34 @@ class RansCommand(Command):
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
         extra_vars = get_ansible_extra_vars(is_local=False)
 
-        # I use a temporary vagrant_inventory file (as opposed to a static one like
-        # vagrant uses) because that way the Servifile is the one source of
-        # truth, and any changes don't require an intermediat step
-        with tempfile.NamedTemporaryFile(mode='w+') as fp:
-            fp.write('# Servi-created (temporary) vagrant_inventory file\n')
-            fp.write('{alias} ansible_ssh_host={host}\n'.format(alias=alias, host=host))
-            fp.file.flush()
-            with open(fp.name, 'r') as tmp:
-                debug('Temporary vagrant_inventory file used for ansible-playbook\n'
-                      '{0}'.format(tmp.read()))
+        #TODO - Need to get all variables and pass through
 
-            # Relative to ansible_config
-            cmd_line = ['ansible-playbook', 'playbook.yml',
-                        '--vagrant_inventory-file', fp.name,
-                        '--user', c.MAIN_USERNAME,
-                        '--private-key', c.MAIN_RSA_KEY_FILE,
-                       ] + proj_only \
-                         + vars_to_cmd_list(extra_vars) \
-                         + extra_args
+        # Get servi_inventory script full path
 
-            info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
-                 .format(' '.join(cmd_line),
-                        os.path.join(c.MASTER_DIR, 'ansible_config')))
-            with timeit():
-                retval = subprocess.call(
-                    cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
+        try:
+            servi_inventory = subprocess.check_output('which servi_inventory',
+                shell=True)
+        except subprocess.CalledProcessError:
+            raise ServiError("Couldn't find servi_inventory script on path.\n"
+                             "Try 'which servi_inventory'.")
+        servi_inventory = servi_inventory.decode('utf-8').strip()
+
+        # Relative to ansible_config
+        cmd_line = ['ansible-playbook', 'playbook.yml',
+                    '--inventory-file', servi_inventory,
+                    '--limit', alias,
+                    '--user', c.MAIN_USERNAME,
+                    '--private-key', c.MAIN_RSA_KEY_FILE,
+                   ] + proj_only \
+                     + vars_to_cmd_list(extra_vars) \
+                     + extra_args
+
+        info('Running REMOTE ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
+             .format(' '.join(cmd_line),
+                    os.path.join(c.MASTER_DIR, 'ansible_config')))
+        with timeit():
+            retval = subprocess.call(
+                cmd_line, cwd=os.path.join(c.MASTER_DIR, 'ansible_config'))
 
         return not retval
 
