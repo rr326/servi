@@ -1,5 +1,7 @@
 ---
 
+-  name: Set hostname to {{ HOST_NAME }}
+   hostname: name="{{ HOST_NAME }}"
 
 #
 # Install packages
@@ -161,12 +163,6 @@
         dest=/etc/environment
         state=present
         line='export PY_VENV_DIR="{{ PY_VENV_DIR }}"'
-
--   name: "/etc/environment: Set SYS_TYPE = {{ SYS_TYPE }}"
-    lineinfile: >
-        dest=/etc/environment
-        state=present
-        line='export SYS_TYPE="{{ SYS_TYPE | default("cloud") }}"'
 
 
 #

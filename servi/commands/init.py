@@ -55,6 +55,8 @@ class InitCommand(Command):
                     global_servi_file_exists()):
                     raise ForceError(
                         'Servifile_globals already exists in: {0}.\n'
+                        'Try "servi init -s" to skip installing '
+                        'Servifile_globals.yml\n'
                             .format(c.SERVIFILE_GLOBAL_FULL))
 
         assert_doit()

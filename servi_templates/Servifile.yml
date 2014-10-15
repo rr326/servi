@@ -17,4 +17,13 @@ SERVI_IGNORE_FILES:
   - "^apache_config/sites-available/THISSITE.conf"
 
 
-
+# This overrides the HOSTS['vagrant'] record from Servifile_globals.yml
+HOSTS:
+  vagrant:
+      hosts:
+        - 127.0.0.1
+      vars:
+          HOST_NAME: vagrant-thissite
+          SERVER_NAME: vagrant-thissite
+          ansible_ssh_port: 2222
+          IS_VAGRANT: True

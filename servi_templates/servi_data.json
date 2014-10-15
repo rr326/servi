@@ -1,8 +1,8 @@
 {
     "files": {
-        "Servifile.yml": "d9abdff55151733b0c2c43d892610f9353272d1f",
-        "Servifile_globals.yml": "7599903147178c57bd283a9ca1124a913b0fcaaa",
-        "Vagrantfile": "3ab94a5ebed4fa3989056cf9b8ac968f0b07ea36",
+        "Servifile.yml": "dcd5d799748b7e218ac6ab68c2f9b923d92fb356",
+        "Servifile_globals.yml": "6f4db859098fc8326162cc0a012333bead90b092",
+        "Vagrantfile": "6f453858410aa30e568e8cee7d8a20f82274ebc5",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
         "ansible_config/playbook.yml": "6f281a20194aa02702aaf47753f3036e3ad85267",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
@@ -12,11 +12,11 @@
         "ansible_config/roles/baseUbuntu/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
         "ansible_config/roles/baseUbuntu/files/sudo_nopasswd": "8cab6f83164d5642fe8ceef3bee9c64284239dc2",
-        "ansible_config/roles/baseUbuntu/tasks/main.yml": "15da76f8af12d6a53074f2278ae0ded62b56956c",
+        "ansible_config/roles/baseUbuntu/tasks/main.yml": "58abc53f39a10264fc95de82f05e8d58c09b8009",
         "ansible_config/roles/baseUbuntu/templates/monitrc.j2": "fa12c2b49a7cf506a26517ae4d65912e5e642fc7",
         "ansible_config/roles/baseUbuntu/templates/postfix_main.cf.j2": "40bc2d72bfb90572fe3dc2b11df6867bc855089e",
         "ansible_config/roles/baseUbuntu/templates/sasl_passwd.j2": "490f288770bb71e99f3b3f7bb7064ad2c0b64d02",
-        "ansible_config/roles/baseUbuntu/templates/servername.conf.j2": "d2f5698760b9f0973395d641e5c8fcb382a540dc",
+        "ansible_config/roles/baseUbuntu/templates/servername.conf.j2": "ce6dc004ce9d00600e83412e654123e87a0b116e",
         "ansible_config/roles/hardenedApache/files/envvars": "3d08477ba9b881c72e6d5691cff65719bf30e0d4",
         "ansible_config/roles/hardenedApache/tasks/main.yml": "63a0b4a286611004c91ece62f38ef2de942c00b5",
         "ansible_config/roles/hardenedApache/templates/apache2.conf": "463aa20655a0d50a8c50fe702dd7972ebd00bc36",
@@ -28,9 +28,8 @@
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/tasks/main.yml": "d30c73defd7ee4b34236a54d2f6966d3fe8da1fc",
         "ansible_config/roles/projectSpecific/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-        "ansible_config/vagrant_inventory": "4f07e1a3d04430ee925e6fa98f273cc2762ba66d",
         "apache_config/sites-available/THISSITE.conf": "b4194e0578916b18cc33eb93d0e42753f360d7a8",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.39"
+    "template_version": "0.1.40"
 }

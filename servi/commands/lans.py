@@ -26,10 +26,8 @@ def get_ansible_extra_vars(is_local):
     }
     if is_local:
         retval["IS_VAGRANT"] = True
-        retval["SYS_TYPE"] = "virtual_machine",
     else:
         retval["IS_VAGRANT"] = False
-        retval["SYS_TYPE"] = "cloud",
 
     return retval
 
