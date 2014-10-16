@@ -5,6 +5,8 @@ from contextlib import contextmanager
 from datetime import datetime
 from logging import debug, info, warning, error
 import collections
+import tempfile
+import shutil
 
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
@@ -55,3 +57,17 @@ def timeit():
     t1 = datetime.now()
     info('Total running time: {0:.1f} min'.format((t1 - t0).seconds / 60))
 
+
+@contextmanager
+def nice_temporary_directory(**kwargs):
+    # This  is like TemporaryDirectory except if there is an error
+    # it does NOT delete the temporary directory
+    try:
+        tempdir = tempfile.mkdtemp(**kwargs)
+        yield tempdir
+    except Exception:
+        error('Exception occured. Not deleting temporary directory.\n'
+              'tempdir = {0}'.format(tempdir))
+        raise
+    else:
+        shutil.rmtree(tempdir)

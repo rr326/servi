@@ -3,8 +3,7 @@ import os
 
 from servi.command import Command, process_and_run_command_line as servi_run
 import servi.config as c
-from servi.utils import pathfor, timeit
-from tempfile import TemporaryDirectory
+from servi.utils import pathfor, timeit, nice_temporary_directory
 from servi.template_mgr import TemplateManager
 import re
 from servi.semantic import SemanticVersion
@@ -59,7 +58,7 @@ class BuildboxCommand(Command):
                 os.remove(os.path.abspath(os.path.join(c.BOX_DIR, f[0])))
 
         orig_dir = os.getcwd()
-        with TemporaryDirectory() as tmpdir:
+        with nice_temporary_directory() as tmpdir:
             debug('buildbox tmppath: {0}\n'.format(tmpdir))
             info('This will do a "vagrant up" with the current servi '
                   'template.\nIt could take a while...\n\n')

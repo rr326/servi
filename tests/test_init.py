@@ -81,7 +81,7 @@ class TestInit():
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
-        assert changed == {'apache_config/sites-available/THISSITE.conf'}
+        assert changed == {'apache_config/sites-available/mysite.conf'}
 
     def test_dirty_servifile_globals(self, dirty_servifile_globals):
         print('expanduser: {0}'.format(os.path.expanduser('~')))

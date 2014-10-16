@@ -142,7 +142,7 @@ def dirty_ignored_files():
     modify_file(
         pathfor('ansible_config/roles/projectSpecific/tasks/main.yml',
                 c.MASTER))
-    os.remove(pathfor("apache_config/sites-available/THISSITE.conf", c.MASTER))
+    os.remove(pathfor("apache_config/sites-available/mysite.conf", c.MASTER))
     return ['ansible_config/roles/projectSpecific/tasks/main.yml']
 
 
@@ -203,7 +203,7 @@ def master_only(setup_init):
 
 @pytest.fixture()
 def template_but_ignored(setup_init):
-    modify_file(pathfor('apache_config/sites-available/THISSITE.conf',
+    modify_file(pathfor('apache_config/sites-available/mysite.conf',
                 c.TEMPLATE))
     return {"m0": setup_init["m0"]}
 

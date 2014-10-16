@@ -120,7 +120,7 @@
 
 #
 # Delete any broken apache config links
-# (Which can easily happen if, say, you rename THISSITE.conf )
+# (Which can easily happen if, say, you rename mysite.conf )
 -   name: Delete any broken links in apache2/sites-enabled
     command: find  -L /etc/apache2/sites-enabled -maxdepth 1 -type l -delete
 

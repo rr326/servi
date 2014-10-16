@@ -64,7 +64,7 @@ sudo ls /  # No password should be asked
     echo 'Edit /etc/hosts'
     subl /etc/hosts
     echo 'Copy sample apache config then edit'
-    cp apache_config/sites-available/THISSITE.conf apache_config/sites-available/serviplate.conf
+    cp apache_config/sites-available/mysite.conf apache_config/sites-available/serviplate.conf
     subl apache_config/sites-available/serviplate.conf
     echo 'build box (not necessary, but good for future servi installs)'
     servi buildbox

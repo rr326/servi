@@ -66,6 +66,6 @@ def test_role_of_fname(template_manager_setup):
     assert tmgr.role_of_fname('ansible_config/roles/mainAccount') \
         == 'mainAccount'
 
-    assert tmgr.role_of_fname('apache_config/sites-available/THISSITE') \
+    assert tmgr.role_of_fname('apache_config/sites-available/mysite') \
         is None
 

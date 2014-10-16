@@ -4,7 +4,7 @@
 
 STATIC_IP : "192.168.10.100"
 LOCAL_DIR : "src"
-SITE_SUFFIX: THISSITE
+SITE_SUFFIX: mysite
 
 
 
@@ -14,7 +14,7 @@ SERVI_IGNORE_FILES:
   - "^Servifile_globals.yml"
   - "^ansible_config/playbook.yml"
   - "^ansible_config/roles/projectSpecific/.*"
-  - "^apache_config/sites-available/THISSITE.conf"
+  - "^apache_config/sites-available/mysite.conf"
   - "^src/.*"
 
 
@@ -24,7 +24,7 @@ HOSTS:
       hosts:
         - 127.0.0.1
       vars:
-          HOST_NAME: vagrant-THISSITE
-          SERVER_NAME: vagrant-THISSITE
+          HOST_NAME: vagrant-mysite
+          SERVER_NAME: vagrant-mysite
           ansible_ssh_port: 2222
           IS_VAGRANT: True

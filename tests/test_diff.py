@@ -13,13 +13,13 @@ def test_diff(setup_init):
                     pathfor('ansible_config/roles/UnusedRole', c.TEMPLATE))
 
     mod_templates = ['Vagrantfile',
-                     'apache_config/sites-available/THISSITE.conf',
+                     'apache_config/sites-available/mysite.conf',
                      'ansible_config/playbook.yml']
 
     mod_master = ['Vagrantfile',
                   'ansible_config/playbook.yml']
 
-    del_master = ['apache_config/sites-available/THISSITE.conf']
+    del_master = ['apache_config/sites-available/mysite.conf']
 
     for file in mod_templates:
         modify_file(pathfor(file, c.TEMPLATE))
@@ -36,16 +36,16 @@ def test_diff(setup_init):
 
     assert added == set()
     assert changed == {'Vagrantfile', 'ansible_config/playbook.yml'}
-    assert removed == {'apache_config/sites-available/THISSITE.conf'}
+    assert removed == {'apache_config/sites-available/mysite.conf'}
 
     tmgr = TemplateManager()
     assert tmgr.t_added == set()
     assert tmgr.t_changed == {'Vagrantfile', 'ansible_config/playbook.yml'}
     # Also UnusedRole stuff
     assert tmgr.t_removed >= \
-        {'apache_config/sites-available/THISSITE.conf'}
+        {'apache_config/sites-available/mysite.conf'}
     assert tmgr.t_mod_but_ignored == {
-        'apache_config/sites-available/THISSITE.conf',
+        'apache_config/sites-available/mysite.conf',
         'ansible_config/playbook.yml'}
 
     assert servi_run('diff')

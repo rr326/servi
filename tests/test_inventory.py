@@ -58,8 +58,8 @@ HOSTS:
       hosts:
         - 127.0.0.1
       vars:
-          HOST_NAME: vagrant-thissite
-          SERVER_NAME: vagrant-thissite
+          HOST_NAME: vagrant-mysite
+          SERVER_NAME: vagrant-mysite
           ansible_ssh_port: 2222
           IS_VAGRANT: True
 """

@@ -183,7 +183,7 @@ class RoleManager(object):
         """
         returns a role if normalized_fname looks like a role
         ansible_config/roles/baseUbuntu/* --> baseUbuntu
-        apache_config/sites_available/THISSITE --> None
+        apache_config/sites_available/mysite --> None
         """
         match = re.search('ansible_config/roles/([^/]*)(/.+|)',
                           normalized_fname)
