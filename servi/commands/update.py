@@ -48,7 +48,10 @@ class UpdateCommand(Command):
                  'The following files from the template were changed but\n'
                  'are on your SERVI_IGNORE_FILES list and will not be '
                  'updated:\n'
-                 '{0}\n'.format(sorted(ignored(master_and_tmpl_changed))))
+                 '{0}\n\n'
+                 'Try a "servi diff" followed by "servi copy" to manually'
+                 'updated changed ignored files.\n'
+                 .format(sorted(ignored(master_and_tmpl_changed))))
 
         if t.modified_possible_roles:
             warn('\nWarning\n'

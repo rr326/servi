@@ -12,9 +12,12 @@ def setup_logging():
             logging.Formatter.__init__(self, fmt)
 
         def format(self, record):
-            if record.levelno >= logging.WARNING:
+            if (record.levelno == logging.WARNING
+                    or record.levelno > logging.ERROR):
                 fmt = '%(levelname)s: %(msg)s'
             else:
+                # Errors have my own ERROR text
+                # Info/debug don't need a levelname
                 fmt = '%(msg)s'
 
             self._fmt = fmt
@@ -22,12 +25,38 @@ def setup_logging():
             result = logging.Formatter.format(self, record)
             return result
 
+    # http://stackoverflow.com/a/24956305/1400991
+
+    class LevelFilter(logging.Filter):
+        LT = 'LT'
+        GTE = 'GTE'
+
+        def __init__(self, level, comp):
+            self.level = level
+            self.comp = comp
+            assert comp in [LevelFilter.LT, LevelFilter.GTE]
+
+        def filter(self, record):
+            if self.comp == LevelFilter.LT:
+                return record.levelno < self.level
+            else:
+                return record.levelno >= self.level
+
     # Set a default logger
     fmt = MyFormatter()
-    hdlr = logging.StreamHandler(sys.stdout)
 
-    hdlr.setFormatter(fmt)
-    logging.root.addHandler(hdlr)
+    stdout_hdlr = logging.StreamHandler(sys.stdout)
+    stdout_hdlr.setFormatter(fmt)
+    lower_than_error = LevelFilter(logging.ERROR, LevelFilter.LT)
+    stdout_hdlr.addFilter(lower_than_error)
+    logging.root.addHandler(stdout_hdlr)
+
+    stderr_hdlr = logging.StreamHandler(sys.stderr)
+    stderr_hdlr.setFormatter(fmt)
+    gte_than_error = LevelFilter(logging.ERROR, LevelFilter.GTE)
+    stderr_hdlr.addFilter(gte_than_error)
+    logging.root.addHandler(stderr_hdlr)
+
     logging.root.setLevel(DEFAULT_LOG_LEVEL)
 
 

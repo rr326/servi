@@ -26,8 +26,8 @@ class UtilsCommand(Command):
         parser = sub_parsers.add_parser(
             'utils', help='Developer support tools.',
             description='Developer support tools.  Run with the '
-                        '-v0 flag to suppress extra printing.  EG: '
-                        '"servi -v0 utils --show_servifile_globals"')
+                        '-v1 flag to suppress extra printing.  EG: '
+                        '"servi -v1 utils --render_servifiles"')
 
         parser.add_argument(
             '-m', '--ensure_latest_manifest',  action='store_true',

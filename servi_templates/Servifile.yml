@@ -4,7 +4,7 @@
 
 STATIC_IP : "192.168.10.100"
 LOCAL_DIR : "src"
-SITE_SUFFIX: thissite
+SITE_SUFFIX: THISSITE
 
 
 
@@ -24,7 +24,7 @@ HOSTS:
       hosts:
         - 127.0.0.1
       vars:
-          HOST_NAME: vagrant-thissite
-          SERVER_NAME: vagrant-thissite
+          HOST_NAME: vagrant-THISSITE
+          SERVER_NAME: vagrant-THISSITE
           ansible_ssh_port: 2222
           IS_VAGRANT: True

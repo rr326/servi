@@ -72,7 +72,7 @@ class BuildboxCommand(Command):
             # which might be installed globally
             if not args.mock:
                 with timeit():
-                    servi_run('-v0 init .')
+                    servi_run('-v1 init -s .')
                     subprocess.check_call('vagrant up', shell=True)
                     subprocess.check_call(
                         'vagrant package --output {0}'.format(box_path),shell=True)
@@ -83,7 +83,7 @@ class BuildboxCommand(Command):
 
                 # If mock (testing) force new servifile
                 # it's ok - it should be a mocked servifile anyway
-                servi_run('-v0 init -f .')
+                servi_run('-v1 init -f .')
 
                 with open(box_path, 'w') as fp:
                     fp.write('mocked base box')

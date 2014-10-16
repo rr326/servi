@@ -77,7 +77,8 @@ def setup_parsers():
 
     servi_parser.add_argument(
         '-v', '--verbose', type=int, choices=range(0, 5),
-        help='4: debug, 3: info, 2: warn, 1: error, 0: silent',
+        help='4: debug, 3: info, 2: warn, 1: error, 0: silent'
+             '(Note: -v0 is risky since errors are not displayed)',
         default=log_level_to_arg(c.DEFAULT_LOG_LEVEL))
 
     sub_parsers = servi_parser.add_subparsers(

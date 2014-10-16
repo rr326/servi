@@ -33,10 +33,8 @@ class InventoryCommand(Command):
         parser = sub_parsers.add_parser(
             'inventory', help='Print ansible inventory to stdout',
             description='Print ansible inventory to stdout.  The data '
-                        'for the inventory comes from Servifile_globals.yml.'
-                        ' Example: '
-                        '"ansible-playbook prod -i \'servi -v0 inventory \' '
-                        'playbook.yml"')
+                        'for the inventory comes from Servifile_globals.yml.  '
+                        'This is used by the servi_inventory script.')
 
         parser.add_argument(
             '--list',  action='store_true',
