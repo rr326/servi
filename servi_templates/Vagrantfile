@@ -25,7 +25,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     end
     
     config.vm.hostname = host_vars["HOST_NAME"]
+
     config.vm.network "private_network", ip: extra_vars["STATIC_IP"]
+    #config.vm.network "forwarded_port", id: 'ssh', host: 2222, guest: 22, auto_correct: true # Not sure if this is necessary
+    config.ssh.port = 22
+    config.ssh.host = extra_vars["STATIC_IP"]
 
     config.vm.provider "virtualbox" do |v|
       v.memory = 512  # wordpress: 1024
@@ -39,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         owner:  extra_vars["WEBDEV_UID"], group:  extra_vars["WEBDEV_GID"], mount_options: ["dmode=775","fmode=664"]
     
     config.vm.provision "ansible" do |ansible|
-        #ansible.verbose = "vv"  # ssh debug: "vvvv"
+        #ansible.verbose =  "vvvv"
         ansible.inventory_path = `which servi_inventory`.strip
         ansible.limit = "vagrant"
         ansible.playbook = "ansible_config/playbook.yml"

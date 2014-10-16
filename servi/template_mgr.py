@@ -99,7 +99,6 @@ class TemplateManager(object):
         if not os.path.exists(subdir):
             os.makedirs(subdir)
 
-        debug('Backed up: {0}'.format(fname))
         shutil.move(pathfor(fname, c.MASTER), subdir)
 
     def copy_files(self, exclude_files):

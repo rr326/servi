@@ -49,7 +49,7 @@ class UpdateCommand(Command):
                  'are on your SERVI_IGNORE_FILES list and will not be '
                  'updated:\n'
                  '{0}\n\n'
-                 'Try a "servi diff" followed by "servi copy" to manually'
+                 'Try a "servi diff" followed by "servi copy" to manually '
                  'updated changed ignored files.\n'
                  .format(sorted(ignored(master_and_tmpl_changed))))
 
