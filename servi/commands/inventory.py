@@ -144,10 +144,3 @@ def do_debug():
 
     return r
 
-
-"""
-Currently debugging usage:
-ansible-playbook -l vagrant -i /Users/rrosen/pyvenv/py3.4/bin/servi_inventory -C playbook.yml
-ansible-playbook -l vagrant -i `which servi_inventory` -C playbook.yml
-
-"""

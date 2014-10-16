@@ -143,6 +143,7 @@ def dirty_ignored_files():
         pathfor('ansible_config/roles/projectSpecific/tasks/main.yml',
                 c.MASTER))
     os.remove(pathfor("apache_config/sites-available/THISSITE.conf", c.MASTER))
+    return ['ansible_config/roles/projectSpecific/tasks/main.yml']
 
 
 # To simplify translating Linux process error codes into asserts
