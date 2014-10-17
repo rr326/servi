@@ -25,6 +25,7 @@ sudo ls /  # No password should be asked
 ## TODO
 * Renderservifiles - have host name field and have it import that data
     * eg: servi utils -r vagrant
+* SSL
 
 * Add config check - make sure I have all parameters expected
 

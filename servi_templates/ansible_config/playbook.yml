@@ -9,10 +9,11 @@
       - debug: var=vars
       # Annoyingly, this will NOT print variables defined by the inventory file
     roles:
-        - baseUbuntu
-        - mainAccount
+        - baseUbuntu  # includes apache
         - hardenedUbuntu
         - hardenedApache
+        - mainAccount
         - python
+        - mysql
         - {role: projectSpecific, tags:[projectSpecific]}
 

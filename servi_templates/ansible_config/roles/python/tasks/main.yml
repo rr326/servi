@@ -21,7 +21,7 @@
 #
 # Apache
 #
--   Name: Enable wsgi
+-   name: Enable wsgi
     command: a2enmod wsgi
 
 -   name: Restart Apache

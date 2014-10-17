@@ -1,10 +1,10 @@
 {
     "files": {
         "Servifile.yml": "f2c3ab7d1e9999381f55e43cca12ee32894e02fe",
-        "Servifile_globals.yml": "742757fc59ffff1b2f7fc3bdd772f3c606e1d1d3",
+        "Servifile_globals.yml": "be5a1da6fd9f1fd3beb0b5a3d3fb653595636acf",
         "Vagrantfile": "1bdf1e3348c93a55a948e6601531873654282789",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
-        "ansible_config/playbook.yml": "4a721d42e0c524e790f9c265026eb616e2b15991",
+        "ansible_config/playbook.yml": "16e16dd881d9f1f1fca0bbbc723e1f6bfef26eff",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "4f181bdef8d870f1173b70e74541a8f787740d54",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
@@ -22,15 +22,27 @@
         "ansible_config/roles/hardenedUbuntu/templates/jail.conf.j2": "29cad7226c9f865eb3ea168f000ab0fd59c48bcd",
         "ansible_config/roles/mainAccount/files/.zshrc": "ea03cdd7d89675ac3eb21bcf757df4be60240645",
         "ansible_config/roles/mainAccount/tasks/main.yml": "a04d7437306fdc25eeee7065c270ea626bbdf45a",
+        "ansible_config/roles/mysql/.git": "7a3b2922cb9c23e0098ccd2ff9a2afd6c823146e",
+        "ansible_config/roles/mysql/README.md": "cba476fb5e30d3677bca9cbc6a2241ab4a2a7876",
+        "ansible_config/roles/mysql/defaults/main.yml": "56c579650445606c5bea9ee2f9c7134b9ee35664",
+        "ansible_config/roles/mysql/handlers/main.yml": "4b992b65eb2b973b8510540f0fe263b692a9b9ea",
+        "ansible_config/roles/mysql/meta/main.yml": "01f0bde2e8a7e9e74633ae8956572c1de6a3b36c",
+        "ansible_config/roles/mysql/tasks/main.yml": "c4ab9ffdb0c146c081f02ef48ef7a00fa5c4df2c",
+        "ansible_config/roles/mysql/templates/.my.cnf.j2": "c0b8cea5e46d9e3571566cc1b84fc4e9a850780e",
+        "ansible_config/roles/mysql/templates/my.cnf.Debian.j2": "0e3c4c889d80fb45868fe55c6fd354b7e03521cb",
+        "ansible_config/roles/mysql/templates/my.cnf.RedHat.j2": "b10ae7e7e180545391fcd178ac3dd3f4900a5468",
+        "ansible_config/roles/mysql/vars/Debian.yml": "9ae44411fa2af08239b335598c4b04c3a27ee094",
+        "ansible_config/roles/mysql/vars/RedHat.yml": "1e447ad9a41702724428e32df5f544e3c647d499",
+        "ansible_config/roles/mysql/vars/main.yml": "59a3bb44da3df0b3a1c53d85fe7053c0f652497a",
         "ansible_config/roles/projectSpecific/files/requirements_py2.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/files/requirements_py3.txt": "c0260f2f87731d7877bb74c69fa485c2ab9c68ba",
         "ansible_config/roles/projectSpecific/tasks/main.yml": "d30c73defd7ee4b34236a54d2f6966d3fe8da1fc",
         "ansible_config/roles/projectSpecific/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
         "ansible_config/roles/python/files/requirements_py2.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/python/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
-        "ansible_config/roles/python/tasks/main.yml": "9d5df6429eba355fde4bb45728ab8b3b35da1a12",
+        "ansible_config/roles/python/tasks/main.yml": "a1d87f645a1e96d3c28169506cf7ca39cfb61203",
         "apache_config/sites-available/mysite.conf": "35b7f5dfb059fcb2bfabaf894941b4da58d1144b",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.48"
+    "template_version": "0.1.49"
 }
