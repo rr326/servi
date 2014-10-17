@@ -13,5 +13,6 @@
         - mainAccount
         - hardenedUbuntu
         - hardenedApache
+        - python
         - {role: projectSpecific, tags:[projectSpecific]}
 

@@ -1,0 +1,77 @@
+---
+
+#
+# Install packages
+#
+
+-   apt: update_cache=yes cache_valid_time=86400
+
+-   name: apt - install multiple packages
+    apt: pkg={{ item }} state=latest
+    with_items:
+      - python
+      - python-pip
+      - python-dev
+      - python-virtualenv
+      - python3
+      - python3-pip
+      - libapache2-mod-wsgi
+
+
+#
+# Apache
+#
+-   Name: Enable wsgi
+    command: a2enmod wsgi
+
+-   name: Restart Apache
+    service: name=apache2 state=restarted enabled=yes
+
+
+#
+# PY_VENV environment variable
+#
+-   name:  "Make {{ PY_VENV_DIR }}"
+    file: dest={{ PY_VENV_DIR }} state=directory
+      owner=webdev group=webdev mode=775
+
+-   name: "/etc/environment: Set PY_VENV_DIR = {{ PY_VENV_DIR }}"
+    lineinfile: >
+        dest=/etc/environment
+        state=present
+        line='export PY_VENV_DIR="{{ PY_VENV_DIR }}"'
+
+
+#
+# Setup Python virtualenvs
+#
+
+-   name: Create python2 virtual environment
+    command: virtualenv --python=python2.7 {{ PY_VENV_DIR }}/py2
+      creates="{{ PY_VENV_DIR }}/py2"
+
+-   file: dest="{{ PY_VENV_DIR }}/py2" state=directory recurse=yes
+      owner=webdev group=webdev mode=775
+
+-   copy: src=requirements_py2.txt dest=/tmp/requirements_py2.txt force=yes
+-   name: Python2 - install base modules
+    pip:
+      executable: pip2
+      virtualenv: "{{ PY_VENV_DIR }}/py2"
+      requirements: /tmp/requirements_py2.txt
+
+-   name: Create python3 virtual environment
+    command: virtualenv --python=python3.4 {{ PY_VENV_DIR }}/py3
+      creates="{{ PY_VENV_DIR }}/py3"
+
+-   file: dest="{{ PY_VENV_DIR }}/py3" state=directory recurse=yes
+      owner=webdev group=webdev mode=775
+
+-   copy: src=requirements_py3.txt dest=/tmp/requirements_py3.txt force=yes
+-   name: Python2 - install base modules
+    pip:
+      executable: pip3
+      virtualenv: "{{ PY_VENV_DIR }}/py3"
+      requirements: /tmp/requirements_py3.txt
+
+
