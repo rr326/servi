@@ -60,7 +60,6 @@ HOSTS:
       vars:
           HOST_NAME: vagrant-mysite
           SERVER_NAME: vagrant-mysite
-          ansible_ssh_port: 2222
           IS_VAGRANT: True
 """
 

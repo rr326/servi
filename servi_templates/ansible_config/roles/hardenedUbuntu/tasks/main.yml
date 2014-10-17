@@ -10,10 +10,8 @@
 -   debug: msg="Set up UFW Firewall, opening ssh, http, https, 127.0.0.1"
 -   apt:  pkg=ufw state=latest
 -   command: ufw allow ssh
--   command: ufw allow 2222/tcp
 -   command: ufw allow http
 -   command: ufw allow https 
--   command: ufw allow from 127.0.0.1   # For vagrant, which might be on different ssh port
 -   command: ufw allow smtp
 -   command: ufw --force  enable
 

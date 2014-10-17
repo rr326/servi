@@ -270,3 +270,22 @@ sudo ls /  # No password should be asked
     Master Directory: /Users/rrosen/dev/berkeley
     Template Directory: /Users/rrosen/dev/servi/servi_templates
     **************************
+    
+# Vagrant Networking Notes
+
+Vagrant Networking Notes
+config.vm.network "private_network", ip: extra_vars["STATIC_IP"]
+  - Setup private network
+<No forwarded port>
+  - It will automatically create an ssh forward (eg: 2222 -> 22) and correct for collisions (for 127.0.0.1)
+config.ssh.guest_port = 22
+  - This will have vagrant automatically use the proper forwarded port (eg: 2222) when trying to talk to guest 22
+Servifile:
+vagrant:
+     hosts:
+       - 192.168.10.12  # For ansible inventory. Use this ip so you don't get into port collisions (Vagrant knows the forwarded port so it can always use 127.0.0.1:<forwarded>  Ansible doesn't. so we need (knownip:22)
+     vars:
+         HOST_NAME: vagrant-berkeley
+         SERVER_NAME: vagrant-berkeley
+         IS_VAGRANT: True
+         ansible_ssh_port: 22  # Force ansible to use 22, otherwise Vagrant has it use a wrong port - 2222, even if it happens to be forwarded to 2200

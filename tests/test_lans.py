@@ -15,7 +15,7 @@ def mock_ansible_inventory():
     os.makedirs(inv_path)
 
     with open(inv_file, "w") as fp:
-        fp.write("default ansible_ssh_host=127.0.0.1 ansible_ssh_port=2222")
+        fp.write("default ansible_ssh_host=127.0.0.1 ")
 
 
 def test_lans(clean_master, mock_template_dir, servi_init,

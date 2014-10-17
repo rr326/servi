@@ -27,9 +27,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.hostname = host_vars["HOST_NAME"]
 
     config.vm.network "private_network", ip: extra_vars["STATIC_IP"]
-    #config.vm.network "forwarded_port", id: 'ssh', host: 2222, guest: 22, auto_correct: true # Not sure if this is necessary
-    config.ssh.port = 22
-    config.ssh.host = extra_vars["STATIC_IP"]
+    config.ssh.guest_port = 22
 
     config.vm.provider "virtualbox" do |v|
       v.memory = 512  # wordpress: 1024
