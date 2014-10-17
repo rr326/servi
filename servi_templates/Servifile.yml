@@ -2,7 +2,7 @@
 ---
 
 
-STATIC_IP : "192.168.10.100"
+STATIC_IP : "192.168.10.9"
 LOCAL_DIR : "src"
 SITE_SUFFIX: mysite
 
@@ -22,9 +22,10 @@ SERVI_IGNORE_FILES:
 HOSTS:
   vagrant:
       hosts:
-        - 127.0.0.1
+        - 192.168.10.9
       vars:
           HOST_NAME: vagrant-mysite
           SERVER_NAME: vagrant-mysite
-          ansible_ssh_port: 2222
           IS_VAGRANT: True
+          ansible_ssh_port: 22
+

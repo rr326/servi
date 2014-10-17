@@ -76,11 +76,3 @@ HOSTS:
     vars:
         HOST_NAME: stage.k2company.com
         SERVER_NAME: stage.k2company.com
-  vagrant:
-    hosts:
-      - 127.0.0.1
-    vars:
-        HOST_NAME: vagrant
-        SERVER_NAME: vagrant
-        ansible_ssh_port: 2222
-        IS_VAGRANT: True

@@ -53,7 +53,6 @@
       - ca-certificates
       - libsasl2-modules
       - mailutils
-      - monit
 
 -   name: Apt -  Autoremove unused packages
     shell: apt-get autoremove -y
@@ -244,12 +243,16 @@
 # Monit system monitoring
 # Simple monitoring (with email alerts). Just alert if the system is starting to crumble
 #
+-   name: apt - install monit
+    apt: pkg=monit state=latest
+    when: IS_VAGRANT != True
+
 -  name: Configure monit
    template: src=monitrc.j2 dest=/etc/monit/monitrc
+   when: IS_VAGRANT != True
 
 # Don't run monit on the vagrant box. No need to get email alerts about your VM!
 -  service: name=monit state=restarted
    when: IS_VAGRANT != True
--  service: name=monit state=stopped
-   when: IS_VAGRANT == True
+
 

@@ -44,8 +44,7 @@ class UpdateCommand(Command):
                         - ignored(master_and_tmpl_changed)))
 
         if ignored(master_and_tmpl_changed):
-            warn('\nWarning\n'
-                 'The following files from the template were changed but\n'
+            warn('The following files from the template were changed but\n'
                  'are on your SERVI_IGNORE_FILES list and will not be '
                  'updated:\n'
                  '{0}\n\n'
@@ -54,8 +53,7 @@ class UpdateCommand(Command):
                  .format(sorted(ignored(master_and_tmpl_changed))))
 
         if t.modified_possible_roles:
-            warn('\nWarning\n'
-                 'The following lines in your ansible_confg/playbook.yml '
+            warn('The following lines in your ansible_confg/playbook.yml '
                  'looked like roles that are commented out.\n'
                  'The Template and Master versions differ.\n'
                  '** Because they are commented, they are ignored.**\n'

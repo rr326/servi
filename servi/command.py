@@ -143,7 +143,7 @@ def process_and_run_command_line(command_line=None):
         with use_log_level(log_level):
             if args.template_dir:
                 c.TMPL_DIR_SITE = args.template_dir
-                warn('*** WARNING: Just set TMPL_DIR_SITE to |{0}|'.format(
+                warn('*** Just set TMPL_DIR_SITE to |{0}|'.format(
                     c.TMPL_DIR_SITE))
 
             if not args.command:
