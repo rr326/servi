@@ -77,7 +77,6 @@ HOSTS:
         HOST_NAME: stage.k2company.com
         SERVER_NAME: stage.k2company.com
 
-
 #
 # Mysql
 #
@@ -86,3 +85,5 @@ mysql_users:
   - name: "{{ lookup('env', 'mysql_admin_un') }}"
     pass: "{{ lookup('env', 'mysql_root_db_pass') }}"
     priv: "*.*:ALL"
+
+    

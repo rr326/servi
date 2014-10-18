@@ -197,6 +197,7 @@ def combined_rendered_servifile():
 def ensure_latest_globals_in_git():
     # Don't copy if in the source tree
     if in_servi_code_dir():
+        debug('In source tree - not copying globals.')
         return True
 
     # If no Servfile_globals, return
