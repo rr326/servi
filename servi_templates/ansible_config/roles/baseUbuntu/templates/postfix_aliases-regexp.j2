@@ -1,0 +1,5 @@
+# Redirect root
+/^root$/ {{ GMAIL_ACCOUNT }}
+
+# Setup catchall, just in case
+/^.*$/ {{ GMAIL_ACCOUNT }}

@@ -177,10 +177,14 @@
 #
 -   template: src=postfix_main.cf.j2 dest=/etc/postfix/main.cf mode=644
 -   template: src=sasl_passwd.j2 dest=/etc/postfix/sasl_passwd mode=644
+-   template: src=postfix_aliases-regexp.j2 dest=/etc/postfix/aliases-regexp mode=644
+-   template: src=postfix_virtual-regexp.j2 dest=/etc/postfix/virtual-regexp mode=644
+
 -   command: postmap /etc/postfix/sasl_passwd
 -   file: path=/etc/postfix/cacerts state=directory
 -   command: cp /etc/ssl/certs/Thawte_Premium_Server_CA.pem /etc/postfix/cacerts
 -   service: name=postfix state=restarted
+
 
 #
 # Crontab MAILTO

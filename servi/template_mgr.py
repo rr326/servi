@@ -130,6 +130,15 @@ class TemplateManager(object):
             if fname == c.SERVIFILE_GLOBAL:
                 master_fname = c.SERVIFILE_GLOBAL_FULL
 
+            # Deal with .git files - used by included submodules - ignore
+            # (template files are just files - too confusing to leave as
+            #  submodules!)
+            if (os.path.split(fname)[1] == '.git'
+                    and os.path.isfile(template_fname)):
+                debug('Skipping .git file (submodule marker): {0}'
+                    .format(fname))
+                continue
+
             # Always backup (never overwrite) master
             if file_exists(master_fname):
                 self.rename_master_file(fname, self.timestamp)
