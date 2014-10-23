@@ -1,16 +1,16 @@
 # Servi
 
-Servi helps developer build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
+Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
 
 
 ## What it is
-Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best[1]-practices. 
+Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
 
 It's a little like Yeoman, for a simple production-quality environment.
         
 
 ## Who is it for
-Developers who build 2+ small sites (single-server) or hobby projects. If your needs are more complicated, servi probably won't help much.
+Developers who build single-server sites or hobby projects. If your needs are more complicated, servi probably won't help much.
 
 
 ## Motivation
@@ -18,9 +18,9 @@ Let's say you want to build a website for yourself, for your company, or for a c
 
 Ok, let's push this baby out. $5 for a hosted server. Sweet.  Let's push our code up there. 
 
-Oh wait. I probalby need to secure my server, since badguys abound. Let's google 'Ubuntu hardening'.  Woa - there's a lot of stuff to do! Ok, go down the list.  Oh wait - let's install Apache. Oh, and let's harden that a bit. Woa - another long list!  What about getting my email setup so I get notified of problems? Another search and setup routine. What if I start running out of diskspace? Another setup. What about setting up my standard zsh environment? Some more stuff.  You get the picture.
+Oh wait. I probalby need to secure my server, since badguys abound. Let's google 'Ubuntu hardening'.  Woa - there's a lot of stuff to do! Ok, go down the list.  Oh wait - let's install Apache. Oh, and let's harden that a bit. Woa - another long list!  What about getting my email setup so I get notified of problems? Another search and setup routine.  What about getting notified if I run out of disk space? Another setup. What about setting up my standard zsh environment? Some more stuff.  You get the picture.
 
-Then, let's say you want to spin up a different project.  Do you just copy a snapshot and move build from there? What if this is a different client. Are you SURE your previous image is clean? And what about all the cruft that accumulated as you added and removed things? Wouldn't it be nice to start from scratch?
+Then, let's say you want to spin up a different project.  Do you just copy a snapshot and build from there? What if this is a different client. Are you SURE your previous image is clean? And what about all the cruft that accumulated as you added and removed things? Wouldn't it be nice to start from scratch?
 
 So that's basically the idea behind servi.  Build a production-quality, reasonably hardened server setup. Make it work easily in with your development setup. Make it easy to modify your core template files and update your projects. Keep everything in your VCS. 
 
@@ -60,7 +60,7 @@ Ok, now lets modify our templates.
     <now your remote machine is updated>
     
 
-## Details
+## What's inside
 * Ansible templates
     (These are only some of the configurations)
     * Ubuntu 14.04
@@ -100,3 +100,10 @@ Ok, now lets modify our templates.
     * usebox / buildbox - Most of your configuration is global, so you can build a vagrant base box and then use it for future projects to save time on the first provisioning.
     * utils --render_servifile - Read your configuration files and do any lookups, displaying the results. Helpful for debugging.
     * pre-commit-hook.git - Add to your repo to make sure you have a copy of your Servifile_globals.yml locally and an updated version of your servi_data.json manifiest
+
+## Installation instructions
+* TBD
+
+## Detailed Instructions
+* TBD
+* 
