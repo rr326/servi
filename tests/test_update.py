@@ -25,6 +25,7 @@ class TestUpdate():
         with pytest.raises(ServiError):
             servi_run('update')
 
+    @pytest.mark.wip
     def test_template_only_unused_role(self, template_only_unused_role):
         m0 = template_only_unused_role["m0"]
         assert servi_run('update')

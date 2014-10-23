@@ -23,9 +23,6 @@ sudo ls /  # No password should be asked
 
 
 ## TODO
-* Unused roles needs to trace dependencies!
-    - eg: myssqlSetup uses mysql
-* Unused roles more (or less!) clever role search (eg: {role: xx, data:yy})
 * Update - remove cleverness and just do a simple diff?
 
 * Renderservifiles - have host name field and have it import that data

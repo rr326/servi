@@ -3,6 +3,7 @@ from servi.command import Command
 from servi.exceptions import ServiError
 from servi.template_mgr import TemplateManager
 import servi.config as c
+from servi.command import process_and_run_command_line as servi_run
 
 
 """
@@ -39,7 +40,9 @@ class UpdateCommand(Command):
                 'in the template:\n'
                 '{0}\n\n'
                 'If you want to reinitialize your templates '
-                '(with automatic backup) run "servi init -f"'
+                '(with automatic backup) run "servi init -f". \n'
+                'If you want to copy a specific file, do "servi copy". \n'
+                'To see all changes, do "servi diff".'
                 .format(master_and_tmpl_changed
                         - ignored(master_and_tmpl_changed)))
 
@@ -49,7 +52,7 @@ class UpdateCommand(Command):
                  'updated:\n'
                  '{0}\n\n'
                  'Try a "servi diff" followed by "servi copy" to manually '
-                 'updated changed ignored files.\n'
+                 'update changed ignored files.\n'
                  .format(sorted(ignored(master_and_tmpl_changed))))
 
         if t.modified_possible_roles:
@@ -59,10 +62,13 @@ class UpdateCommand(Command):
                  '** Because they are commented, they are ignored.**\n'
                  '{0}\n'.format(sorted(t.modified_possible_roles)))
 
-        info('Updating repository with Servi template version: {0}'
+        info('Updating MASTER with Servi template version: {0}'
                .format(t.m_template.template_version))
 
         t.update_master()
+
+        info('MASTER updated. Showing diff (after update).')
+        servi_run("-v2 diff -l")
 
         return True
 
