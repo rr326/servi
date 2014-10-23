@@ -8,7 +8,7 @@
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "a9c8b296220d20ff02db1df2718a93067bc56a6e",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
-        "ansible_config/roles/baseUbuntu/files/sshd_config": "2cb2739d18774396d5d2c714ce7f5f5da05f27b3",
+        "ansible_config/roles/baseUbuntu/files/sshd_config": "3b246e2c83ebc3eeaac0e50d57787d0b0c7c8fdd",
         "ansible_config/roles/baseUbuntu/files/sudo_nopasswd": "8cab6f83164d5642fe8ceef3bee9c64284239dc2",
         "ansible_config/roles/baseUbuntu/tasks/main.yml": "f3b4f53a7df41f9d7f0fb5927911a86f12a557c4",
         "ansible_config/roles/baseUbuntu/templates/monitrc.j2": "fa12c2b49a7cf506a26517ae4d65912e5e642fc7",
@@ -47,5 +47,5 @@
         "apache_config/sites-available/mysite.conf": "35b7f5dfb059fcb2bfabaf894941b4da58d1144b",
         "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
     },
-    "template_version": "0.1.54"
+    "template_version": "0.1.55"
 }
