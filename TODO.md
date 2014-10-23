@@ -23,6 +23,11 @@ sudo ls /  # No password should be asked
 
 
 ## TODO
+* Unused roles needs to trace dependencies!
+    - eg: myssqlSetup uses mysql
+* Unused roles more (or less!) clever role search (eg: {role: xx, data:yy})
+* Update - remove cleverness and just do a simple diff?
+
 * Renderservifiles - have host name field and have it import that data
     * eg: servi utils -r vagrant
 * SSL
@@ -36,6 +41,8 @@ sudo ls /  # No password should be asked
     * Remove static ips? (and use that tool that does *.dev?)
 * Vagrant - append VAGRANT to hostname
 
+* /etc/cron.daily/apt: Package 'resolvconf' has conffile prompt and needs to be upgraded manually
+    http://askubuntu.com/questions/104899/make-apt-get-or-aptitude-run-with-y-but-not-prompt-for-replacement-of-configu
 
 
 * Backups - is it making unnecessary backups?

@@ -1,6 +1,5 @@
 ---
 -   hosts: all
-    gather_facts: no
     vars_files:
       - [~/Servifile_globals.yml, ../Servifile.yml]  # This will import Servifile_globals if it exists and if not, just Servifile
       - ../Servifile.yml    # This may import Servifile AGAIN, but I need a known file above.
@@ -14,6 +13,6 @@
         - hardenedApache
         - mainAccount
         - python
-        - mysql
+        #- mysql
         - {role: projectSpecific, tags:[projectSpecific]}
 

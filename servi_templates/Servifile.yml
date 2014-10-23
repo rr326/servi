@@ -28,4 +28,3 @@ HOSTS:
           SERVER_NAME: vagrant-mysite
           IS_VAGRANT: True
           ansible_ssh_port: 22
-
