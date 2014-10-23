@@ -1,0 +1,59 @@
+---
+
+#
+# This is a sample Flask app (using python 3)
+#
+
+
+-   copy: src=requirements_py3.txt dest=/tmp/requirements_py3.txt force=yes
+-   name: Update py3 venv with needed modules
+    pip:
+      executable: pip3
+      virtualenv: "{{ PY_VENV_DIR }}/py3"
+      requirements: /tmp/requirements_py3.txt
+
+
+
+
+#
+# Setup the apache configuration file
+# In Vagrant, this will be mounted and available.
+# In non-vagrant, the push scripts (eg: grunt pushto:prod) must upload the file, and possibly restart apache.
+
+
+
+#
+# Vagrant-only
+#
+#-   debug: msg="Doing Vagrant-only tasks"
+# (Nothing)
+
+#
+# Non-Vagrant-only
+#
+-   debug: msg="Doing Non-Vagrant tasks."
+
+-   file: dest=/var/www/{{ SITE_SUFFIX }} state=directory group=webdev owner=webdev mode=770
+    when: IS_VAGRANT != True
+
+-   name: Copy apache configuration to sites-available
+    copy: src="../../../../apache_config/sites-available/{{ SITE_SUFFIX }}.conf"
+          dest="/etc/apache2/sites-available/{{ SITE_SUFFIX }}.conf"
+          group=webdev owner=webdev mode=770 force=no
+    when: IS_VAGRANT != True
+
+#
+# Do for Vagrant & non-Vagrant
+#
+
+-   name: Create apache log file directory
+    file: path=/var/log/apache2/{{SITE_SUFFIX}} state=directory group=www-data owner=www-data mode=770
+
+-   command: a2ensite {{ SITE_SUFFIX }}.conf
+-   service: name=apache2 state=restarted
+
+
+
+
+
+

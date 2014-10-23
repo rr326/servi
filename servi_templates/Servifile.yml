@@ -16,6 +16,7 @@ SERVI_IGNORE_FILES:
   - "^ansible_config/roles/projectSpecific/.*"
   - "^apache_config/sites-available/mysite.conf"
   - "^src/.*"
+  - ".git"
 
 
 # This overrides the HOSTS['vagrant'] record from Servifile_globals.yml

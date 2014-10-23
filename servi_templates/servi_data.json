@@ -1,10 +1,10 @@
 {
     "files": {
-        "Servifile.yml": "daaf2f8641f6f92dc189d44f3a97211ac40e76f1",
+        "Servifile.yml": "db53dbec56e76a9ba99d379ab8b2056a3c388fa0",
         "Servifile_globals.yml": "8ceb7a973f8a3081e3a119eb085ed8e364ab06bd",
         "Vagrantfile": "1bdf1e3348c93a55a948e6601531873654282789",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
-        "ansible_config/playbook.yml": "fb68652deaa5603a075f0425e8bcc0321a6d477e",
+        "ansible_config/playbook.yml": "b160c3141314157b8b89944b095402ac2715344c",
         "ansible_config/roles/baseUbuntu/files/20auto-upgrades": "a9c8b296220d20ff02db1df2718a93067bc56a6e",
         "ansible_config/roles/baseUbuntu/files/50unattended-upgrades": "ae31a835e116f3b32aa29515e6594df219290be3",
         "ansible_config/roles/baseUbuntu/files/logrotate_apache2": "5d45f63b733aed721f8c3519907e9646876b44bd",
@@ -44,8 +44,14 @@
         "ansible_config/roles/python/files/requirements_py2.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/python/files/requirements_py3.txt": "ae3369de2f2737730a4334d45c341833d51b8e9d",
         "ansible_config/roles/python/tasks/main.yml": "a1d87f645a1e96d3c28169506cf7ca39cfb61203",
-        "apache_config/sites-available/mysite.conf": "35b7f5dfb059fcb2bfabaf894941b4da58d1144b",
-        "src/index.html": "a8c155c94f12ff10db798be30422f4e6b75c2e8d"
+        "ansible_config/roles/sampleFlask/files/requirements_py3.txt": "9284af07c252830c7786acbcfde0593a15b6e251",
+        "ansible_config/roles/sampleFlask/meta/main.yml": "40358e7eb55bbd61f69941bf78bf37867d79b3b2",
+        "ansible_config/roles/sampleFlask/tasks/main.yml": "13d6dfb7c1d0e37e9cbe27cf71f53172e5e9e942",
+        "ansible_config/roles/sampleFlask/vars/main.yml": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+        "apache_config/sites-available/mysite.conf": "dc7d5fcc029b8fc0100ed11273927692e45ca853",
+        "src/index.html": "f126e54ceadcc2156e9c3e09487e8c10a6223ed6",
+        "src/myflask.py": "d040a21f9b9c4230485bdb4066537aa6f0b8fa05",
+        "src/myflask.wsgi": "4e613701860880a2519ae0202a78460d166fe312"
     },
-    "template_version": "0.1.55"
+    "template_version": "0.1.56"
 }
