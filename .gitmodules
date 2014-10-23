@@ -1,3 +1,0 @@
-[submodule "servi_templates/ansible_config/roles/mysql"]
-	path = servi_templates/ansible_config/roles/mysql
-	url = git@github.com:rr326/mysql.git

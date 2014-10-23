@@ -13,7 +13,6 @@
         - hardenedApache
         - mainAccount
         - python
-        #- mysql
         - {role: projectSpecific, tags:[projectSpecific]}
         - sampleFlask   # Sample flask app
 
