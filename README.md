@@ -1,6 +1,6 @@
 <div style="position: relative; z-index: 1000;">    
-    <a href="/rr326/servi/blob/master/img/servi_small.png?raw=true" target="_blank">
-        <img align="right" src="/rr326/servi/raw/master/img/servi_small.png?raw=true" style="max-width:100%;">
+    <a href="img/servi_small.png?raw=true" target="_blank">
+        <img align="right" src="img/servi_small.png?raw=true" style="max-width:100%;">
     </a>
 </div>
 
