@@ -7,20 +7,20 @@
 
 # This is your rsa key for ssh. You should store it in an envornment
 # variable in your shell.
-MAIN_RSA_KEY_FILE: "{{ lookup('env', 'RROSEN326_CRED_FILE') }}"
+MAIN_RSA_KEY_FILE: "{{ lookup('env', 'MY_CRED_FILE') }}"
 
 # Main user account name and user id for ssh
-MAIN_USERNAME : rrosen326
+MAIN_USERNAME : "{{ lookup('env', 'MY_UN') }}"
 
 
 #
 # Postfix configuration
 # This uses gmail as the defail relay
 #
-GMAIL_ACCOUNT: rrosen326@gmail.com
+GMAIL_ACCOUNT: "{{ lookup('env', 'MY_GMAIL_UN') }}"
 # Ansible needs the left name to be different than the right!
 GMAIL_PW_VAR: "{{ lookup('env', 'GMAIL_PW') }}"
-DEFAULT_MAILTO_ADDRESS: rrosen326@gmail.com   # Who to send mail to
+DEFAULT_MAILTO_ADDRESS: "{{ lookup('env', 'MY_GMAIL_UN') }}"  # Who to send mail to
 
 
 #

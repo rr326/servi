@@ -1,7 +1,7 @@
 {
     "files": {
         "Servifile.yml": "db53dbec56e76a9ba99d379ab8b2056a3c388fa0",
-        "Servifile_globals.yml": "dd2abc74b6f94ada82357d31bd1f1cdb9d9921da",
+        "Servifile_globals.yml": "af34f6ac6660b9bcc25f1650998477bb70cf64df",
         "Vagrantfile": "1bdf1e3348c93a55a948e6601531873654282789",
         "ansible_config/ansible.cfg": "3deed61d8dc6ae504c5c29367e6d7364365e11d7",
         "ansible_config/playbook.yml": "46a8deb97f03a837f711d68e68e1e12b632c7505",
@@ -41,5 +41,5 @@
         "src/myflask.py": "d040a21f9b9c4230485bdb4066537aa6f0b8fa05",
         "src/myflask.wsgi": "4e613701860880a2519ae0202a78460d166fe312"
     },
-    "template_version": "0.1.57"
+    "template_version": "0.1.58"
 }
