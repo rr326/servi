@@ -1,8 +1,12 @@
-<img align="right" src="img/servi_small.png?raw=true" style="position: relative; z-index: 1000;">
+<div style="position: relative; z-index: 1000;">    
+    <a href="/rr326/servi/blob/master/img/servi_small.png?raw=true" target="_blank">
+        <img align="right" src="/rr326/servi/raw/master/img/servi_small.png?raw=true" style="max-width:100%;">
+    </a>
+</div>
 
 # Servi
 
-Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
+Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works. img align="right" src="img/servi_small.png?raw=true" style="position: relative; z-index: 1000;">
 
 ## What it is 
 Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
