@@ -1,8 +1,8 @@
 # Servi
 
-[!Servi Image](/img/servi_small.png?raw=true) Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
+Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
 
-
+![Servi Image](img/servi_small.png?raw=true) 
 ## What it is
 Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
 
