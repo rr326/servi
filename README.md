@@ -1,12 +1,12 @@
 <img align="right" src="img/servi_small.png?raw=true" style="position: relative;">
 
-<h1 style="overflow: hidden;"> Servi </h1>
+<h1 style="overflow: hidden !important;"> Servi </h1>
 
 Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
 
 
 
-<h2 style="overflow: hidden;"> What it is </h2>
+<h2 style="overflow: hidden !important;"> What it is </h2>
 Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
 
 It's a little like [Yeoman](http://yeoman.io/), but for setting up your server.
