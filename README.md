@@ -1,4 +1,4 @@
-<img align="left" src="img/servi_small.png?raw=true" style="padding-right: 20px;">
+<img align="left" src="img/servi_small.png?raw=true" style="margin-right: 20px;">
 
 # Servi
 
