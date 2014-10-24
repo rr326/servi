@@ -1,8 +1,8 @@
-<style> h1, h2 {overflow: hidden} </style>
-
 <img align="right" src="img/servi_small.png?raw=true" style="position: relative;">
 
-# Servi 
+```html
+<h1 style="overflow:hidden;"> Servi </h1>
+```
 
 Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works.
 
