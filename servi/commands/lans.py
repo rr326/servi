@@ -7,7 +7,7 @@ import servi.config as c
 from servi.template_mgr import TemplateManager
 from servi.utils import pathfor, timeit
 from servi.exceptions import ServiError
-
+import sys
 
 def get_servi_inventory_path():
     try:
@@ -15,7 +15,8 @@ def get_servi_inventory_path():
             subprocess.check_output('which servi_inventory', shell=True)
     except subprocess.CalledProcessError:
         raise ServiError("Couldn't find servi_inventory script on path.\n"
-                         "Try 'which servi_inventory'.")
+                         "Try 'which servi_inventory'.\n"
+                         "Current path: {0}".format(sys.path))
     servi_inventory = servi_inventory.decode('utf-8').strip()
 
     return servi_inventory

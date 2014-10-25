@@ -2,7 +2,7 @@
 
 # Servi
 
-Servi helps developers build *production* quality environments, easily and quickly. And you can then mirror your production environment for development, ensuring that when you push to production, everything works. 
+Servi helps developers build *production* quality environments, easily and quickly. It mirrors your production environment on a vm for development, ensuring that when you push to production, everything works. 
 
 ## What it is 
 Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
@@ -25,12 +25,6 @@ Then, let's say you want to spin up a different project.  Do you just copy a sna
 
 So that's basically the idea behind servi.  Build a production-quality, reasonably hardened server setup. Make it work easily in with your development setup. Make it easy to modify your core template files and update your projects. Keep everything in your VCS. 
 
-BTW - here's a good article (with a ninja squirrel!) on why it's useful to use something like Ansible instead of doing it manually: [article](https://devopsu.com/blog/ansible-vs-shell-scripts/).  Though don't believe him that it's that easy - I've spent a LOT of time debugging Ansible-based problems!
-
-
-## Disclaimer
-Ideally, servi should be written by team of experts who know how to build a good server and know best practices. But unfortunately those guys are busy writing kernals, or developing frameworks, or whatever it is they do.  Instead, it's written by a guy without all that excellent background who still needed to set up some servers. So I did my best with a lot of google searching, but I'm sure I missed things or made dumb decisions. Luckily all the ansible templates are super easy to read, so go ahead and clean them up and improve them. (And send me a pull request!)
-
 ## Example
 Set up a new project and get it running locally (on a virtual machine)
 
@@ -45,8 +39,9 @@ Set up a new project and get it running locally (on a virtual machine)
 Ok - now let's go live.  You need to set up a cloud server with JUST enough configuration to allow ansible to talk to it (ssh key, main account, authorized_keys, and passwordless sudo)
 
     $ servi rans <host_name>
+    # <browser: goto static ip - woa - hello world is running!>
    
-Browser: goto host_name, and you are up!  And you know it works, since it worked locally.
+And you knew it would work, since your development machine is exactly the same as your production server.
 
 Ok, now lets modify our templates.
     
@@ -64,17 +59,20 @@ Ok, now lets modify our templates.
     
 
 ## Yet another framework?
-NO! It's not a framework. It's mostly a comprehensive set of ansible templates. It's a little Vagrantfile.  Then there are two configuration files (Servifile_globals.yml and Servifile.yml).  These both get stored in your repo and are read directly by Ansible or Vagrant - so your project is complete. Want to walk away from servi? You're already done.
+NO! It's not a framework. It's mostly a comprehensive set of Ansible templates. It's a little Vagrantfile.  Then there are two configuration files (Servifile_globals.yml and Servifile.yml).  These both get stored in your repo and are read directly by Ansible or Vagrant - so your project is complete. Want to walk away from servi? You're already done.
 
 The servi tools just help you use all the templates, but they aren't necessary. Each of your projects is complete and servi-less*. 
 
-*There is one complication - although I copy your ~/Servifile_globals.yml to your repo for tracking, I still read from ~. So to truly remove servi you'd just copy everything in Servifile_globals into your projects Servifile.yml. 
+*There is one complication - although I copy your ~/Servifile_globals.yml to your repo for tracking, I still read from ~. So to truly remove servi you'd just copy everything in Servifile_globals into your project's Servifile.yml. 
+
+## Disclaimer
+Ideally, servi should be written by team of experts who know how to build a good server and know best practices. But unfortunately those guys are busy writing kernals, or developing frameworks, or whatever it is they do.  Instead, it's written by a guy without all that excellent background who still needed to set up some servers. So I did my best with a lot of google searching, but I'm sure I missed things or made dumb decisions. Luckily all the Ansible templates are super easy to read, so go ahead and clean them up and improve them. (And send me a pull request!)
 
 
 ## Help?
 Imagine a world where a novice could spin up a complete, secure, well-designed production server at the touch of a button.  Help make it so!  
 
-I think servi could go from 'kinda cool' to 'totally awesome' with very little effort. I just need help putting the "best" in "best practices".  If you're an expert at linux or apache ops, please send feedback my way. (Actual pull requests would be better, but I'll take what I can get.)
+I think servi could go from 'kinda cool' to 'totally awesome' with very little effort. I just need help putting the "best" into "best practices".  If you're an expert at linux or apache ops, please send feedback my way. (Actual pull requests would be better, but I'll take what I can get.)
 
 ## What's inside
 * Ansible templates
