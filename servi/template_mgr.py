@@ -2,7 +2,8 @@ from datetime import datetime
 import re
 import shutil
 import os
-from logging import debug, info, warning as warn, error
+from logging import debug
+
 import yaml
 
 from servi.manifest import Manifest

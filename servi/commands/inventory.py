@@ -1,22 +1,9 @@
-from pprint import pprint
-import json
 import os
-import shutil
-from logging import debug, info, warning as warn, error
-import subprocess
 import json
+from pprint import pformat
 
 from servi.command import Command
-from servi.manifest import Manifest
-from servi.utils import pathfor
 import servi.config as c
-from servi.semantic import SemanticVersion, SEMANTIC_VERSIONS, PATCH
-from servi.exceptions import ServiError
-from copy import deepcopy
-from pprint import pformat
-import json
-import sys
-from pprint import pformat
 
 
 class InventoryCommand(Command):

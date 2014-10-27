@@ -1,13 +1,12 @@
 import subprocess
 import os
-from logging import debug, info, warning as warn, error
+from logging import info
+import sys
 
 from servi.command import Command
 import servi.config as c
-from servi.template_mgr import TemplateManager
-from servi.utils import pathfor, timeit
+from servi.utils import timeit
 from servi.exceptions import ServiError
-import sys
 
 
 def get_servi_inventory_path():

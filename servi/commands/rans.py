@@ -1,15 +1,13 @@
 import subprocess
 import os
-from logging import debug, info, warning as warn, error
-import tempfile
+from logging import info
+from pprint import pformat
 
 from servi.command import Command
 import servi.config as c
-from servi.template_mgr import TemplateManager
-from servi.utils import pathfor, timeit
+from servi.utils import timeit
 from servi.exceptions import ServiError
 from servi.commands.lans import get_servi_inventory_path
-from pprint import pformat
 
 
 class RansCommand(Command):

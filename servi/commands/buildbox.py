@@ -1,16 +1,14 @@
 import subprocess
 import os
+import re
+import argparse
+from logging import debug, info, warning as warn
 
 from servi.command import Command, process_and_run_command_line as servi_run
 import servi.config as c
-from servi.utils import pathfor, timeit, nice_temporary_directory
-from servi.template_mgr import TemplateManager
-import re
+from servi.utils import timeit, nice_temporary_directory
 from servi.semantic import SemanticVersion
-import argparse
 from servi.manifest import get_template_version
-from logging import debug, info, warning as warn, error
-import logging
 
 
 SKIPPED = 'SKIPPED'

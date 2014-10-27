@@ -1,10 +1,9 @@
-from pprint import pprint
-import json
 import os
 import shutil
-from logging import debug, info, warning as warn, error
+from logging import debug, info
 import subprocess
 import json
+from pprint import pformat
 
 from servi.command import Command
 from servi.manifest import Manifest
@@ -12,8 +11,6 @@ from servi.utils import pathfor
 import servi.config as c
 from servi.semantic import SemanticVersion, SEMANTIC_VERSIONS, PATCH
 from servi.exceptions import ServiError
-from copy import deepcopy
-from pprint import pformat
 
 
 class UtilsCommand(Command):

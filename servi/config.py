@@ -1,11 +1,14 @@
 import os
 import os.path
-import yaml
-from servi.exceptions import MasterNotFound, ServiError
 import logging
-from jinja2 import Environment, DictLoader
-from logging import debug, info, warning as warn, error
+from logging import warning as warn
 import collections
+
+import yaml
+from jinja2 import Environment, DictLoader
+
+from servi.exceptions import MasterNotFound, ServiError
+
 
 '''
 Global configuration for servi files
@@ -49,6 +52,12 @@ DIFFTOOL = 'git diff'
 
 DEFAULT_LOG_LEVEL = logging.INFO
 
+# Variables that should be set by Servifile.yml and Servifile_globals.yml
+HOSTS = None
+MAIN_USERNAME = None
+MAIN_RSA_KEY_FILE = None
+LOCAL_DIR = None
+SITE_SUFFIX = None
 
 #############################################################################
 #############################################################################

@@ -1,8 +1,8 @@
-from logging import debug, info, warning as warn, error
+from logging import info, warning as warn
+
 from servi.command import Command
 from servi.exceptions import ServiError
 from servi.template_mgr import TemplateManager
-import servi.config as c
 from servi.command import process_and_run_command_line as servi_run
 
 

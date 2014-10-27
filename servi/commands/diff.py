@@ -1,6 +1,5 @@
 import subprocess
 import os
-from logging import debug, info, warning as warn, error
 
 from servi.command import Command
 import servi.config as c

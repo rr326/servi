@@ -1,12 +1,12 @@
 import hashlib
 import os
-import servi.config as c
 from contextlib import contextmanager
 from datetime import datetime
-from logging import debug, info, warning, error
-import collections
+from logging import info, error
 import tempfile
 import shutil
+
+import servi.config as c
 
 
 def file_exists(path):

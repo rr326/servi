@@ -1,15 +1,15 @@
 from glob import glob
 import argparse
-import sys
 import io
 from importlib import import_module
 import os
-from servi.exceptions import ForceError, ServiError
-import servi.config as c
-from servi.config import set_master_dir, load_user_config
 from logging import debug, info, warning as warn, error
 import logging
 from contextlib import contextmanager
+
+from servi.exceptions import ForceError, ServiError
+import servi.config as c
+from servi.config import set_master_dir, load_user_config
 
 
 class Command(object):

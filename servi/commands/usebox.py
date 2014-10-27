@@ -1,16 +1,14 @@
 import subprocess
 import os
-from logging import debug, info, warning as warn, error
-
-from servi.command import Command, process_and_run_command_line as servi_run
-import servi.config as c
-from servi.utils import pathfor, timeit
-from servi.template_mgr import TemplateManager
-import re
-from servi.commands.buildbox import get_boxname, get_all_boxes
-from servi.exceptions import ServiError, ForceError
-from servi.semantic import SemanticVersion
+from logging import info
 import argparse
+
+from servi.command import Command
+import servi.config as c
+from servi.utils import timeit
+from servi.template_mgr import TemplateManager
+from servi.commands.buildbox import get_all_boxes
+from servi.exceptions import ServiError, ForceError
 
 
 class UseboxCommand(Command):

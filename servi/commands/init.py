@@ -1,10 +1,8 @@
 import os
-from logging import debug, info, warning as warn, error
 
 import servi.config as c
 from servi.command import Command
 from servi.exceptions import ForceError, ServiError
-
 from servi.template_mgr import TemplateManager
 from servi.config import set_master_dir, load_user_config, \
     servi_file_exists_in, global_servi_file_exists
