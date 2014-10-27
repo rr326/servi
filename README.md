@@ -262,7 +262,10 @@ Depending on how opinionated you are, getting your base templates set up might t
         
         # If some things didn't get copied (since servi intentionally 
         #   doesn't copy some things based on your SERVI_IGNORE_FILES)
-        # servi copy -f <file name>
+        servi copy -f <file name>
         # or manually modify your local copy
+        
+        # reload the template
+        $ vagrant provision
         
 You keep doing that a while until everything looks good. Then do a `vagrant destroy` and then a `vagrant up` to validate that it all works properly. Then push it out to a production server to validate that: `servi rans <host>`.  If everything works, you are set. 

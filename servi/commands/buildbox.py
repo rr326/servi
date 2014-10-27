@@ -129,6 +129,3 @@ def get_all_boxes():
         boxes.sort(key=lambda tup: tup[1], reverse=True)
 
     return boxes
-
-# TODO: usebox - check if template > saved box. Fail not -f
-# TODO: unit tests
