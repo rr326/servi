@@ -2,7 +2,7 @@
 
 # Servi
 
-Servi helps developers build *production* quality environments, easily and quickly. It mirrors your production environment on a vm for development, ensuring that when you push to production, everything works. 
+Servi helps developers build *production*-quality servers, easily and quickly. It mirrors your production environment on a virtual machine for development, ensuring that when you push to production, everything works. 
 
 ## What it is 
 Servi is mostly a bunch of Ansible templates, integrated with a Vagrant setup, and a few command line tools for making it easier for you to use. It has baked-in assumptions and best-practices. 
@@ -59,14 +59,14 @@ Ok, now lets modify our templates.
     
 
 ## Yet another framework?
-NO! It's not a framework. It's mostly a comprehensive set of Ansible templates. It's a little Vagrantfile.  Then there are two configuration files (Servifile_globals.yml and Servifile.yml).  These both get stored in your repo and are read directly by Ansible or Vagrant - so your project is complete. Want to walk away from servi? You're already done.
+NO! It's not a framework. It's mostly a comprehensive set of Ansible templates. It's also a little Vagrantfile.  Then there are two configuration files (Servifile_globals.yml and Servifile.yml).  These both get stored in your repo and are read directly by Ansible or Vagrant - so your project is complete. Want to walk away from servi? You're already done.
 
 The servi tools just help you use all the templates, but they aren't necessary. Each of your projects is complete and servi-less*. 
 
-*There is one complication - although I copy your ~/Servifile_globals.yml to your repo for tracking, I still read from ~. So to truly remove servi you'd just copy everything in Servifile_globals into your project's Servifile.yml. 
+*There is one complication - although I copy your ~/Servifile_globals.yml to your repo for tracking, I still read from ~. So to truly remove servi you'd just copy everything in Servifile_globals into your project's Servifile.yml.
 
 ## Disclaimer
-Ideally, servi should be written by team of experts who know how to build a good server and know best practices. But unfortunately those guys are busy writing kernals, or developing frameworks, or whatever it is they do.  Instead, it's written by a guy without all that excellent background who still needed to set up some servers. So I did my best with a lot of google searching, but I'm sure I missed things or made dumb decisions. Luckily all the Ansible templates are super easy to read, so go ahead and clean them up and improve them. (And send me a pull request!)
+Ideally, servi should be written by team of experts who know how to build a good server and know best practices. But unfortunately those guys are busy writing kernals, or developing frameworks, or whatever it is they do.  Instead, it's written by a guy without all that excellent background who still needed to set up some servers. So I did my best with a lot of google searching, but I'm sure I missed things or made dumb decisions. Luckily all the Ansible templates are easy to read, so go ahead and clean them up and improve them. (And send me a pull request!)
 
 
 ## Help?
@@ -108,9 +108,9 @@ I think servi could go from 'kinda cool' to 'totally awesome' with very little e
 * Convenience tools
     These aren't really necessary, but make using servi easier.
     * copy - Copy a template file to your master location
-    * lans - Local Ansible - run an Ansible playbook (or all) on your local (/vagrant) machine
-    * rans - Remote Ansible - run it on a remote host. These just set a lot of command line arguments Ansible needs.
-    * pushto - push your code to host X - With Vagrant, it shares a local folder. With a production server, you need to push your code. This is a thin wrapper on rsync to make it easy.
+    * lans - Local ANSible - run an Ansible playbook (or all) on your local (/vagrant) machine
+    * rans - Remote ANSible - run it on a remote host. These just set a lot of command line arguments Ansible needs.
+    * pushto - Push your code to host X - With Vagrant, it shares a local folder. With a production server, you need to push your code. This is a thin wrapper on rsync to make it easy.
     * usebox / buildbox - Most of your configuration is global, so you can build a Vagrant base box and then use it for future projects to save time on the first provisioning.
     * utils --render_servifile - Read your configuration files and do any lookups, displaying the results. Helpful for debugging.
     * pre-commit-hook.git - Add to your repo to make sure you have a copy of your Servifile_globals.yml locally and an updated version of your servi_data.json manifiest
@@ -125,12 +125,12 @@ I think servi could go from 'kinda cool' to 'totally awesome' with very little e
     * You really want to fork servi (instead of cloning), since it is highly likely you will want to tweak your base templates and keep them in git.
     * If you've never forked, it's a piece of cake. [Github: fork a repo](https://help.github.com/articles/fork-a-repo/)
 * Clone your forked repo. eg: `git clone https://github.com/YOUR-USERNAME/servi`
-* Install servi  
+* **Install servi**  
  Note - it is important to **install with the 'develop'** option below so that when you change your templates, any `servi xx` command will use your changed files.
     
         cd <your local forked directory>
         python3 setup.py develop  
-* Test it <a name="test"></a>
+* **<a name="test">Test it </a>**
     * Step 1 - initialize
     
             $ mkdir mysite
@@ -147,7 +147,7 @@ I think servi could go from 'kinda cool' to 'totally awesome' with very little e
             $ vagrant up 
             $ curl mysite.dev  # Should see Hello, world!
             $ curl mysite.dev/flask  # Should see Hello, world!   
-            $ # Works? Now delete it
+            $ # Works? Now delete it.
             $ vagrant destroy
 
 * Upgrade rsync (optional)
@@ -198,6 +198,11 @@ If it doesn't work, the first thing to test is if your configuration is turning 
 ### Customizing a project
 Now that you've edited your configuration and tested it, let's customize it.
 
+    $ cd myproject
+    $ servi init .
+    # Turn on the git pre-commit hook to automatically copy your ~/Servifile_globals to your local repository (so the repo is complete)
+    $ servi -l
+
 1. apache_config/sites_available/mysite.conf  
     1. Copy this to a new conf file (you'll delete the other one after everything works)
     1. Modify
@@ -213,9 +218,9 @@ I've done my best to create a solid, complete server, but you'll probably want t
 
 1. Ansible_config/*  
    This is where it all happens. You'll want to look through all of it and make the appropriate changes. EG:
-   * **playbook.yml** - put new top-level roles here. Use ruby instead of python? Create a ruby role and remove the python one. (No need to remove the python one from the repository - it won't get copied to your projects unless it is included in playbook.yml). Also, remove 'sampleFlask' - you don't want to have to delete that every time.
-   * **roles/hardenedApache** - My sites are not very valuable so I didn't do any DDoS hardening, but you might want to.  Also modify templates/apache2.conf for global config.
-   * **rols/mainAccount/files/.zshrc** - This is a pretty vanilla .zshrc. Put your own here. (Or switch to bash if you prefer.)
+   * playbook.yml - put new top-level roles here. Use ruby instead of python? Create a ruby role and remove the python one. (No need to remove the python one from the repository - it won't get copied to your projects unless it is included in playbook.yml). Also, remove 'sampleFlask' - you don't want to have to delete that every time.
+   * roles/hardenedApache - My sites are not very valuable so I didn't do any DDoS hardening, but you might want to.  Also modify templates/apache2.conf for global config.
+   * rols/mainAccount/files/.zshrc - This is a pretty vanilla .zshrc. Put your own here. (Or switch to bash if you prefer.)
 1. apache_config/sites_available/mysite.conf  
    Put your default virtual host config here.
    
@@ -232,7 +237,7 @@ To run servi on a new production server, you need to do some basic manual config
         # Now you are on your cloud server
         $ useradd -m -G sudo <your main user: MY_UN>
         $ visdo
-          # $ (Change this line to add 'NOPASSWD')
+          # (Change this line to add 'NOPASSWD' (but no '#'))
           # %sudo   ALL=(ALL:ALL) NOPASSWD:ALL
         $ cd /home/<MY_UN>
         $ mkdir .ssh
@@ -250,9 +255,13 @@ To run servi on a new production server, you need to do some basic manual config
 Depending on how opinionated you are, getting your base templates set up might take some time. So create a new project (or better, use an existing one). Spin up a Vagrant development machine. Iterate on your templates, changing them and then doing:
 
         $ servi update
-        # Now make sure that you've updated the project configuration only differs for project-specific stuff
+        
+        # Now make sure that you've updated the project configuration 
+        #   only differs for project-specific stuff
         $ servi diff  
-        # If some things didn't get copied (since servi intentionally doesn't copy some things based on your SERVI_IGNORE_FILES)
+        
+        # If some things didn't get copied (since servi intentionally 
+        #   doesn't copy some things based on your SERVI_IGNORE_FILES)
         # servi copy -f <file name>
         # or manually modify your local copy
         
