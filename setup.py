@@ -40,7 +40,7 @@ setup(
             [ 'servi = main:main']
     },
 
-    install_requires = ['PyYAML>=3.11', 'pytest>=2.6.2'],
+    install_requires = ['PyYAML>=3.11', 'pytest>=2.6.2', 'jinja2', 'jinja2'],
 
     author = "Ross Rosen",
     author_email = "rrosen326@gmail.com",

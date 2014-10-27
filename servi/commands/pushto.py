@@ -50,7 +50,6 @@ class PushtoCommand(Command):
 
         parser.set_defaults(command_func=self.run)
 
-
     @staticmethod
     def do_rsync(*args, print_only=False):
         cmd = []
@@ -59,7 +58,7 @@ class PushtoCommand(Command):
 
         info('rsync command line: {0}\n'.format(' '.join(cmd)))
         if not print_only:
-            retval = subprocess.call(' '.join(cmd), shell=True )
+            retval = subprocess.call(' '.join(cmd), shell=True)
         else:
             retval = False
 
@@ -73,7 +72,7 @@ class PushtoCommand(Command):
         if args.host_alias not in hostdict:
             raise ServiError('Given host alias ({0}) not found in '
                              'Servifile.yml HOSTS: \n{1}'
-                .format(args.host_alias, pformat(c.HOSTS)))
+                             .format(args.host_alias, pformat(c.HOSTS)))
 
         if args.dir:
             src_dir = args.dir
@@ -84,7 +83,7 @@ class PushtoCommand(Command):
         host = hostdict[alias]['hosts'][0]
 
         ssh_cmd = '"ssh -q -l {0} -i {1}"'.format(c.MAIN_USERNAME,
-                                             c.MAIN_RSA_KEY_FILE)
+                                                  c.MAIN_RSA_KEY_FILE)
 
         dest_base = '{1}'.format(c.MAIN_USERNAME, host)
 

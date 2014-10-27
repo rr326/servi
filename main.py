@@ -32,6 +32,7 @@ def setup_logging():
         GTE = 'GTE'
 
         def __init__(self, level, comp):
+            super().__init__()
             self.level = level
             self.comp = comp
             assert comp in [LevelFilter.LT, LevelFilter.GTE]

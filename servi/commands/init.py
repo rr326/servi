@@ -12,6 +12,7 @@ from servi.config import set_master_dir, load_user_config, \
 
 class InitCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"skip_init": True}
 
     def register_command_line(self, sub_parsers):
@@ -22,7 +23,8 @@ class InitCommand(Command):
                  'This is usually the root dir of your project. '
                  '"." is a good choice.')
         parser.add_argument('-f', '--force', action='store_true')
-        parser.add_argument('-s', '--skip_servifile_globals', action='store_true')
+        parser.add_argument('-s', '--skip_servifile_globals',
+                            action='store_true')
         parser.set_defaults(command_func=self.run)
 
     def run(self, args, extra_args):
@@ -52,12 +54,12 @@ class InitCommand(Command):
                         'Servifile already exists in: {0}.\n'
                         .format(os.path.abspath(args.dir)))
                 if (not args.skip_servifile_globals and
-                    global_servi_file_exists()):
+                        global_servi_file_exists()):
                     raise ForceError(
                         'Servifile_globals already exists in: {0}.\n'
                         'Try "servi init -s" to skip installing '
                         'Servifile_globals.yml\n'
-                            .format(c.SERVIFILE_GLOBAL_FULL))
+                        .format(c.SERVIFILE_GLOBAL_FULL))
 
         assert_doit()
         if not os.path.exists(args.dir):

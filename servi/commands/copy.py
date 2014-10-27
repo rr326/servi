@@ -22,6 +22,12 @@ from datetime import datetime
 
 
 class CopyCommand(Command):
+    def __init__(self):
+        super().__init__()
+        self.parser = None
+        self.arglist = None
+
+    # noinspection PyProtectedMember
     def register_command_line(self, sub_parsers):
 
         #
@@ -47,7 +53,7 @@ class CopyCommand(Command):
 
         self.parser = parser
         self.arglist = [arg.dest for arg in parser._optionals._actions
-                        if arg.dest != 'help' ]
+                        if arg.dest != 'help']
 
     def run(self, args, extra_args):
         source = pathfor(args.template_file_name, c.TEMPLATE)

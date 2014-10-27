@@ -121,7 +121,7 @@ def load_user_config():
         user_config = {}
 
     combined_config = deep_update(global_config, user_config)
-    for k,v in combined_config.items():
+    for k, v in combined_config.items():
         globals()[k] = v
 
     return global_config, user_config, combined_config
@@ -214,7 +214,7 @@ def deep_update(orig_dict, new_dict):
     # http://stackoverflow.com/a/3233356/1400991
     for key, val in new_dict.items():
         if isinstance(val, collections.Mapping):
-            tmp = deep_update(orig_dict.get(key, { }), val)
+            tmp = deep_update(orig_dict.get(key, {}), val)
             orig_dict[key] = tmp
         else:
             orig_dict[key] = new_dict[key]

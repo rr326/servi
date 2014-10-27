@@ -18,12 +18,15 @@ import json
 import sys
 from pprint import pformat
 
+
 class InventoryCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"skip_init": True}
         self.arglist = []
         self.parser = None
 
+    # noinspection PyProtectedMember
     def register_command_line(self, sub_parsers):
 
         #
@@ -52,7 +55,7 @@ class InventoryCommand(Command):
 
         self.parser = parser
         self.arglist = [arg.dest for arg in parser._optionals._actions
-                        if arg.dest != 'help' ]
+                        if arg.dest != 'help']
 
     def run(self, args, extra_args):
         if args.debug:
@@ -101,7 +104,7 @@ def do_debug():
 
     if type(hosts) != dict:
         print('"HOSTS" should be a dict / hash. It is currently a: {0}'
-               .format(type(hosts)))
+              .format(type(hosts)))
         return False
 
     for host, rec in hosts.items():
@@ -117,19 +120,20 @@ def do_debug():
         elif type(rec['hosts']) != list:
             print('Host "{0}" >> Each "hosts" record should be a list. '
                   'It is currently a: {1}'
-                .format(host, type(rec['hosts'])))
+                  .format(host, type(rec['hosts'])))
             r = False
 
         if type(rec) is dict:
             if 'vars' not in rec:
-                print('Host "{0}" >> "vars" not found (case sensitive).'.format(host))
+                print('Host "{0}" >> "vars" not found (case sensitive).'
+                      .format(host))
                 r = False
 
             elif type(rec['vars']) != dict:
                 print('Host "{0}" >> Each "vars" record should '
                       'be a dict / hash. '
                       'It is currently a: {1}'
-                    .format(host, type(rec['vars'])))
+                      .format(host, type(rec['vars'])))
                 r = False
     if r:
         print('Debug checks passed.  If it is still not working, '

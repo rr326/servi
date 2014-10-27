@@ -15,12 +15,15 @@ from servi.exceptions import ServiError
 from copy import deepcopy
 from pprint import pformat
 
+
 class UtilsCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"skip_init": True}
         self.arglist = []
         self.parser = None
 
+    # noinspection PyProtectedMember
     def register_command_line(self, sub_parsers):
 
         parser = sub_parsers.add_parser(
@@ -36,7 +39,7 @@ class UtilsCommand(Command):
             'with an error 1. Good for a pre-commit hook.  '
             'Eg: "servi -v0 utils ensure_latest_manifest"')
         parser.add_argument('--bump', choices=SEMANTIC_VERSIONS,
-                                   help='Bump the version')
+                            help='Bump the version')
         parser.add_argument(
             '-s', '--set_ver', type=str,
             help='Set template version to <string>')
@@ -76,14 +79,13 @@ class UtilsCommand(Command):
 
         self.parser = parser
         self.arglist = [arg.dest for arg in parser._optionals._actions
-                        if arg.dest != 'help' ]
+                        if arg.dest != 'help']
 
     def run(self, args, extra_args):
         if sum([1 for key in self.arglist
                 if getattr(args, key)]) > 1:
             raise ServiError('Too many arguments. Only 1 flag per run.\n'
                              'args: {0}'.format(vars(args)))
-
 
         if args.ensure_latest_manifest:
             return ensure_latest_manifest()
@@ -136,7 +138,7 @@ def ensure_latest_manifest():
         m_template_fresh.save()
         bump(PATCH)
         info('Update Manifest: New manifest of the current template '
-              'directory saved to: {0}'.format(m_template_fresh.fname))
+             'directory saved to: {0}'.format(m_template_fresh.fname))
         return False
 
 
@@ -211,7 +213,8 @@ def ensure_latest_globals_in_git():
     # Get git root
     try:
         root = subprocess.check_output(
-            'git rev-parse --show-toplevel', shell=True).decode()
+            'git rev-parse --show-toplevel', shell=True,
+            universal_newlines=True)
         if root[-1] == '\n':
             root = root[:len(root)-1]
 
@@ -232,6 +235,7 @@ def ensure_latest_globals_in_git():
     except subprocess.CalledProcessError:
         # Not in a git dir.
         raise ServiError('Not currently in a git directory.')
+
 
 def show_servidir():
     print(c.find_master_dir(os.getcwd()))
@@ -255,7 +259,8 @@ def link_githook():
 
     try:
         gitroot = subprocess.check_output(
-            'git rev-parse --show-toplevel 2>/dev/null', shell=True).decode()
+            'git rev-parse --show-toplevel 2>/dev/null', shell=True,
+            universal_newlines=True)
         if gitroot[-1] == '\n':
             gitroot = gitroot[:len(gitroot) - 1]
     except subprocess.CalledProcessError:
@@ -265,7 +270,7 @@ def link_githook():
                          'or a tree that uses servi, and that uses git for '
                          'source control. \n'
                          'You can manually add the servi pre-commit hook '
-                         'script located here: {0}'.format( servihook))
+                         'script located here: {0}'.format(servihook))
 
     githook = os.path.abspath(os.path.join(gitroot, '.git/hooks/pre-commit'))
     if os.path.exists(githook):
@@ -277,10 +282,6 @@ def link_githook():
     os.symlink(servihook, githook)
     info('linked {0} to {1}'.format(githook, servihook))
     return True
-
-
-
-
 
 
 command = UtilsCommand()

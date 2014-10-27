@@ -9,21 +9,24 @@ from servi.utils import pathfor, timeit
 from servi.exceptions import ServiError
 import sys
 
+
 def get_servi_inventory_path():
     try:
         servi_inventory = \
-            subprocess.check_output('which servi_inventory', shell=True)
+            subprocess.check_output('which servi_inventory', shell=True,
+                                    universal_newlines=True)
     except subprocess.CalledProcessError:
         raise ServiError("Couldn't find servi_inventory script on path.\n"
                          "Try 'which servi_inventory'.\n"
                          "Current path: {0}".format(sys.path))
-    servi_inventory = servi_inventory.decode('utf-8').strip()
+    servi_inventory = servi_inventory.strip()
 
     return servi_inventory
 
 
 class LansCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"parse_known_args": True}
 
     def register_command_line(self, sub_parsers):
@@ -34,7 +37,8 @@ class LansCommand(Command):
             description="Local ANSible - "
                         "Run ansbile on your local (vagrant) setup."
                         "This is a convenience function that sets "
-                        "up the ansible command with the proper vagrant_inventory "
+                        "up the ansible command with the proper "
+                        "vagrant_inventory "
                         "file, and ssh user and password, saving you a lot "
                         "of typing. Any arguments not listed below will be "
                         "passed directly 'ansible-playbook'."
@@ -60,7 +64,7 @@ class LansCommand(Command):
 
         info('Running local ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
              .format(' '.join(cmd_line),
-                os.path.join(c.MASTER_DIR, 'ansible_config')))
+                     os.path.join(c.MASTER_DIR, 'ansible_config')))
 
         with timeit():
             retval = subprocess.call(
@@ -70,13 +74,3 @@ class LansCommand(Command):
 
 
 command = LansCommand()
-
-
-"""
-* TODO
-    * Need to set same env variables as vagrantfile (eg: IS_VAGRANT)
-    * Need to get it to read ansible.cfg (maybe just change current directory)
-    * Following works:
-
-ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
-"""

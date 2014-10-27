@@ -8,6 +8,7 @@ import collections
 import tempfile
 import shutil
 
+
 def file_exists(path):
     return os.path.isfile(path) and os.access(path, os.R_OK)
 
@@ -50,6 +51,7 @@ def reset_cwd():
     yield
     os.chdir(origdir)
 
+
 @contextmanager
 def timeit():
     t0 = datetime.now()
@@ -66,6 +68,7 @@ def nice_temporary_directory(**kwargs):
         tempdir = tempfile.mkdtemp(**kwargs)
         yield tempdir
     except Exception:
+        # noinspection PyUnboundLocalVariable
         error('Exception occured. Not deleting temporary directory.\n'
               'tempdir = {0}'.format(tempdir))
         raise

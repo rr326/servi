@@ -18,6 +18,7 @@ SKIPPED = 'SKIPPED'
 
 class BuildboxCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"skip_init": True}
 
     def register_command_line(self, sub_parsers):
@@ -44,7 +45,7 @@ class BuildboxCommand(Command):
 
         if os.path.exists(box_path):
             warn('servi_box for current template already exists: {0}'
-                  .format(box_path))
+                 .format(box_path))
             warn('Exiting')
             return SKIPPED
 
@@ -61,7 +62,7 @@ class BuildboxCommand(Command):
         with nice_temporary_directory() as tmpdir:
             debug('buildbox tmppath: {0}\n'.format(tmpdir))
             info('This will do a "vagrant up" with the current servi '
-                  'template.\nIt could take a while...\n\n')
+                 'template.\nIt could take a while...\n\n')
 
             # Important - everthing is relative to tmpdir as cwd
             os.chdir(tmpdir)
@@ -74,11 +75,12 @@ class BuildboxCommand(Command):
                     servi_run('-v1 init -s .')
                     subprocess.check_call('vagrant up', shell=True)
                     subprocess.check_call(
-                        'vagrant package --output {0}'.format(box_path),shell=True)
+                        'vagrant package --output {0}'.format(box_path),
+                        shell=True)
                     subprocess.check_call('vagrant destroy -f', shell=True)
             else:
                 info('mocking vagrant package with base box: {0}'.format(
-                      box_path))
+                     box_path))
 
                 # If mock (testing) force new servifile
                 # it's ok - it should be a mocked servifile anyway
@@ -89,7 +91,7 @@ class BuildboxCommand(Command):
 
             info('servi box created in: {0}'.format(box_path))
             info('To use, run "servi usebox"\n'
-                  'or run: "vagrant init {0}"'.format(box_path))
+                 'or run: "vagrant init {0}"'.format(box_path))
 
         os.chdir(orig_dir)
         return True

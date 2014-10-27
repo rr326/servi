@@ -14,6 +14,7 @@ from pprint import pformat
 
 class RansCommand(Command):
     def __init__(self):
+        super().__init__()
         self.special = {"parse_known_args": True}
 
     def register_command_line(self, sub_parsers):
@@ -24,7 +25,8 @@ class RansCommand(Command):
             description="Remote ANSible - "
                         "Run ansbile on your remote system."
                         "This is a convenience function that sets "
-                        "up the ansible command with the proper vagrant_inventory "
+                        "up the ansible command with the proper "
+                        "vagrant_inventory "
                         "file, and ssh user and password, saving you a lot "
                         "of typing. Any arguments not listed below will be "
                         "passed directly 'ansible-playbook'."
@@ -53,7 +55,7 @@ class RansCommand(Command):
 
         alias = args.host_alias
         proj_only = ['-t', 'projectSpecific'] if args.project_only else []
-        IS_VAGRANT = \
+        is_vagrant = \
             c.HOSTS \
             .get(args.host_alias, {}) \
             .get("vars", {}) \
@@ -64,13 +66,13 @@ class RansCommand(Command):
                     '--limit', alias,
                     '--user', c.MAIN_USERNAME,
                     '--private-key', c.MAIN_RSA_KEY_FILE,
-                    '-e', "IS_VAGRANT={0}".format(IS_VAGRANT),
+                    '-e', "IS_VAGRANT={0}".format(is_vagrant),
                     ] + proj_only \
                       + extra_args
 
         info('Running REMOTE ansible with:\n\tcommand line: {0}\n\tcwd:{1}'
              .format(' '.join(cmd_line),
-                    os.path.join(c.MASTER_DIR, 'ansible_config')))
+                     os.path.join(c.MASTER_DIR, 'ansible_config')))
 
         with timeit():
             retval = subprocess.call(
@@ -80,13 +82,3 @@ class RansCommand(Command):
 
 
 command = RansCommand()
-
-
-"""
-* TODO
-    * Need to set same env variables as vagrantfile (eg: IS_VAGRANT)
-    * Need to get it to read ansible.cfg (maybe just change current directory)
-    * Following works:
-
-ansible-playbook -C ansible_config/playbook.yml -i .vagrant/provisioners/ansible/vagrant_inventory/vagrant_ansible_inventory  -e ansible_ssh_user=vagrant -e ansible_ssh_private_key_file=/Users/rrosen/.vagrant.d/insecure_private_key
-"""

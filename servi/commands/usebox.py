@@ -12,6 +12,7 @@ from servi.exceptions import ServiError, ForceError
 from servi.semantic import SemanticVersion
 import argparse
 
+
 class UseboxCommand(Command):
     def register_command_line(self, sub_parsers):
 
@@ -50,7 +51,7 @@ class UseboxCommand(Command):
                              all_boxes[0][0]))
 
         env = os.environ.copy()
-        env['servi_box']= os.path.join(c.BOX_DIR, all_boxes[0][0])
+        env['servi_box'] = os.path.join(c.BOX_DIR, all_boxes[0][0])
 
         os.chdir(c.MASTER_DIR)
 
@@ -59,7 +60,7 @@ class UseboxCommand(Command):
                 subprocess.check_call('vagrant up', env=env, shell=True)
         else:
             info('mocking vagrant up with base box: {0}'
-                  .format(env['servi_box']))
+                 .format(env['servi_box']))
 
         return True
 

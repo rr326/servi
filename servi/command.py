@@ -56,9 +56,6 @@ def load_plugins(main_parser):
 # http://stackoverflow.com/a/16942165/1400991
 class ArgumentParserMod(argparse.ArgumentParser):
     def error(self, message):
-        # sys.stderr.write('***********\n%s: error: %s\n\n' % (self.prog, message))
-        # self.print_help(sys.stderr)
-        # self.exit(2)
         stream = io.StringIO()
         self.print_help(stream)
         errmsg = '%s: error: %s\n\n' % (self.prog, message) \
@@ -140,6 +137,7 @@ def process_and_run_command_line(command_line=None):
         args, extra_args = parse_args(commands, servi_parser, command_line)
 
         log_level = arg_to_log_level(args.verbose)
+        retval = False
         with use_log_level(log_level):
             if args.template_dir:
                 c.TMPL_DIR_SITE = args.template_dir
@@ -165,12 +163,12 @@ def process_and_run_command_line(command_line=None):
                 info('Servi - Running: {0}\n'.format(args.command))
                 if c.MASTER_DIR:
                     debug('Master Directory: {0}'
-                        .format(os.path.abspath(c.MASTER_DIR)))
+                          .format(os.path.abspath(c.MASTER_DIR)))
                 debug('Template Directory: {0}'
-                    .format(os.path.abspath(c.TMPL_DIR_SITE)))
+                      .format(os.path.abspath(c.TMPL_DIR_SITE)))
 
                 retval = args.command_func(args, extra_args)
-            except (ForceError, ServiError) as e:
+            except (ForceError, ServiError):
                 raise
 
 

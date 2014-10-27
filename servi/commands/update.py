@@ -31,7 +31,6 @@ class UpdateCommand(Command):
         t = TemplateManager()
         ignored = TemplateManager.ignored_files
 
-
         master_and_tmpl_changed = t.m_mod & t.t_mod
         #if len(changed_or_removed_files - changed_but_ignored_files) > 0:
         if master_and_tmpl_changed - ignored(master_and_tmpl_changed):
@@ -63,7 +62,7 @@ class UpdateCommand(Command):
                  '{0}\n'.format(sorted(t.modified_possible_roles)))
 
         info('Updating MASTER with Servi template version: {0}'
-               .format(t.m_template.template_version))
+             .format(t.m_template.template_version))
 
         t.update_master()
 

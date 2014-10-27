@@ -79,7 +79,9 @@ class TemplateManager(object):
         self.modified_possible_roles = rm.modified_possible_roles
         self.role_of_fname = rm.role_of_fname
 
-    def init_master(self, exclude_files=[]):
+    def init_master(self, exclude_files=None):
+        if exclude_files is None:
+            exclude_files = []
         self.copy_files(exclude_files=exclude_files)
 
     def update_master(self):
@@ -123,7 +125,7 @@ class TemplateManager(object):
             if (_cur_role and self.master_playbook_exists
                     and _cur_role not in self.roles):
                 debug('Skipping unused role file: {0}'
-                       .format(fname))
+                      .format(fname))
                 continue
 
             # Handle SERVIFILE_GLOBALS differently
@@ -136,7 +138,7 @@ class TemplateManager(object):
             if (os.path.split(fname)[1] == '.git'
                     and os.path.isfile(template_fname)):
                 debug('Skipping .git file (submodule marker): {0}'
-                    .format(fname))
+                      .format(fname))
                 continue
 
             # Always backup (never overwrite) master
