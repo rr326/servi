@@ -2,8 +2,10 @@ from datetime import datetime
 import shutil
 import re
 import tempfile
-import pytest
 import os
+
+import pytest
+
 from servi.utils import pathfor
 from servi.command import process_and_run_command_line as servi_run
 from servi.manifest import Manifest
@@ -27,17 +29,22 @@ Scenarios
     * Changed in ~
 """
 
+
 @pytest.fixture(autouse=True)
 def mock_homedir(monkeypatch, tmpdir):
-    homedir=tmpdir.mkdir('mockhome')
+    homedir = tmpdir.mkdir('mockhome')
+
     def hardcode_homedir(path):
         return str(homedir)
+
     monkeypatch.setattr(os.path, 'expanduser', hardcode_homedir)
     monkeypatch.setattr(c, 'SERVIFILE_GLOBAL_FULL',
                         os.path.join(str(homedir), c.SERVIFILE_GLOBAL))
 
+
 def test_mock_homedir():
     assert os.path.basename(os.path.expanduser('~')) == 'mockhome'
+
 
 @pytest.fixture()
 def clean_master(monkeypatch, tmpdir):

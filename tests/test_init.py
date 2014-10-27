@@ -2,6 +2,7 @@ from servi.exceptions import *
 from tests.fixtures import *
 
 
+# noinspection PyMethodMayBeStatic
 class TestInit():
     def test_command_line_params(self, tmpdir):
         proj1 = tmpdir.mkdir('proj1')

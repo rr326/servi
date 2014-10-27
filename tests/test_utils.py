@@ -1,11 +1,6 @@
 from servi.config import find_master_dir
 from tests.fixtures import *
 from servi.exceptions import MasterNotFound
-from servi.command import process_and_run_command_line as servi_run
-from time import sleep
-from servi.utils import timeit
-import sys
-import io
 
 
 def test_find_master_dir(fake_master):

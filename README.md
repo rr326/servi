@@ -195,7 +195,7 @@ Before you start customizing your project, make sure it all still works. Follow 
 
 If it doesn't work, the first thing to test is if your configuration is turning out the way you think it is. Run `servi utils -r` to render your Servifiles.  Read the results carefully - are you getting what you think you should be getting?
 
-### Customizing a project
+### Customize a project
 Now that you've edited your configuration and tested it, let's customize it.
 
     $ cd myproject
@@ -213,7 +213,7 @@ Now that you've edited your configuration and tested it, let's customize it.
     1. This is the main driver of Ansible.
     1. Ideally you shouldn't have to modify this for a project. Instead, modify this globally (as part of your servi fork directory) and it will be part of all your servi projects.
     
-### Customizing the servi Ansible) templates
+### Customize the servi Ansible templates
 I've done my best to create a solid, complete server, but you'll probably want to modify my choices.
 
 1. Ansible_config/*  
@@ -224,7 +224,7 @@ I've done my best to create a solid, complete server, but you'll probably want t
 1. apache_config/sites_available/mysite.conf  
    Put your default virtual host config here.
    
-### Customizing servi itself
+### Customize servi itself
 You probably don't need to do this, but it's easy to if you want to. You just need to know python 3.  Then look in servi/command.py to see how the simple plugin system works. And please add unit tests to the tests folder. (If you haven't used pytest, it's super easy, especially now that it's set up to run.)
 
 ### Set up a new cloud / production server

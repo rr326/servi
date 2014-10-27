@@ -1,7 +1,9 @@
 import subprocess as sp
+
+import pytest
+
 from servi.command import process_and_run_command_line as servi_run
 from servi.exceptions import *
-import pytest
 
 
 def test_servi_shellscript(tmpdir):

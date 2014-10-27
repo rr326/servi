@@ -1,11 +1,12 @@
+import subprocess
+from filecmp import cmp
+
 from tests.fixtures import *
 import servi.manifest as man
 from servi.command import process_and_run_command_line as servi_run
 from servi.utils import file_exists, reset_cwd
 from servi.semantic import SemanticVersion
 from servi.exceptions import ServiError
-import subprocess
-from filecmp import cmp
 from servi.commands.utils import in_servi_code_dir
 
 
@@ -55,7 +56,7 @@ def test_ensure_latest_globals_in_git(setup_empty, tmpdir):
     # In Project Dir
     #
     projdir.chdir()
-    assert servi_run('init --skip_servifile_globals .' )
+    assert servi_run('init --skip_servifile_globals .')
     assert servi_run('utils --ensure_latest_globals_in_git ')
 
     assert servi_run('init -f .')

@@ -2,6 +2,7 @@ from servi.exceptions import *
 from tests.fixtures import *
 
 
+# noinspection PyMethodMayBeStatic
 class TestUpdate():
     def test_clean(self, setup_empty):
         with pytest.raises(MasterNotFound):
@@ -49,7 +50,7 @@ class TestUpdate():
 
         m1 = Manifest(c.MASTER)
         added, changed, removed = Manifest.diff_files(m1, m0)
-        assert  added | changed | removed == set()
+        assert added | changed | removed == set()
 
     def test_dirty_servifile_globals(self, dirty_servifile_globals):
         m0 = dirty_servifile_globals["m0"]

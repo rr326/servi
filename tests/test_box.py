@@ -1,14 +1,12 @@
+import subprocess
+
 from tests.fixtures import *
 from servi.utils import *
-from servi.manifest import Manifest
-from servi.template_mgr import TemplateManager
 from servi.command import process_and_run_command_line as servi_run
-from servi.commands.usebox import UseboxCommand
-from servi.commands.buildbox import get_boxname, get_all_boxes
+from servi.commands.buildbox import get_all_boxes
 import servi.commands.buildbox as buildbox
 from servi.exceptions import ServiError, ForceError
-import subprocess
-from datetime import datetime
+
 
 @pytest.fixture()
 def clean_boxes():
@@ -76,7 +74,8 @@ def test_build_and_use(clean_master, mock_template_dir, clean_boxes, tmpdir):
             assert servi_run('init .')
             assert servi_run('buildbox')
             assert servi_run('usebox')
-            status_text = subprocess.check_output('vagrant status', shell=True)
-            status_text = status_text.decode(encoding='ascii', errors='ignore')
-            assert re.search('default\s*running',status_text)
+            status_text = subprocess.check_output(
+                'vagrant status', shell=True, universal_newlines=True)
+            status_text = status_text
+            assert re.search('default\s*running', status_text)
             subprocess.call('vagrant destroy -f', shell=True)

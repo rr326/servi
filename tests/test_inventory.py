@@ -1,16 +1,12 @@
-from servi.config import find_master_dir
-from tests.fixtures import *
-from servi.exceptions import MasterNotFound
-from servi.command import process_and_run_command_line as servi_run
-from time import sleep
-from servi.utils import timeit
-import sys
-import io
 import json
+
 import yaml
 
-GOOD_REC = \
-"""
+from tests.fixtures import *
+from servi.command import process_and_run_command_line as servi_run
+
+
+GOOD_REC = """
 ---
 HOSTS:
   prod:
@@ -27,8 +23,7 @@ HOSTS:
         SERVER_NAME: stage.k2company.com
 """
 
-BAD_REC = \
-"""
+BAD_REC = """
 ---
 HOSTS:
   prod:
@@ -50,8 +45,7 @@ HOSTS:
         SERVER_NAME: stage.k2company.com
 """
 
-SERVIFILE_LOCAL = \
-"""
+SERVIFILE_LOCAL = """
 ---
 HOSTS:
   vagrant:
@@ -63,6 +57,7 @@ HOSTS:
           IS_VAGRANT: True
 """
 
+
 def equal_jsons(text1, text2):
     try:
         o1 = json.loads(text1.strip('\n\s"'))
@@ -71,6 +66,7 @@ def equal_jsons(text1, text2):
         return False
 
     return o1 == o2
+
 
 @pytest.mark.wip
 def test_inventory(mock_homedir, setup_init):

@@ -1,9 +1,6 @@
-import pytest
 from tests.fixtures import *
-from servi.manifest import Manifest
 import servi.config as c
 from servi.command import process_and_run_command_line as servi_run
-import os
 
 
 @pytest.fixture
