@@ -1,4 +1,5 @@
 <img src="img/servi_small.png?raw=true">
+<meta property="og:image" content="https://raw.githubusercontent.com/rr326/servi/master/img/servi_small.png">
 
 # Servi
 
